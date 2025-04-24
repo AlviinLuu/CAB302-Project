@@ -5,10 +5,20 @@ import javafx.scene.control.Label;
 
 public class LoginController {
     @FXML
-    private Label welcomeText;
+    private Label introText;
+    private Boolean isLogin = true;
+
+    public final String loginText = "Welcome Back!";
+    public final String registerText = "Welcome Aboard!";
 
     @FXML
     protected void onLoginButtonClick() {
-        welcomeText.setText("Login Screen");
+        if (isLogin){
+            introText.setText(loginText);
+        }else{
+            introText.setText(registerText);
+        }
+        isLogin = !isLogin;
+
     }
 }

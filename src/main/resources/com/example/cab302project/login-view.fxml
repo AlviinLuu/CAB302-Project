@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302project.LoginController">
+<VBox alignment="CENTER" prefHeight="320.0" prefWidth="220.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.LoginController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
+   <TextField promptText="email" />
+   <TextField promptText="password" />
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Howdy!" onAction="#onLoginButtonClick"/>
+    <Label fx:id="welcomeText" />
+    <Button onAction="#onLoginButtonClick" text="Howdy!" />
 </VBox>
