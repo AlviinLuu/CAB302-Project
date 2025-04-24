@@ -2,6 +2,7 @@ package com.example.cab302project;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import jdk.jshell.spi.ExecutionControl;
 
 public class LoginController {
     @FXML
@@ -20,5 +21,10 @@ public class LoginController {
         }
         isLogin = !isLogin;
 
+    }
+
+    @FXML
+    protected void onSubmitButtonClick() {
+        System.out.println("Hello");
     }
 }
