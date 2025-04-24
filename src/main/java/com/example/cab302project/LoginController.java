@@ -12,6 +12,7 @@ public class LoginController {
     public final String loginText = "Welcome Back!";
     public final String registerText = "Welcome Aboard!";
 
+
     @FXML
     protected void onLoginButtonClick() {
         if (isLogin){
