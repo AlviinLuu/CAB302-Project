@@ -16,6 +16,7 @@ import java.io.IOException;
 /// - check that email and password follow requirements
 /// - make it all look a bit nicer
 
+
 public class LoginApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
