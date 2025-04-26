@@ -7,6 +7,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/// Launch this file to run the program. User input is stored in the username and password variables in LoginController
+/// after the submit button is pushed and then a function can be called there to send things over to the database.
+/// The isLogin bool shows if it was a login or sign up,
+///
+/// To do:
+/// - add repeat password field in register screen
+/// - check that email and password follow requirements
+/// - make it all look a bit nicer
+
 public class LoginApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
