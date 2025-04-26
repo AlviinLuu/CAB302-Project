@@ -17,6 +17,8 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
     @FXML
+    private PasswordField repeatPasswordField;
+    @FXML
     private Button switchState;
 
     public final String loginText = "Welcome Back!";
@@ -28,12 +30,13 @@ public class LoginController {
         if (isLogin){
             introText.setText(loginText);
             switchState.setText("Register Instead");
+            repeatPasswordField.setVisible(false);
         }else{
             introText.setText(registerText);
             switchState.setText("Login Instead");
+            repeatPasswordField.setVisible(true);
         }
         isLogin = !isLogin;
-
     }
 
     @FXML
@@ -44,6 +47,11 @@ public class LoginController {
         }
         if (passwordField.getText() != null){
             String password = passwordField.getText();
+        }
+        if ((repeatPasswordField.getText() != null) && !isLogin){
+            String rptPassword = repeatPasswordField.getText();
+            //System.out.println(rptPassword);
+            //possible bug - if text is entered on register screen it stays in the text field when login page is submitted
         }
 
     }

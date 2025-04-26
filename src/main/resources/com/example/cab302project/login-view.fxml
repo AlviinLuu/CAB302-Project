@@ -12,10 +12,15 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
-   <TextField fx:id="emailField" promptText="email" />
-   <PasswordField fx:id="passwordField" promptText="Password" />
-   <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" text="Submit" />
+   <VBox prefWidth="180.0" spacing="10.0">
+      <children>
+         <TextField fx:id="emailField" promptText="email" />
+         <PasswordField fx:id="passwordField" prefWidth="180.0" promptText="Password" />
+         <PasswordField fx:id="repeatPasswordField" prefWidth="180.0" promptText="Repeat Password" />
+      </children>
+   </VBox>
+   <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="52.0" prefWidth="57.0" text="Submit" />
 
     <Label fx:id="welcomeText" />
-    <Button fx:id="switchState" onAction="#onSwitchStateClick" text="Switch" />
+    <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="60.0" prefWidth="134.0" text="Switch" />
 </VBox>
