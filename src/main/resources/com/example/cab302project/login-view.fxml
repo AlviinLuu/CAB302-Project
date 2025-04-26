@@ -17,5 +17,5 @@
    <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" text="Submit" />
 
     <Label fx:id="welcomeText" />
-    <Button fx:id="switchState" onTouchReleased="#onSubmitButtonClick" text="Switch" />
+    <Button fx:id="switchState" onAction="#onSwitchStateClick" text="Switch" />
 </VBox>
