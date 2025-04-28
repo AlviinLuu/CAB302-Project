@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="320.0" prefWidth="220.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.LoginController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
+   <VBox prefWidth="180.0" spacing="10.0">
+      <children>
+         <TextField fx:id="emailField" promptText="email" />
+         <PasswordField fx:id="passwordField" prefWidth="180.0" promptText="Password" />
+         <PasswordField fx:id="repeatPasswordField" prefWidth="180.0" promptText="Repeat Password" />
+      </children>
+   </VBox>
+   <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="52.0" prefWidth="57.0" text="Submit" />
+
+    <Label fx:id="welcomeText" />
+    <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="60.0" prefWidth="134.0" text="Switch" />
+</VBox>
