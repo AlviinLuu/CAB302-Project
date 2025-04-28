@@ -27,6 +27,11 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+    private String username;
+    private String password;
+    private String email;
+    private String rptPassword;
+
     public final String loginText = "Welcome Back!";
     public final String registerText = "Welcome Aboard!";
 
@@ -52,15 +57,18 @@ public class LoginController {
         errorLabel.setVisible(false);
         //System.out.println("Hello");
         if (emailField.getText() != null || emailField.getText() != ""){
-            String email = emailField.getText();
+            email = emailField.getText();
         }else{
             //this is not working currently
             displayError("Please Enter Username");
         }
 
         if (passwordField.getText() != null) {
-            String password = passwordField.getText();
+            password = passwordField.getText();
             System.out.println(password);
+        }
+        if (usernameField != null){
+            username = usernameField.getText();
         }
 
         if ((repeatPasswordField.getText() != null)) {

@@ -7,11 +7,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="320.0" prefWidth="513.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.LoginController">
+<VBox alignment="CENTER" prefHeight="320.0" prefWidth="513.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
+   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" textFill="WHITE" />
    <Label fx:id="errorLabel" text="Error" textFill="RED" visible="false" />
    <VBox maxWidth="-Infinity" prefWidth="180.0" spacing="10.0">
       <children>
@@ -23,10 +23,10 @@
    </VBox>
 
     <Label fx:id="welcomeText" />
-   <VBox prefHeight="78.0" prefWidth="473.0" VBox.vgrow="ALWAYS">
+   <VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="78.0" prefWidth="473.0" spacing="3.0" VBox.vgrow="ALWAYS">
       <children>
-          <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="28.0" prefWidth="66.0" text="Switch" />
-         <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="46.0" prefWidth="57.0" text="Submit" />
+         <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="31.0" prefWidth="57.0" text="Submit" />
+          <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="31.0" prefWidth="123.0" text="Switch" />
       </children>
    </VBox>
 </VBox>
