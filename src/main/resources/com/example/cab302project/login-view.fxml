@@ -6,16 +6,21 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="320.0" prefWidth="422.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
+   <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="28.0" />
+      </font></Label>
    <Label fx:id="errorLabel" text="Label" textFill="RED" visible="false" />
    <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="98.0" prefWidth="180.0" spacing="10.0">
       <children>
-         <TextField fx:id="emailField" promptText="email" />
+         <TextField fx:id="usernameField" promptText="Username" />
+         <TextField fx:id="emailField" promptText="Email" />
          <PasswordField fx:id="passwordField" prefWidth="180.0" promptText="Password" />
          <PasswordField fx:id="repeatPasswordField" prefWidth="180.0" promptText="Repeat Password" />
       </children>

@@ -16,6 +16,8 @@ public class LoginController {
     @FXML
     private Boolean isLogin = false; // Start in "Register" mode (false)
     @FXML
+    private TextField usernameField;
+    @FXML
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
@@ -44,11 +46,13 @@ public class LoginController {
             introText.setText(registerText);
             switchState.setText("Login Instead");
             repeatPasswordField.setVisible(true); // Show repeat password for registration
+            usernameField.setVisible(false);
         } else {
             // Switch to Login mode
             introText.setText(loginText);
             switchState.setText("Register Instead");
             repeatPasswordField.setVisible(false); // Hide repeat password for login
+            usernameField.setVisible(false);
         }
         isLogin = !isLogin; // Toggle the login state
     }
