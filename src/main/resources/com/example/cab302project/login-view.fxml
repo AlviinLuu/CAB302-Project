@@ -7,20 +7,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="320.0" prefWidth="220.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.LoginController" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
+<VBox alignment="CENTER" prefHeight="320.0" prefWidth="422.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <Label fx:id="introText" prefHeight="18.0" prefWidth="151.0" text="Label" />
-   <VBox prefWidth="180.0" spacing="10.0">
+   <Label fx:id="errorLabel" text="Label" textFill="RED" visible="false" />
+   <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="98.0" prefWidth="180.0" spacing="10.0">
       <children>
          <TextField fx:id="emailField" promptText="email" />
          <PasswordField fx:id="passwordField" prefWidth="180.0" promptText="Password" />
          <PasswordField fx:id="repeatPasswordField" prefWidth="180.0" promptText="Repeat Password" />
       </children>
    </VBox>
-   <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="52.0" prefWidth="57.0" text="Submit" />
 
     <Label fx:id="welcomeText" />
-    <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="60.0" prefWidth="134.0" text="Switch" />
+   <VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="96.0" prefWidth="382.0">
+      <children>
+         <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="43.0" prefWidth="57.0" text="Submit" />
+          <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="60.0" prefWidth="134.0" text="Switch" />
+      </children>
+   </VBox>
 </VBox>

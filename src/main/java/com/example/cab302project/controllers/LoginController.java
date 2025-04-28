@@ -55,6 +55,8 @@ public class LoginController {
 
     @FXML
     protected void onSubmitButtonClick() {
+        //hide error label (will get immediatly shown again if there is a problem)
+        errorLabel.setVisible(false);
         // Get input values from the fields
         String email = emailField.getText();
         String password = passwordField.getText();
@@ -74,9 +76,7 @@ public class LoginController {
                 } else {
                     System.out.println("Login failed.");
                     // Show error message
-                    if (errorLabel != null) {
-                        errorLabel.setText("Invalid email or password.");
-                    }
+                    showError("Invalid email or password.");
                 }
             } else {
                 // Registration logic
@@ -85,9 +85,7 @@ public class LoginController {
                 // Check if the email already exists in the database
                 if (userDAO.userExists(email)) {
                     System.out.println("Account with this email already exists.");
-                    if (errorLabel != null) {
-                        errorLabel.setText("Account with this email already exists.");
-                    }
+                    showError("Account with this email already exists.");
                 } else if (rptPassword != null && password.equals(rptPassword)) {
                     // Ensure password matches the repeat password
                     User newUser = new User(email, password, email); // Create a new user (email as username or adjust)
@@ -95,9 +93,8 @@ public class LoginController {
                     System.out.println("User registered successfully!");
 
                     // Show success message
-                    if (errorLabel != null) {
-                        errorLabel.setText("Registration successful!");
-                    }
+                    showError("Registration successful!");
+
 
                     // Optionally clear fields after registration
                     emailField.clear();
@@ -106,17 +103,18 @@ public class LoginController {
                 } else {
                     // Passwords do not match during registration
                     System.out.println("Passwords do not match.");
-                    if (errorLabel != null) {
-                        errorLabel.setText("Passwords do not match.");
-                    }
+                    showError("Passwords do not match.");
                 }
             }
         } else {
             // Handle empty fields (email or password)
-            if (errorLabel != null) {
-                errorLabel.setText("Please fill in all fields.");
-            }
-
+            showError("Please fill in all fields.");
         }
     }
+
+    private void showError(String msg){
+        errorLabel.setVisible(true);
+        errorLabel.setText(msg);
+    }
+
 }
