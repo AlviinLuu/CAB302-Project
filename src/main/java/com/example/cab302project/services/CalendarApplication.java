@@ -13,7 +13,7 @@ public class CalendarApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/calendarpage/hello-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             stage.setTitle(TITLE);
