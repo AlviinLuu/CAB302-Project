@@ -21,4 +21,6 @@ public interface IUserDAO {
 
     // Deletes a user from the database (optional)
     void deleteUser(String username);
+
+    boolean userExists(String email);
 }
