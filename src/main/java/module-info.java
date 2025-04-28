@@ -2,6 +2,7 @@ module com.example.cab302project {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.xerial.sqlitejdbc;
+    requires jdk.jshell;
 
 
     opens com.example.cab302project to javafx.fxml;
