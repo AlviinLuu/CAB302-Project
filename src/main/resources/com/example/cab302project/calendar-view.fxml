@@ -17,7 +17,7 @@
             <!-- Main Navigation Bar -->
             <HBox spacing="20" style="-fx-padding: 10;">
                 <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true" onMouseEntered="#onLogoHover" onMouseExited="#onLogoExit"/>
-                <Label text="The Ultimate Calendar" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;"/>
+                <Label text="Smart Schedule Assistant" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;"/>
                 <Region HBox.hgrow="ALWAYS"/>
             </HBox>
 
