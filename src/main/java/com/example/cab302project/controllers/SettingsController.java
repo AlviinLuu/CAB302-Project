@@ -230,12 +230,33 @@ public class SettingsController {
     }
 
 
-
-
-
+//    @FXML
+//    private void goToFriends() {
+//        System.out.println("Navigating to Friends Page (to be implemented).");
+//    }
     @FXML
-    private void goToFriends() {
-        System.out.println("Navigating to Friends Page (to be implemented).");
+    private void openFriendsPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/friends-view.fxml"));
+            Parent friendsRoot = loader.load();
+
+            Stage friendsStage = new Stage();
+            friendsStage.setTitle("Friends");
+
+            Scene scene = new Scene(friendsRoot);
+            friendsStage.setScene(scene);
+
+            // Set it to full screen
+            friendsStage.setMaximized(true);
+
+            // Close the current Calendar window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
+            currentStage.close();
+
+            friendsStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @FXML

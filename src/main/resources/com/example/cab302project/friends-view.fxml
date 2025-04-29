@@ -1,26 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.cab302project.controllers.FriendsController"
-            prefHeight="400.0" prefWidth="600.0"
-            style="-fx-background-color: #F0F8FF;">
+<SplitPane fx:id="splitPane" orientation="HORIZONTAL" dividerPositions="0.75"
+           xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.cab302project.controllers.FriendsController"
+           prefHeight="Infinity">
 
-    <VBox spacing="20" alignment="CENTER" layoutX="100" layoutY="50" prefWidth="600">
-        <Label text="My Friends" style="-fx-font-size: 28px; -fx-text-fill: #4B0082; -fx-font-weight: bold;"/>
+    <!-- Left section (Main Content) -->
+    <VBox fx:id="mainContent" style="-fx-padding: 0; -fx-background-color: #F0F8FF;" VBox.vgrow="ALWAYS">
 
-        <ListView fx:id="friendsList" prefWidth="400" prefHeight="400" style="-fx-background-color: #E6E6FA;"/>
+        <!-- Top Navigation -->
+        <VBox style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
+            <HBox spacing="20" style="-fx-padding: 10;">
+                <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true" />
+                <Label text="Smart Schedule Assistant - Friends" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" />
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
 
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Add Friend" onAction="#onAddFriend" style="-fx-background-color: #CCCCFF; -fx-font-weight: bold;"/>
-            <Button text="Remove Friend" onAction="#onRemoveFriend" style="-fx-background-color: #CCCCFF; -fx-font-weight: bold;"/>
-        </HBox>
+        <!-- Friends Page Content -->
+        <StackPane VBox.vgrow="ALWAYS" style="-fx-background-color: #E6E6FA;">
+            <Label text="Friends page content will appear here when we code for it later <3" style="-fx-font-size: 20px; -fx-text-fill: #444;" />
+        </StackPane>
+
     </VBox>
 
-</AnchorPane>
+    <!-- Right Sidebar ****Need to implement AI and moce account and logout button down -->
+    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
+        <Button text="HOME" onAction="#goToHome"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <VBox.margin><Insets top="10"/></VBox.margin>
+
+        <Button text="SETTINGS"
+                onAction="#openSettingsPage"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <VBox.margin><Insets top="10"/></VBox.margin>
+
+        <Button text="FRIENDS"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+
+        <Button text="ACCOUNT"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+    </VBox>
+
+</SplitPane>
