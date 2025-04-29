@@ -1,18 +1,20 @@
 // File: Session.java
 package com.example.cab302project.util;
 
-public class Session {
-    private static String loggedInEmail;
+import com.example.cab302project.models.User;
 
-    public static void setLoggedInEmail(String email) {
-        loggedInEmail = email;
+public class Session {
+    private static User loggedInUser;
+
+    public static void setLoggedInUser(User user) {
+        loggedInUser = user;
     }
 
-    public static String getLoggedInEmail() {
-        return loggedInEmail;
+    public static User getLoggedInUser() {
+        return loggedInUser;
     }
 
     public static void clear() {
-        loggedInEmail = null;
+        loggedInUser = null;
     }
 }

@@ -3,6 +3,7 @@ package com.example.cab302project.controllers;
 import com.example.cab302project.models.IUserDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
+import com.example.cab302project.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -65,6 +66,8 @@ public class LoginController {
                 System.out.println("Attempting login...");
                 boolean isValidUser = this.userDAO.validateUser(email, password);
                 if (isValidUser) {
+                    User user = userDAO.getUserByEmail(email); // You’ll need this method
+                    Session.setLoggedInUser(user);
                     System.out.println("Login successful!");
                     openCalendarPage();
                 } else {

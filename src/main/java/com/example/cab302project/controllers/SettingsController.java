@@ -1,4 +1,8 @@
 package com.example.cab302project.controllers;
+import com.example.cab302project.models.IUserDAO;
+import com.example.cab302project.models.SqliteUserDAO;
+import com.example.cab302project.models.User;
+import com.example.cab302project.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -33,6 +37,7 @@ public class SettingsController {
     private VBox mainContent;
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
+    private final IUserDAO userDAO = new SqliteUserDAO();
 
     @FXML
     private void initialize() {
@@ -131,20 +136,39 @@ public class SettingsController {
     @FXML
     private void handleChangeEmail() {
         String newEmail = emailField.getText();
-        if (newEmail.contains("@")) {
-            System.out.println("Email changed to: " + newEmail);
+        User currentUser = Session.getLoggedInUser();
+
+        if (newEmail.contains("@") && currentUser != null) {
+            boolean success = userDAO.updateEmail(currentUser.getEmail(), newEmail);
+            if (success) {
+                currentUser.setEmail(newEmail);
+                Session.setLoggedInUser(currentUser);
+                System.out.println("Email updated in database and session.");
+            } else {
+                System.out.println("Failed to update email in database.");
+            }
         } else {
-            System.out.println("Invalid email entered.");
+            System.out.println("Invalid email entered or no user in session.");
         }
     }
+
 
     @FXML
     private void handleChangePassword() {
         String newPassword = passwordField.getText();
-        if (newPassword.length() >= 6) {
-            System.out.println("Password changed.");
+        User currentUser = Session.getLoggedInUser();
+
+        if (newPassword.length() >= 6 && currentUser != null) {
+            boolean success = userDAO.updatePassword(currentUser.getEmail(), newPassword);
+            if (success) {
+                currentUser.setPassword(newPassword);
+                Session.setLoggedInUser(currentUser); // Update the session with new info
+                System.out.println("Password updated in database and session.");
+            } else {
+                System.out.println("Failed to update password in database.");
+            }
         } else {
-            System.out.println("Password too short.");
+            System.out.println("Password too short or no user in session.");
         }
     }
 
@@ -175,6 +199,7 @@ public class SettingsController {
     }
     @FXML
     private void handleLogOut() {
+        Session.clear();
         System.out.println("Logging out...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));

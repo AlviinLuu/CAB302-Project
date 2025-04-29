@@ -1,10 +1,6 @@
 package com.example.cab302project.models;
 
-import org.sqlite.jdbc4.JDBC4PreparedStatement;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SqliteUserDAO implements IUserDAO {
 
@@ -144,6 +140,32 @@ public class SqliteUserDAO implements IUserDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean updateEmail(String currentEmail, String newEmail) {
+        String sql = "UPDATE users SET email = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newEmail);
+            stmt.setString(2, currentEmail);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
