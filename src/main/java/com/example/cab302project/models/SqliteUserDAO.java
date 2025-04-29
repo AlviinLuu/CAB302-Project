@@ -28,11 +28,16 @@ public class SqliteUserDAO implements IUserDAO {
 
     @Override
     public void addUser(User user) {
-        // First, check if the user already exists
         if (userExists(user.getEmail())) {
-            System.out.println("User already exists.");
-            return;  // Exit if the user already exists
+            System.out.println("Email already exists.");
+            return;
         }
+
+        if (getUserByUsername(user.getUsername()) != null) {
+            System.out.println("Username already exists.");
+            return;
+        }
+
         String query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getUsername());
@@ -43,6 +48,7 @@ public class SqliteUserDAO implements IUserDAO {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public User getUserByUsername(String username) {

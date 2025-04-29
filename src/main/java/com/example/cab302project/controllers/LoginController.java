@@ -66,7 +66,7 @@ public class LoginController {
                 System.out.println("Attempting login...");
                 boolean isValidUser = this.userDAO.validateUser(email, password);
                 if (isValidUser) {
-                    User user = userDAO.getUserByEmail(email); // You’ll need this method
+                    User user = userDAO.getUserByEmail(email);
                     Session.setLoggedInUser(user);
                     System.out.println("Login successful!");
                     openCalendarPage();
@@ -76,26 +76,32 @@ public class LoginController {
                 }
             } else {
                 System.out.println("Attempting registration...");
+                if (!password.equals(rptPassword)) {
+                    System.out.println("Passwords do not match.");
+                    this.showError("Passwords do not match.");
+                    return;
+                }
                 if (this.userDAO.userExists(email)) {
-                    System.out.println("Account with this email already exists.");
+                    System.out.println("Email already in use.");
                     this.showError("Account with this email already exists.");
-                } else if (rptPassword != null && password.equals(rptPassword)) {
+                } else if (this.userDAO.getUserByUsername(email) != null) {
+                    System.out.println("Username already in use.");
+                    this.showError("Account with this username already exists.");
+                } else {
                     User newUser = new User(email, password, email);
-                    this.userDAO.addUser(newUser);
+                    this.userDAO.addUser(newUser); // No return value, so we assume success only after checks
                     System.out.println("User registered successfully!");
                     this.showError("Registration successful!");
                     this.emailField.clear();
                     this.passwordField.clear();
                     this.repeatPasswordField.clear();
-                } else {
-                    System.out.println("Passwords do not match.");
-                    this.showError("Passwords do not match.");
                 }
             }
         } else {
             this.showError("Please fill in all fields.");
         }
     }
+
 
     private void openCalendarPage() {
         try {
