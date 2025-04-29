@@ -5,9 +5,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane fx:id="splitPane" orientation="HORIZONTAL" dividerPositions="0.2"
+<SplitPane fx:id="splitPane" orientation="HORIZONTAL" dividerPositions="0.75"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.example.calendarpage.SettingsController"
+           fx:controller="com.example.cab302project.controllers.SettingsController"
            prefHeight="Infinity">
 
     <!-- Left (Main Settings Area) -->
@@ -19,8 +19,8 @@
             <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 20;">
                 <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true"
                            onMouseEntered="#onLogoHover" onMouseExited="#onLogoExit"/>
-                <Label text="The Ultimate Calendar - Settings"
-                       style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+                <Label text="Smart Schedule Assistant - Settings"
+                       style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
             </HBox>
         </VBox>
@@ -71,19 +71,20 @@
     </VBox>
 
     <!-- Right Sidebar (Expanded by Default) -->
-    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="300" maxWidth="350" spacing="10">
-
-        <Button fx:id="homeButton" text="HOME" onAction="#goToHome"
+    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="350" maxWidth="350" spacing="10">
+        <Button text="HOME"  onAction="#goToHome"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin><Insets top="10"/></VBox.margin>
-
-        <Button fx:id="settingsButton" text="SETTINGS"
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+        <Button text="SETTINGS"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin><Insets top="10"/></VBox.margin>
-
-        <Button fx:id="friendsButton" text="FRIENDS" onAction="#goToFriends"
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+        <Button text="FRIENDS"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
 

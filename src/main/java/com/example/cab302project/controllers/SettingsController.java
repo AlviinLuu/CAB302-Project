@@ -24,7 +24,7 @@ public class SettingsController {
     @FXML private ImageView profileImage;
     @FXML private ImageView logoImage;
     @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton;
-    @FXML private Button homeButton, settingsButton, friendsButton, signOutButton;
+    //@FXML private Button homeButton, settingsButton, friendsButton, signOutButton;
     @FXML private Label dateLabel;
     @FXML private VBox aiSidebar;
     @FXML private GridPane miniDayView;
@@ -47,19 +47,19 @@ public class SettingsController {
         passwordField.setText("********");
 
         // Apply sidebar styling and calendar info
-        applySidebarButtonStyle();
+        //applySidebarButtonStyle();
         updateDateLabel();
         renderMiniDayView();
     }
 
-    private void applySidebarButtonStyle() {
-        homeButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-                "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-        settingsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; " +
-                "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-        friendsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-                "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-    }
+    //private void applySidebarButtonStyle() {
+     //   homeButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
+      //          "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+       // settingsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; " +
+       //         "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+       // friendsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
+        //        "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+   // }
 
     private void updateDateLabel() {
         if (dateLabel != null) {
@@ -150,27 +150,27 @@ public class SettingsController {
     @FXML
     private void goToHome() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calendarpage/hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
             Parent homeRoot = loader.load();
 
-            Stage stage = (Stage) homeButton.getScene().getWindow();
+            Stage homeStage = new Stage();
+            homeStage.setTitle("The Ultimate Calendar");
+
             Scene scene = new Scene(homeRoot);
 
-            stage.setScene(scene);
-            stage.setTitle("The Ultimate Calendar");
+            homeStage.setScene(scene);
 
-            // Enforce full-screen-like behaviour
-            stage.setWidth(javafx.stage.Screen.getPrimary().getVisualBounds().getWidth());
-            stage.setHeight(javafx.stage.Screen.getPrimary().getVisualBounds().getHeight());
-            stage.setX(0);
-            stage.setY(0);
+            // 🌟 Set it to full screen
+            homeStage.setMaximized(true); // Maximize the window
 
-            stage.setMaximized(true); // Keep this too, some systems still honor it
+            homeStage.show();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     @FXML
     private void goToFriends() {
