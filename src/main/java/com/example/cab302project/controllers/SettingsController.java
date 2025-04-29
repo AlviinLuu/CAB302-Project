@@ -143,12 +143,12 @@ public class SettingsController {
             if (success) {
                 currentUser.setEmail(newEmail);
                 Session.setLoggedInUser(currentUser);
-                System.out.println("Email updated in database and session.");
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Email updated successfully!");
             } else {
-                System.out.println("Failed to update email in database.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update email. Try again.");
             }
         } else {
-            System.out.println("Invalid email entered or no user in session.");
+            showAlert(Alert.AlertType.WARNING, "Warning", "Please enter a valid email address.");
         }
     }
 
@@ -162,14 +162,21 @@ public class SettingsController {
             boolean success = userDAO.updatePassword(currentUser.getEmail(), newPassword);
             if (success) {
                 currentUser.setPassword(newPassword);
-                Session.setLoggedInUser(currentUser); // Update the session with new info
-                System.out.println("Password updated in database and session.");
+                Session.setLoggedInUser(currentUser);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Password updated successfully!");
             } else {
-                System.out.println("Failed to update password in database.");
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update password. Try again.");
             }
         } else {
-            System.out.println("Password too short or no user in session.");
+            showAlert(Alert.AlertType.WARNING, "Warning", "Password must be at least 6 characters.");
         }
+    }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
