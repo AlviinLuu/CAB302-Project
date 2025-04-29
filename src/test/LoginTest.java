@@ -47,4 +47,25 @@ public class LoginTest {
 
     @Test
     public void testLoginWhitespaceOnly() {assertFalse(authService.login("   ", "   "));}
+    @Test
+    public void testLoginSpecialCharacters() {
+        User specialUser = new User("user!@#", "pass!@#", "special@email.com");
+        authService.register(specialUser);
+        assertTrue(authService.login("user!@#", "pass!@#"));
+    }
+    @Test
+    public void testLoginLongCredentials() {
+        String longUsername = "user".repeat(50);
+        String longPassword = "pass".repeat(50);
+        User longUser = new User(longUsername, longPassword, "longuser@email.com");
+        authService.register(longUser);
+        assertTrue(authService.login(longUsername, longPassword));
+    }
+    @Test
+    public void testLoginCaseSensitivity() {
+        assertFalse(authService.login("ALICE", "pass123"));  // "ALICE" is different from "alice"
+    }
+
+
+
 }
