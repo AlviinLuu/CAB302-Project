@@ -261,7 +261,7 @@ public class CalenderController {
             Scene scene = new Scene(settingsRoot);
             settingsStage.setScene(scene);
 
-            // 🌟 Set it to full screen
+            // Set it to full screen
             settingsStage.setMaximized(true);
 
             // Close the current Calendar window
@@ -273,6 +273,33 @@ public class CalenderController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void openFriendsPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/friends-view.fxml"));
+            Parent friendsRoot = loader.load();
+
+            Stage friendsStage = new Stage();
+            friendsStage.setTitle("Friends");
+
+            Scene scene = new Scene(friendsRoot);
+            friendsStage.setScene(scene);
+
+            // Set it to full screen
+            friendsStage.setMaximized(true);
+
+            // Close the current Calendar window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
+            currentStage.close();
+
+            friendsStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     // Example simple AI response ****NEED TO BE REPLACED WHEN AI SET UP*******
     //private String generateResponse(String userInput) {
