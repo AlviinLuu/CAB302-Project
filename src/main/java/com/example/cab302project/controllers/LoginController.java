@@ -59,7 +59,7 @@ public class LoginController {
 
     @FXML
     protected void onSubmitButtonClick() {
-        //hide error label (will get immediatly shown again if there is a problem)
+        //hide error label (will get immediately shown again if there is a problem)
         errorLabel.setVisible(false);
         // Get input values from the fields
         String email = emailField.getText();
@@ -76,7 +76,6 @@ public class LoginController {
                 if (isValidUser) {
                     System.out.println("Login successful!");
                     // Proceed to the next screen (e.g., main app screen)
-                    // You can use a method like `goToHomePage()` here
                 } else {
                     System.out.println("Login failed.");
                     // Show error message
@@ -100,7 +99,7 @@ public class LoginController {
                     showError("Registration successful!");
 
 
-                    // Optionally clear fields after registration
+                    // Clear fields after registration
                     emailField.clear();
                     passwordField.clear();
                     repeatPasswordField.clear();
