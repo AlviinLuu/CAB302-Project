@@ -154,7 +154,7 @@ public class SettingsController {
             Parent homeRoot = loader.load();
 
             Stage homeStage = new Stage();
-            homeStage.setTitle("The Ultimate Calendar");
+            homeStage.setTitle("Smart Schedule Assistant");
 
             Scene scene = new Scene(homeRoot);
 
