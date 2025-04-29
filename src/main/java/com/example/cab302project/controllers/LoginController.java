@@ -1,20 +1,22 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.IUserDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
-import com.example.cab302project.models.IUserDAO;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import jdk.jshell.spi.ExecutionControl;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginController {
     @FXML
     private Label introText;
     @FXML
-    private Boolean isLogin = true; // Start in "login" mode (false)
+    private Boolean isLogin = true;
     @FXML
     private TextField usernameField;
     @FXML
@@ -26,98 +28,93 @@ public class LoginController {
     @FXML
     private Button switchState;
     @FXML
-    private Label errorLabel; // Label to display error messages
+    private Label errorLabel;
 
-    // Database access object (DAO)
-    private final IUserDAO userDAO;
+    private final IUserDAO userDAO = new SqliteUserDAO();
 
     public final String loginText = "Welcome Back!";
     public final String registerText = "Welcome Aboard!";
 
-    public LoginController() {
-        // Initialize userDAO to interact with the database
-        this.userDAO = new SqliteUserDAO();
-    }
+    public LoginController() {}
 
     @FXML
     protected void onSwitchStateClick() {
-        if (isLogin) {
-            // Switch to Register mode
-            introText.setText(registerText);
-            switchState.setText("Login Instead");
-            repeatPasswordField.setVisible(true); // Show repeat password for registration
-            usernameField.setVisible(true);
+        if (this.isLogin) {
+            this.introText.setText(registerText);
+            this.switchState.setText("Login Instead");
+            this.repeatPasswordField.setVisible(true);
+            this.usernameField.setVisible(true);
         } else {
-            // Switch to Login mode
-            introText.setText(loginText);
-            switchState.setText("Register Instead");
-            repeatPasswordField.setVisible(false); // Hide repeat password for login
-            usernameField.setVisible(false);
+            this.introText.setText(loginText);
+            this.switchState.setText("Register Instead");
+            this.repeatPasswordField.setVisible(false);
+            this.usernameField.setVisible(false);
         }
-        isLogin = !isLogin; // Toggle the login state
+        this.isLogin = !this.isLogin;
     }
 
     @FXML
     protected void onSubmitButtonClick() {
-        //hide error label (will get immediately shown again if there is a problem)
-        errorLabel.setVisible(false);
-        // Get input values from the fields
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        String rptPassword = repeatPasswordField.getText(); // For registration only
+        this.errorLabel.setVisible(false);
+        String email = this.emailField.getText();
+        String password = this.passwordField.getText();
+        String rptPassword = this.repeatPasswordField.getText();
 
         if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
-            if (isLogin) {
-                // Login logic
+            if (this.isLogin) {
                 System.out.println("Attempting login...");
-
-                // Check if user exists in the database
-                boolean isValidUser = userDAO.validateUser(email, password);
+                boolean isValidUser = this.userDAO.validateUser(email, password);
                 if (isValidUser) {
                     System.out.println("Login successful!");
-                    // Proceed to the next screen (e.g., main app screen)
+                    openCalendarPage();
                 } else {
                     System.out.println("Login failed.");
-                    // Show error message
-                    showError("Invalid email or password.");
+                    this.showError("Invalid email or password.");
                 }
             } else {
-                // Registration logic
                 System.out.println("Attempting registration...");
-
-                // Check if the email already exists in the database
-                if (userDAO.userExists(email)) {
+                if (this.userDAO.userExists(email)) {
                     System.out.println("Account with this email already exists.");
-                    showError("Account with this email already exists.");
+                    this.showError("Account with this email already exists.");
                 } else if (rptPassword != null && password.equals(rptPassword)) {
-                    // Ensure password matches the repeat password
-                    User newUser = new User(email, password, email); // Create a new user (email as username or adjust)
-                    userDAO.addUser(newUser); // Add the user to the database
+                    User newUser = new User(email, password, email);
+                    this.userDAO.addUser(newUser);
                     System.out.println("User registered successfully!");
-
-                    // Show success message
-                    showError("Registration successful!");
-
-
-                    // Clear fields after registration
-                    emailField.clear();
-                    passwordField.clear();
-                    repeatPasswordField.clear();
+                    this.showError("Registration successful!");
+                    this.emailField.clear();
+                    this.passwordField.clear();
+                    this.repeatPasswordField.clear();
                 } else {
-                    // Passwords do not match during registration
                     System.out.println("Passwords do not match.");
-                    showError("Passwords do not match.");
+                    this.showError("Passwords do not match.");
                 }
             }
         } else {
-            // Handle empty fields (email or password)
-            showError("Please fill in all fields.");
+            this.showError("Please fill in all fields.");
         }
     }
 
-    private void showError(String msg){
-        errorLabel.setVisible(true);
-        errorLabel.setText(msg);
+    private void openCalendarPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
+            Parent calendarRoot = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Calendar Page");
+            stage.setScene(new Scene(calendarRoot));
+            stage.setMaximized(true);
+            stage.show();
+
+            // Close the login window
+            Stage currentStage = (Stage) emailField.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    private void showError(String msg) {
+        this.errorLabel.setVisible(true);
+        this.errorLabel.setText(msg);
+    }
 }
