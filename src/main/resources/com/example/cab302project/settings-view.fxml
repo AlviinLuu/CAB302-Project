@@ -43,7 +43,7 @@
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label text="Email" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <TextField fx:id="emailField" style="-fx-font-size: 16px; -fx-background-radius: 8;"/>
-                    <Button fx:id="changeEmailButton" text="Change Email Address"
+                    <Button fx:id="changeEmailButton" text="Change Email Address" onAction="#handleChangeEmail"
                             style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;"
                             prefHeight="45" maxWidth="250"/>
                 </VBox>
@@ -52,7 +52,7 @@
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label text="Password" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
                     <PasswordField fx:id="passwordField" style="-fx-font-size: 16px; -fx-background-radius: 8;"/>
-                    <Button fx:id="changePasswordButton" text="Change Password"
+                    <Button fx:id="changePasswordButton" text="Change Password" onAction="#handleChangePassword"
                             style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;"
                             prefHeight="45" maxWidth="250"/>
                 </VBox>
@@ -99,7 +99,7 @@
         <Button text="ACCOUNT"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <Button fx:id="signOutButton"
+        <Button text="LOG OUT" onAction="#handleLogOut"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
     </VBox>

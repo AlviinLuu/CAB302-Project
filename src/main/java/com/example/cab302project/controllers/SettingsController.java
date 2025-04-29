@@ -1,4 +1,8 @@
 package com.example.cab302project.controllers;
+import com.example.cab302project.models.IUserDAO;
+import com.example.cab302project.models.SqliteUserDAO;
+import com.example.cab302project.models.User;
+import com.example.cab302project.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -29,9 +33,11 @@ public class SettingsController {
     @FXML private VBox aiSidebar;
     @FXML private GridPane miniDayView;
     @FXML private SplitPane splitPane;
-
+    @FXML
+    private VBox mainContent;
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
+    private final IUserDAO userDAO = new SqliteUserDAO();
 
     @FXML
     private void initialize() {
@@ -130,21 +136,47 @@ public class SettingsController {
     @FXML
     private void handleChangeEmail() {
         String newEmail = emailField.getText();
-        if (newEmail.contains("@")) {
-            System.out.println("Email changed to: " + newEmail);
+        User currentUser = Session.getLoggedInUser();
+
+        if (newEmail.contains("@") && currentUser != null) {
+            boolean success = userDAO.updateEmail(currentUser.getEmail(), newEmail);
+            if (success) {
+                currentUser.setEmail(newEmail);
+                Session.setLoggedInUser(currentUser);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Email updated successfully!");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update email. Try again.");
+            }
         } else {
-            System.out.println("Invalid email entered.");
+            showAlert(Alert.AlertType.WARNING, "Warning", "Please enter a valid email address.");
         }
     }
+
 
     @FXML
     private void handleChangePassword() {
         String newPassword = passwordField.getText();
-        if (newPassword.length() >= 6) {
-            System.out.println("Password changed.");
+        User currentUser = Session.getLoggedInUser();
+
+        if (newPassword.length() >= 6 && currentUser != null) {
+            boolean success = userDAO.updatePassword(currentUser.getEmail(), newPassword);
+            if (success) {
+                currentUser.setPassword(newPassword);
+                Session.setLoggedInUser(currentUser);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Password updated successfully!");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update password. Try again.");
+            }
         } else {
-            System.out.println("Password too short.");
+            showAlert(Alert.AlertType.WARNING, "Warning", "Password must be at least 6 characters.");
         }
+    }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
@@ -154,21 +186,50 @@ public class SettingsController {
             Parent homeRoot = loader.load();
 
             Stage homeStage = new Stage();
-            homeStage.setTitle("The Ultimate Calendar");
+            homeStage.setTitle("Smart Schedule Assistant");
 
             Scene scene = new Scene(homeRoot);
-
             homeStage.setScene(scene);
 
-            // 🌟 Set it to full screen
+            //  Set it to full screen
             homeStage.setMaximized(true); // Maximize the window
 
             homeStage.show();
+
+            //  Close the current Settings page
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleLogOut() {
+        Session.clear();
+        System.out.println("Logging out...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Smart Schedule Assistant");
+
+            Scene scene = new Scene(loginRoot, 380, 500);
+            loginStage.setScene(scene);
+
+            loginStage.show();
+
+            // Close the current Settings page
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 

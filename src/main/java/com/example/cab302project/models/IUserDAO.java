@@ -23,4 +23,8 @@ public interface IUserDAO {
     void deleteUser(String username);
 
     boolean userExists(String email);
+
+    boolean updateEmail(String currentEmail, String newEmail);
+
+    boolean updatePassword(String email, String newPassword);
 }
