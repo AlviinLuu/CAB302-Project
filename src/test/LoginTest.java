@@ -37,7 +37,7 @@ public class LoginTest {
     public void testLoginEmptyPassword() {assertFalse(authService.login("alice", ""));}
 
     @Test
-    public void testLoginNullValues() {assertThrows(NullPointerException.class, () -> {authService.login(null, null);});}
+    public void testLoginNullValues() {assertFalse(authService.login(null, null));}
 
     @Test
     public void testLoginInvalidEmailFormat() {assertFalse(authService.login("alice@invalid", "pass123"));}
