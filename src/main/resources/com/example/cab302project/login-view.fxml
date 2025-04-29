@@ -35,7 +35,7 @@
    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="134.0" prefWidth="239.0" spacing="5.0">
       <children>
          <Button fx:id="submitBtn" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="43.0" prefWidth="57.0" text="Submit" />
-          <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="28.0" prefWidth="134.0" text="Login Instead" />
+          <Button fx:id="switchState" onAction="#onSwitchStateClick" prefHeight="28.0" prefWidth="134.0" text="Register Instead" />
       </children>
       <padding>
          <Insets top="10.0" />
