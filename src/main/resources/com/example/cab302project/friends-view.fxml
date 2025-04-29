@@ -23,7 +23,7 @@
 
         <!-- Friends Page Content -->
         <StackPane VBox.vgrow="ALWAYS" style="-fx-background-color: #E6E6FA;">
-            <Label text="Friends page content will appear here when we code for it later <3" style="-fx-font-size: 20px; -fx-text-fill: #444;" />
+            <Label text="Friends page content will appear here when we code for it laterrr" style="-fx-font-size: 20px; -fx-text-fill: #444;" />
         </StackPane>
 
     </VBox>
