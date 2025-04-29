@@ -160,12 +160,12 @@ public class SettingsController {
             Scene scene = new Scene(homeRoot);
             homeStage.setScene(scene);
 
-            // 🌟 Set it to full screen
+            //  Set it to full screen
             homeStage.setMaximized(true); // Maximize the window
 
             homeStage.show();
 
-            // 🛑 Close the current Settings page
+            //  Close the current Settings page
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
             currentStage.close();
 
@@ -173,6 +173,30 @@ public class SettingsController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleLogOut() {
+        System.out.println("Logging out...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Smart Schedule Assistant");
+
+            Scene scene = new Scene(loginRoot, 380, 500);
+            loginStage.setScene(scene);
+
+            loginStage.show();
+
+            // Close the current Settings page
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
