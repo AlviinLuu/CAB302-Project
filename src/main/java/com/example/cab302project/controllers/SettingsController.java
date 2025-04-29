@@ -29,7 +29,8 @@ public class SettingsController {
     @FXML private VBox aiSidebar;
     @FXML private GridPane miniDayView;
     @FXML private SplitPane splitPane;
-
+    @FXML
+    private VBox mainContent;
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
 
@@ -157,7 +158,6 @@ public class SettingsController {
             homeStage.setTitle("Smart Schedule Assistant");
 
             Scene scene = new Scene(homeRoot);
-
             homeStage.setScene(scene);
 
             // 🌟 Set it to full screen
@@ -165,10 +165,15 @@ public class SettingsController {
 
             homeStage.show();
 
+            // 🛑 Close the current Settings page
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
 

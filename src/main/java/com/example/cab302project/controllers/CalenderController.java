@@ -259,11 +259,14 @@ public class CalenderController {
             settingsStage.setTitle("Settings");
 
             Scene scene = new Scene(settingsRoot);
-
             settingsStage.setScene(scene);
 
             // 🌟 Set it to full screen
-            settingsStage.setMaximized(true); // This maximizes the window
+            settingsStage.setMaximized(true);
+
+            // Close the current Calendar window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
+            currentStage.close();
 
             settingsStage.show();
         } catch (Exception e) {
