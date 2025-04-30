@@ -37,7 +37,7 @@
       <top>
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="134.0" prefWidth="239.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-               <Button fx:id="submitBtn" alignment="CENTER_LEFT" maxWidth="350" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Submit" />
+               <Button fx:id="submitBtn" alignment="CENTER_LEFT" defaultButton="true" maxWidth="350" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Submit" />
                 <Button fx:id="switchState" alignment="CENTER_LEFT" maxWidth="350" onAction="#onSwitchStateClick" prefHeight="39.0" prefWidth="239.0" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Register Instead">
                   <font>
                      <Font size="5.0" />

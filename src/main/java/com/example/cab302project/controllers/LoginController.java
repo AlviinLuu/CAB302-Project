@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,12 +31,16 @@ public class LoginController {
     private PasswordField repeatPasswordField;
     @FXML
     private Button switchState;
+    @FXML
+    private Button submitBtn = new Button();
 
 
     private final IUserDAO userDAO = new SqliteUserDAO();
 
     public final String loginText = "Welcome Back!";
     public final String registerText = "Welcome Aboard!";
+
+
 
     public LoginController() {}
 
@@ -54,7 +59,9 @@ public class LoginController {
         }
         this.isLogin = !this.isLogin;
     }
-
+    public void submit(){
+        onSubmitButtonClick();
+    }
     @FXML
     protected void onSubmitButtonClick() {
         this.errorLabel.setVisible(false);

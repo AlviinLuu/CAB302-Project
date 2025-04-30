@@ -1,5 +1,6 @@
 package com.example.cab302project;
 
+import com.example.cab302project.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,7 +27,11 @@ public class LoginApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.show();
+
     }
+
+
+
 
     public static void main(String[] args) {
         launch();
