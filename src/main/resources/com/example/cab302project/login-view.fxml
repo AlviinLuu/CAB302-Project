@@ -7,23 +7,28 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox alignment="CENTER" prefHeight="578.0" prefWidth="332.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Label fx:id="titleText" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="67.0" prefWidth="547.0" text="Ultimate Uni Calendar" textFill="WHITE" wrapText="true">
+   <HBox alignment="CENTER_LEFT" spacing="10">
+      <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true"/>
+      <Label fx:id="titleText" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="67.0" prefWidth="547.0" text="Smart Schedule Assistant" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="System Bold" size="27.0" />
+         </font>
+      </Label>
+   </HBox>
+   <Label fx:id="introText" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="67.0" prefWidth="547.0" text="Welcome Back! Log In!" textFill="WHITE" wrapText="true" alignment="CENTER">
       <font>
-         <Font name="System Bold" size="27.0" />
-      </font>
-   </Label>
-   <Label fx:id="introText" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="67.0" prefWidth="547.0" text="Welcome Back!" textFill="WHITE" wrapText="true">
-      <font>
-         <Font name="System Bold" size="13.0" />
+         <Font name="System Bold" size="20.0" />
       </font></Label>
-   <Label fx:id="errorLabel" text="Label" textFill="RED" visible="false" />
-   <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="98.0" prefWidth="180.0" spacing="10.0">
+      <Label fx:id="errorLabel" text="Label" textFill="RED" visible="false" alignment="CENTER"/>
+   <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="98.0" prefWidth="350.0" spacing="10.0">
       <children>
          <TextField fx:id="usernameField" promptText="Username" visible="false" />
          <TextField fx:id="emailField" promptText="Email" />
@@ -37,8 +42,8 @@
       <top>
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="134.0" prefWidth="239.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-               <Button fx:id="submitBtn" alignment="CENTER_LEFT" defaultButton="true" maxWidth="350" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Submit" />
-                <Button fx:id="switchState" alignment="CENTER_LEFT" maxWidth="350" onAction="#onSwitchStateClick" prefHeight="39.0" prefWidth="239.0" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Register Instead">
+               <Button fx:id="submitBtn" alignment="CENTER" defaultButton="true" maxWidth="350" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="40.0" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Log In" />
+                <Button fx:id="switchState" alignment="CENTER" maxWidth="350" onAction="#onSwitchStateClick" prefHeight="40.0" prefWidth="239.0" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="New Here? Register">
                   <font>
                      <Font size="5.0" />
                   </font>
