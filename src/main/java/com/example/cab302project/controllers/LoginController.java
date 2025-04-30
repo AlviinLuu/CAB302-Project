@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -33,6 +35,8 @@ public class LoginController {
     private Button switchState;
     @FXML
     private Button submitBtn = new Button();
+    @FXML
+    private ImageView logoImage;
 
 
     private final IUserDAO userDAO = new SqliteUserDAO();
@@ -43,6 +47,13 @@ public class LoginController {
 
 
     public LoginController() {}
+
+    @FXML
+    private void initialize() {
+        // Load logo
+        Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
+        logoImage.setImage(logo);
+    }
 
     @FXML
     protected void onSwitchStateClick() {
