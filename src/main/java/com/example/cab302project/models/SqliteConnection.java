@@ -21,4 +21,7 @@ public class SqliteConnection {
         }
         return instance;
     }
+    public static void injectTestConnection(Connection testConnection) {
+        instance = testConnection;
+    }
 }
