@@ -19,7 +19,7 @@ import java.io.IOException;
 
 
 public class LoginApplication extends Application {
-    public static final int WIDTH = 300;
+    public static final int WIDTH = 450;
     public static final int HEIGHT = 600;
 
     public void start(Stage stage) throws IOException {
