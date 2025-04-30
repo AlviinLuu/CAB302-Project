@@ -87,7 +87,9 @@ public class LoginController {
                 } else if (this.userDAO.getUserByUsername(email) != null) {
                     System.out.println("Username already in use.");
                     this.showError("Account with this username already exists.");
-                } else {
+                } else if(!isValidPassword(password)){
+                    this.showError("Password Does Not Meet Requirements");
+                }else {
                     User newUser = new User(email, password, email);
                     this.userDAO.addUser(newUser); // No return value, so we assume success only after checks
                     System.out.println("User registered successfully!");
@@ -121,7 +123,12 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
+    private boolean isValidEmail(String email){
+        return true;
+    }
+    private boolean isValidPassword(String pw){
+        return true;
+    }
     private void showError(String msg) {
         this.errorLabel.setVisible(true);
         this.errorLabel.setText(msg);
