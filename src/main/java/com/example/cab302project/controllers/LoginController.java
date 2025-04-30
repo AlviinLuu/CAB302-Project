@@ -45,12 +45,11 @@ public class LoginController {
     public final String registerText = "Welcome Aboard!";
 
 
-
     public LoginController() {}
 
     @FXML
     private void initialize() {
-        // Load logo
+        // logo
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
     }
