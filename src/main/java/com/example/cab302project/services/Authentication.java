@@ -10,8 +10,8 @@ public class Authentication {
         users.put(user.getUsername(), user);
     }
 
-    public boolean login(String username, String password) {
-        User user = users.get(username);
+    public boolean login(String email, String password) {
+        User user = users.get(email);
         return user != null && user.getPassword().equals(password);
     }
 }
