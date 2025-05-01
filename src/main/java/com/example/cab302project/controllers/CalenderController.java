@@ -116,16 +116,6 @@ public class CalenderController {
             dayComboBox.getItems().add(i);
         }
         dayComboBox.setValue(currentDate.getDayOfMonth());
-//        dayComboBox.setOnAction(e -> {
-//            if (dayRadio.isSelected()) {
-//                Integer selectedDay = dayComboBox.getValue();
-//                if (selectedDay != null) {
-//                    // Update currentDate while preserving current month and year
-//                    currentDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), selectedDay);
-//                    updateCalendar();
-//                }
-//            }
-//        });
 
         dayComboBox.setVisible(false);
         dayComboBox.setManaged(false);
@@ -161,29 +151,6 @@ public class CalenderController {
     }
 
     // === Navigation Buttons ===
-//    @FXML
-//    private void onMonthYearSelected() {
-//        String selectedMonth = monthComboBox.getValue();
-//        Integer selectedYear = yearComboBox.getValue();
-//        Integer selectedDay = dayComboBox.getValue();
-//
-//        if (selectedMonth != null && selectedYear != null) {
-//            int monthNumber = monthComboBox.getItems().indexOf(selectedMonth) + 1; // January = 0, so +1
-//            int day = (selectedDay != null) ? selectedDay : 1;
-//            currentDate = LocalDate.of(selectedYear, monthNumber, 1);
-//
-//            // Refresh dayComboBox values based on selected month and year
-//            int daysInMonth = currentDate.lengthOfMonth();
-//            dayComboBox.getItems().clear();
-//            for (int i = 1; i <= daysInMonth; i++) {
-//                dayComboBox.getItems().add(i);
-//            }
-//            dayComboBox.setValue(Math.min(currentDate.getDayOfMonth(), daysInMonth));
-//
-//            updateCalendar();
-//        }
-//    }
-
     @FXML
     private void onMonthYearSelected() {
         String selectedMonth = monthComboBox.getValue();
@@ -196,7 +163,7 @@ public class CalenderController {
             // Fallback to 1 if null
             int preservedDay = (selectedDay != null) ? selectedDay : 1;
 
-            // Update currentDate using preserved day (for now)
+            // Update currentDate using preserved day
             currentDate = LocalDate.of(selectedYear, monthNumber, 1);
 
             // Get actual number of days in that month
@@ -235,7 +202,7 @@ public class CalenderController {
         dayView.setVisible(false);
         dayView.setManaged(false);
 
-        yearRadio.setSelected(true); // To make sure the button stays selected.
+        yearRadio.setSelected(true); // Ensure the Year button stays selected.
     }
 
     @FXML
@@ -418,7 +385,7 @@ public class CalenderController {
         weekGrid.getChildren().clear();
         monthGrid.getChildren().clear();
         yearGrid.getChildren().clear();
-        dayGrid.getChildren().clear();  // Clear the day grid as well
+        dayGrid.getChildren().clear();
 
         // Add weekday headers to the appropriate grid (depending on the selected view)
         String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
