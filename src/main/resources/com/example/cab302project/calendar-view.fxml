@@ -27,6 +27,7 @@
                 <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
                     <ComboBox fx:id="monthComboBox" prefWidth="150"/>
                     <ComboBox fx:id="yearComboBox" prefWidth="100"/>
+                    <ComboBox fx:id="dayComboBox" prefWidth="80" visible="false" managed="false"/>
                     <Button text="Go" onAction="#onMonthYearSelected" style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A;"/>
                     <Label fx:id="monthLabel" text="April 2025" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
                 </HBox>
