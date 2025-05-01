@@ -39,7 +39,7 @@
 
     <Label fx:id="welcomeText" />
    <BorderPane prefHeight="200.0" prefWidth="200.0">
-      <top>
+      <bottom>
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="134.0" prefWidth="239.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
                <Button fx:id="submitBtn" alignment="CENTER" defaultButton="true" maxWidth="350" mnemonicParsing="false" onAction="#onSubmitButtonClick" prefHeight="40.0" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="Log In" />
@@ -53,6 +53,6 @@
                <Insets top="10.0" />
             </padding>
          </VBox>
-      </top>
+      </bottom>
    </BorderPane>
 </VBox>

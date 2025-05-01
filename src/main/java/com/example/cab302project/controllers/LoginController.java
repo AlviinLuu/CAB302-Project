@@ -42,20 +42,26 @@ public class LoginController {
 
 
 
-    public LoginController() {}
+    public LoginController() {
+    }
 
     @FXML
     protected void onSwitchStateClick() {
         if (this.isLogin) {
+            //change to "register" state
             this.introText.setText(registerText);
             this.switchState.setText("Login Instead");
             this.repeatPasswordField.setVisible(true);
             this.usernameField.setVisible(true);
+            submitBtn.setText("Register");
+
         } else {
             this.introText.setText(loginText);
             this.switchState.setText("Register Instead");
             this.repeatPasswordField.setVisible(false);
             this.usernameField.setVisible(false);
+            submitBtn.setText("Login");
+
         }
         this.isLogin = !this.isLogin;
     }
