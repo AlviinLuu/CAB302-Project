@@ -62,6 +62,8 @@ public class CalenderController {
     private ComboBox<String> monthComboBox;
     @FXML
     private ComboBox<Integer> yearComboBox;
+    @FXML
+    private ComboBox<Integer> dayComboBox;
 
 
     @FXML
@@ -109,6 +111,30 @@ public class CalenderController {
         monthComboBox.setValue(currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
         yearComboBox.setValue(currentDate.getYear());
 
+        // Populate day combo box with default 1-31
+        for (int i = 1; i <= 31; i++) {
+            dayComboBox.getItems().add(i);
+        }
+        dayComboBox.setValue(currentDate.getDayOfMonth());
+//        dayComboBox.setOnAction(e -> {
+//            if (dayRadio.isSelected()) {
+//                Integer selectedDay = dayComboBox.getValue();
+//                if (selectedDay != null) {
+//                    // Update currentDate while preserving current month and year
+//                    currentDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), selectedDay);
+//                    updateCalendar();
+//                }
+//            }
+//        });
+
+        dayComboBox.setVisible(false);
+        dayComboBox.setManaged(false);
+
+
+        // Update dayComboBox based on month/year changes
+        monthComboBox.setOnAction(e -> updateDayComboBox());
+        monthComboBox.setOnAction(e -> updateDayComboBox());
+
         // Set up toggle group
         viewToggleGroup = new ToggleGroup();
         dayRadio.setToggleGroup(viewToggleGroup);
@@ -119,27 +145,80 @@ public class CalenderController {
         splitPane.setDividerPositions(0.2);
         renderMiniDayView();
 
+        updateDayComboBox();
         viewToggleGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
+                RadioButton selected = (RadioButton) newVal;
+                boolean isDayView = selected == dayRadio || selected == weekRadio;
+
+                dayComboBox.setVisible(isDayView);
+                dayComboBox.setManaged(isDayView);
+
                 updateCalendar();
             }
         });
-
         updateCalendar();
     }
 
     // === Navigation Buttons ===
+//    @FXML
+//    private void onMonthYearSelected() {
+//        String selectedMonth = monthComboBox.getValue();
+//        Integer selectedYear = yearComboBox.getValue();
+//        Integer selectedDay = dayComboBox.getValue();
+//
+//        if (selectedMonth != null && selectedYear != null) {
+//            int monthNumber = monthComboBox.getItems().indexOf(selectedMonth) + 1; // January = 0, so +1
+//            int day = (selectedDay != null) ? selectedDay : 1;
+//            currentDate = LocalDate.of(selectedYear, monthNumber, 1);
+//
+//            // Refresh dayComboBox values based on selected month and year
+//            int daysInMonth = currentDate.lengthOfMonth();
+//            dayComboBox.getItems().clear();
+//            for (int i = 1; i <= daysInMonth; i++) {
+//                dayComboBox.getItems().add(i);
+//            }
+//            dayComboBox.setValue(Math.min(currentDate.getDayOfMonth(), daysInMonth));
+//
+//            updateCalendar();
+//        }
+//    }
+
     @FXML
     private void onMonthYearSelected() {
         String selectedMonth = monthComboBox.getValue();
         Integer selectedYear = yearComboBox.getValue();
+        Integer selectedDay = dayComboBox.getValue(); // <-- store before clearing
 
         if (selectedMonth != null && selectedYear != null) {
-            int monthNumber = monthComboBox.getItems().indexOf(selectedMonth) + 1; // January = 0, so +1
+            int monthNumber = monthComboBox.getItems().indexOf(selectedMonth) + 1;
+
+            // Fallback to 1 if null
+            int preservedDay = (selectedDay != null) ? selectedDay : 1;
+
+            // Update currentDate using preserved day (for now)
             currentDate = LocalDate.of(selectedYear, monthNumber, 1);
+
+            // Get actual number of days in that month
+            int daysInMonth = currentDate.lengthOfMonth();
+
+            // Repopulate day combo box
+            dayComboBox.getItems().clear();
+            for (int i = 1; i <= daysInMonth; i++) {
+                dayComboBox.getItems().add(i);
+            }
+
+            // Set selected day to the preserved value (or last day if out of range)
+            int correctedDay = Math.min(preservedDay, daysInMonth);
+            dayComboBox.setValue(correctedDay);
+
+            // Finally update currentDate with correct day
+            currentDate = LocalDate.of(selectedYear, monthNumber, correctedDay);
+
             updateCalendar();
         }
     }
+
 
     // === View Handlers ===
     @FXML
@@ -208,6 +287,11 @@ public class CalenderController {
         yearView.setManaged(false);
 
         dayRadio.setSelected(true); // Ensure the Day button stays selected.
+
+        // Update selected day from combo
+        int selectedDay = dayComboBox.getValue();
+        currentDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), selectedDay);
+        updateCalendar();
     }
 
     @FXML
@@ -543,7 +627,8 @@ public class CalenderController {
         }
 
         // Create and add the date label at the top (spanning both columns)
-        Label dateLabel = new Label(LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")));
+        Label dateLabel = new Label(currentDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")));
+
         dateLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #333; -fx-padding: 1px;");
         dateLabel.setAlignment(Pos.TOP_LEFT);
         dateLabel.setMaxWidth(Double.MAX_VALUE);
@@ -578,6 +663,9 @@ public class CalenderController {
 
     private void renderYearView() {
         yearGrid.getChildren().clear();
+        yearGrid.getColumnConstraints().clear();
+        yearGrid.getRowConstraints().clear();
+
         int monthsPerRow = 3;
         int monthsPerCol = 4;
         int month = 1;
@@ -719,6 +807,19 @@ public class CalenderController {
             miniDayView.add(timeLabel, 0, hour + 1);
             miniDayView.add(eventSlot, 1, hour + 1);
             GridPane.setHgrow(eventSlot, Priority.ALWAYS);
+        }
+    }
+
+    private void updateDayComboBox() {
+        Integer year = yearComboBox.getValue();
+        String monthStr = monthComboBox.getValue();
+        if (monthStr != null && year != null) {
+            int month = monthComboBox.getItems().indexOf(monthStr) + 1;
+            int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+            dayComboBox.getItems().clear();
+            for (int i = 1; i <= daysInMonth; i++) dayComboBox.getItems().add(i);
+            int today = LocalDate.now().getDayOfMonth();
+            dayComboBox.setValue(Math.min(today, daysInMonth));
         }
     }
 
