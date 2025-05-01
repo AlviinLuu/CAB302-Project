@@ -1,7 +1,5 @@
 package com.example.cab302project.models;
 
-import com.example.cab302project.models.User;
-
 public interface IUserDAO {
 
     // Adds a new user to the database
@@ -14,7 +12,7 @@ public interface IUserDAO {
     User getUserByEmail(String email);
 
     // Validates a user’s credentials (for login)
-    boolean validateUser(String username, String password);
+    boolean validateUser(String email, String password);
 
     // Updates a user’s information (e.g., email, password)
     void updateUser(User user);
