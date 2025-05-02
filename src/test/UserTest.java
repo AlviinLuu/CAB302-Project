@@ -39,4 +39,25 @@ public class UserTest {
         user.setPassword("newpassword");
         assertEquals("newpassword", user.getPassword(), "Password should be 'newpassword' after setting it");
     }
+
+    @Test
+    public void testSetPasswordWeird() {
+        // Test the setter for password
+        String pass = "sdkgiroo 45kfs";
+        user.setPassword(pass);
+        assertEquals(pass, user.getPassword(), "Password should be 'newpassword' after setting it");
+    }
+
+    //@Test Seems like this should be handled differently by the app so ill leave this commented for now
+    public void testSetPasswordNull() {
+        // Test the setter for password
+
+            // Test the setter for password
+            String pass = "password";
+            user.setPassword(null);
+            assertEquals(pass, user.getPassword(), "Password should be 'newpassword' after setting it");
+
+    }
+
+
 }
