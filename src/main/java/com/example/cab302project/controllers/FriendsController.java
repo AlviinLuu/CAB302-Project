@@ -2,13 +2,20 @@ package com.example.cab302project.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 
@@ -26,24 +33,34 @@ public class FriendsController {
     @FXML
     private Label profileContentLabel;
     @FXML
-    private RadioButton user1Radio, user2Radio, user3Radio;
+    private ComboBox<String> friendSelector;
+    @FXML
+    private GridPane miniDayView;
+
+    private LocalDate currentDate = LocalDate.now();
+
 
 
     @FXML
     public void initialize() {
-        // Assign the toggle group in code
-        user1Radio.setToggleGroup(friendsToggleGroup);
-        user2Radio.setToggleGroup(friendsToggleGroup);
-        user3Radio.setToggleGroup(friendsToggleGroup);
+        // Populate the ComboBox with some mock usernames (replace with actual logic later)
+        friendSelector.getItems().addAll("Username1", "Username2", "Username3");
 
-        friendsToggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle != null) {
-                RadioButton selectedRadio = (RadioButton) newToggle;
-                String username = selectedRadio.getText();
-                profileHeaderLabel.setText(username + "'s Profile");
-                profileContentLabel.setText("Details about " + username + " will be shown here.");
+        // Listen for selection changes
+        friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                profileHeaderLabel.setText(newVal + "'s Profile");
+                profileContentLabel.setText("Details about " + newVal + " will be shown here.");
             }
         });
+
+        for (int i = 0; i < 24; i++) {
+            Label hourLabel = new Label(String.format("%02d:00", i));
+            hourLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #1A1A1A;");
+            miniDayView.add(hourLabel, 0, i);
+        }
+        renderMiniDayView();
+
     }
 
     @FXML
@@ -137,4 +154,45 @@ public class FriendsController {
     timeline.setCycleCount(fullText.length());
     timeline.play();
     }
+
+    private void renderMiniDayView() {
+        miniDayView.getChildren().clear();
+        miniDayView.getRowConstraints().clear();
+
+        // Add a label for the current day and month (no year)
+        Label dateLabel = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
+        dateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 50px; -fx-text-fill: #333; ");
+        dateLabel.setMaxWidth(Double.MAX_VALUE);
+        dateLabel.setAlignment(Pos.TOP_LEFT);
+        miniDayView.add(dateLabel, 0, 0, 2, 1); // Span across 2 columns
+
+        // Add a small spacer after the date label
+        RowConstraints spacer = new RowConstraints();
+        spacer.setMinHeight(40);
+        miniDayView.getRowConstraints().add(spacer);
+
+        // Add RowConstraints for each hour
+        for (int hour = 0; hour < 24; hour++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setMinHeight(30); // Smaller because it's a mini version
+            miniDayView.getRowConstraints().add(rowConstraints);
+
+            // Create time label (hour on the left)
+            Label timeLabel = new Label(String.format("%02d:00", hour));
+            timeLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
+            timeLabel.setMaxWidth(Double.MAX_VALUE);
+            timeLabel.setAlignment(Pos.CENTER_RIGHT);
+
+            // Create event slot (on the right side)
+            Label eventSlot = new Label();
+            eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;");
+            eventSlot.setMaxWidth(Double.MAX_VALUE);
+            eventSlot.setAlignment(Pos.CENTER_LEFT);
+
+            miniDayView.add(timeLabel, 0, hour + 1);
+            miniDayView.add(eventSlot, 1, hour + 1);
+            GridPane.setHgrow(eventSlot, Priority.ALWAYS);
+        }
+    }
+
 }
