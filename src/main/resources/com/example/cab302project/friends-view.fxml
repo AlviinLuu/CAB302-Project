@@ -37,14 +37,18 @@
                     <Label text="Pick a friend - drop down menu" />
                     <ComboBox fx:id="friendSelector" prefWidth="200"/>
 
-                    <Button text="Add friends by search"
-                            style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
+                    <Label text="Search Users" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="searchField" promptText="Search users..."
+                               style="-fx-background-color: white; -fx-border-color: #D8B9FF; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+
+                    <ListView fx:id="searchResultsList" prefHeight="150"
+                              style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>
 
                     <Button text="Your Requests"
                             style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
 
-                    <Button text="Pending Requests to others"
-                            style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
+                    <Label text="Pending Requests to others" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="pendingRequestsList" prefHeight="120"/>
                 </VBox>
 
                 <!-- Friend Profile and AI Area -->
@@ -64,9 +68,6 @@
                         <TextArea fx:id="aiPromptField" promptText="enter AI prompt in this textbox"
                                   wrapText="true" prefRowCount="3"
                                   style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
-<!--                        <Button text="ask" onAction="#handleAIPrompt"-->
-<!--                                style="-fx-text-fill: white; -fx-background-color: #8000FF; -fx-font-weight: bold; -fx-background-radius: 12;"-->
-<!--                                alignment="CENTER_RIGHT" maxWidth="80"/>-->
                         <Button text="Ask" onAction="#handleAIPrompt"
                                 style="-fx-text-fill: white; -fx-background-color: #8000FF; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                                 maxWidth="100" alignment="CENTER"/>
@@ -101,17 +102,6 @@
         <Button text="FRIENDS"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-
-<!--        &lt;!&ndash; AI Prompt Area &ndash;&gt;-->
-<!--        <Label text="AI Assistant" style="-fx-text-fill: #1A1A1A; -fx-font-size: 16px; -fx-font-weight: bold;"/>-->
-<!--        <TextArea fx:id="aiPromptField" promptText="Enter your prompt here..."-->
-<!--                  wrapText="true" prefRowCount="5"-->
-<!--                  style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>-->
-<!--        <Button text="Ask" onAction="#handleAIPrompt"-->
-<!--                style="-fx-text-fill: white; -fx-background-color: #8000FF; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"-->
-<!--                maxWidth="100" alignment="CENTER"/>-->
-<!--        <Label fx:id="aiResponseLabel"-->
-<!--               wrapText="true"/>-->
 
         <Region VBox.vgrow="ALWAYS"/>
 

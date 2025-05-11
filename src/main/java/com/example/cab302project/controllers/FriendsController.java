@@ -13,6 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ListView;
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +44,17 @@ public class FriendsController {
 
     private LocalDate currentDate = LocalDate.now();
 
+    @FXML private TextField searchField;
+    @FXML private ListView<String> searchResultsList;
+    @FXML private ListView<String> pendingRequestsList;
+
+    private ObservableList<String> allUsers = FXCollections.observableArrayList(
+            "Username1", "Username2", "Username3", "Harpi", "Simran", "Alex", "Jas"
+    );
+
+    private ObservableList<String> pendingRequests = FXCollections.observableArrayList();
+
+
 
 
     @FXML
@@ -61,6 +77,29 @@ public class FriendsController {
         }
         renderMiniDayView();
 
+        searchResultsList.setItems(FXCollections.observableArrayList()); // initially empty
+
+        // Live search
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.isBlank()) {
+                searchResultsList.getItems().clear();
+            } else {
+                searchResultsList.setItems(
+                        allUsers.filtered(user -> user.toLowerCase().contains(newVal.toLowerCase()))
+                );
+            }
+        });
+
+        // Add selected user to pending requests
+        pendingRequestsList.setItems(pendingRequests);
+
+        searchResultsList.setOnMouseClicked(event -> {
+            String selectedUser = searchResultsList.getSelectionModel().getSelectedItem();
+            if (selectedUser != null && !pendingRequests.contains(selectedUser)) {
+                pendingRequests.add(selectedUser);
+                searchResultsList.getSelectionModel().clearSelection();
+            }
+        });
     }
 
     @FXML
