@@ -1,53 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="splitPane" orientation="HORIZONTAL" dividerPositions="0.75"
-           xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.cab302project.controllers.FriendsController"
-           prefHeight="Infinity">
+<SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="HORIZONTAL" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.FriendsController">
 
     <!-- Left section (Main Content) -->
     <VBox fx:id="mainContent" style="-fx-padding: 0; -fx-background-color: #F0F8FF;" VBox.vgrow="ALWAYS">
 
         <!-- Top Navigation -->
-        <VBox style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
+        <VBox prefWidth="521.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
             <HBox spacing="20" style="-fx-padding: 10;">
                 <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true" />
-                <Label text="Smart Schedule Assistant - Friends" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" />
-                <Region HBox.hgrow="ALWAYS"/>
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" text="Smart Schedule Assistant - Friends" />
+                <Region HBox.hgrow="ALWAYS" />
             </HBox>
         </VBox>
 
         <!-- Friends Page Content -->
-        <StackPane VBox.vgrow="ALWAYS" style="-fx-background-color: #E6E6FA;">
-            <Label text="Friends page content will appear here when we code for it laterrr" style="-fx-font-size: 20px; -fx-text-fill: #444;" />
+        <StackPane alignment="TOP_CENTER" style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <ListView fx:id="friendList" prefHeight="170.0" prefWidth="413.0">
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+                  </HBox.margin>
+               </ListView>
+               <HBox maxHeight="-Infinity" prefHeight="19.0" prefWidth="535.0" spacing="10.0">
+                  <children>
+                     <TextField fx:id="friendSearchField" prefHeight="25.0" prefWidth="171.0" promptText="Search Friends" />
+                     <Button mnemonicParsing="false" text="Add" />
+                  </children>
+               </HBox>
+            </children>
+         </HBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
         </StackPane>
 
     </VBox>
 
     <!-- Right Sidebar ****Need to implement AI and moce account and logout button down -->
-    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
-        <Button text="HOME" onAction="#goToHome"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin><Insets top="10"/></VBox.margin>
+    <VBox fx:id="aiSidebar" maxWidth="350" minWidth="0" spacing="10" style="-fx-background-color: #E6E6FA; -fx-padding: 20;">
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#goToHome" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="HOME" />
 
-        <Button text="SETTINGS"
-                onAction="#openSettingsPage"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin><Insets top="10"/></VBox.margin>
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#openSettingsPage" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="SETTINGS" />
 
-        <Button text="FRIENDS"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="FRIENDS" />
 
-        <Button text="ACCOUNT"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="ACCOUNT" />
+        <VBox.margin><Insets top="10" /></VBox.margin>
+        <VBox.margin><Insets top="10" /></VBox.margin>
     </VBox>
 
 </SplitPane>
