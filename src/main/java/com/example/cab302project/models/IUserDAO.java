@@ -1,5 +1,8 @@
 package com.example.cab302project.models;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public interface IUserDAO {
 
     // Adds a new user to the database
@@ -25,4 +28,19 @@ public interface IUserDAO {
     boolean updateEmail(String currentEmail, String newEmail);
 
     boolean updatePassword(String email, String newPassword);
+
+    // Send a friend request from one user to another
+    boolean sendFriendRequest(String senderUsername, String receiverUsername);
+
+    // Accept a pending friend request
+    boolean acceptFriendRequest(String senderUsername, String receiverUsername);
+
+    // Decline a pending friend request
+    boolean declineFriendRequest(String senderUsername, String receiverUsername);
+
+    // Get all pending friend requests for a user
+    List<User> getPendingFriendRequests(String username);
+
+    // Get all friends (accepted requests) of a user
+    List<User> getFriends(String username) throws SQLException;
 }

@@ -1,28 +1,39 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.SqliteConnection;
+import com.example.cab302project.models.SqliteUserDAO;
+import com.example.cab302project.models.User;
+import com.example.cab302project.util.Session;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.util.Duration;
+
 import java.io.InputStream;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FriendsController {
-//    private final ToggleGroup friendsToggleGroup = new ToggleGroup();
 
-    @FXML private javafx.scene.layout.VBox mainContent;
+    @FXML private VBox mainContent;
     @FXML private TextArea aiPromptField;
     @FXML private Label aiResponseLabel;
     @FXML private Label profileHeaderLabel;
@@ -33,286 +44,322 @@ public class FriendsController {
     @FXML private GridPane miniDayView;
     @FXML private ImageView logoImage;
 
-
-    private LocalDate currentDate = LocalDate.now();
-
     @FXML private ListView<String> searchResultsList;
     @FXML private TextField searchUserField;
 
+    @FXML private ListView<String> pendingRequestsList;   // outgoing
+    @FXML private ListView<String> incomingRequestsList;  // incoming
 
-    @FXML private ListView<String> pendingRequestsList;
-    // This should be a list of all existing users on the database
-    private ObservableList<String> allUsers = FXCollections.observableArrayList(
-            "HarpiSwaggy", "HarpimoreSwaggy",
-            "Anns", "Annzy", "Annsthecoder",
-            "Alvin1", "AlvinthechipMunk",
-            "Alexthedesigner", "Alex1",
-            "Arshdeep1", "JustArsh"// mock data update using sql once set up
-    );
-
-    private ObservableList<String> pendingRequests = FXCollections.observableArrayList();
-
-    // This the list of people who have sent the user a friend request (user chooses to accept or reject)
-    @FXML private ListView<String> incomingRequestsList;
-    private ObservableList<String> incomingRequests = FXCollections.observableArrayList(
-            "PapiCore", "BelleTheBaddie", "BarbieDreams", "Cinderella_sLostShoe", "Jas_mine", "Official_Aladd1n", "nastyNav33n" // mock data update using sql once set up
-    );
-
-    // This the list of user's current friends available on the dropdown menu
     @FXML private ComboBox<String> friendSelector;
-    private ObservableList<String> friendList = FXCollections.observableArrayList();
 
+    private ObservableList<String> allUsers        = FXCollections.observableArrayList();
+    private ObservableList<String> pendingOutgoing = FXCollections.observableArrayList();
+    private ObservableList<String> incomingReqs    = FXCollections.observableArrayList();
+    private ObservableList<String> friendList      = FXCollections.observableArrayList();
+
+    private LocalDate currentDate = LocalDate.now();
+    private Connection connection;
+    private SqliteUserDAO userDAO;
 
     @FXML
     public void initialize() {
-        // Load logo
+        // 1) Ensure session has a user
+        User sessionUser = Session.getLoggedInUser();
+        if (sessionUser == null) {
+            System.err.println("ERROR: No user in session! Call Session.setLoggedInUser(...) after login.");
+            return;
+        }
+
+        // 2) DB & DAO
+        connection = SqliteConnection.getInstance();
+        userDAO    = new SqliteUserDAO();
+
+        // 3) Load logo
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
 
-        // Populate the ComboBox with some mock usernames (replace with actual logic later)
-//        friendSelector.getItems().addAll("Username1", "Username2", "Username3");
+        // 4) Load data from DB
+        loadAllUsers();
+        refreshFriendList();
+        refreshIncomingRequests();
+        refreshOutgoingRequests();
+
+        // 5) Wire UI list views
         friendSelector.setItems(friendList);
-        friendList.addAll(); // this is the pre-existing freinds list, update with SQL once set up
+        pendingRequestsList.setItems(pendingOutgoing);
+        incomingRequestsList.setItems(incomingReqs);
 
-        // Listen for selection changes
-        friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                profileHeaderLabel.setText(newVal + "'s Profile");
-
-                // Simulate user info lookup — replace this with SQL later
-                usernameLabel.setText("@" + newVal.toLowerCase());
-                nameLabel.setText("Please extract " + newVal + "'s Full Name from db");
-                bioLabel.setText("hsfdjkosdguhej gydwwjcsba gudehcnjds uhdbk This is a dummy bio for " + newVal + ". This will also come from the database.");
-
-                // dummy image for profile used
-                // TODO: make this interact with data base so the profile picture corresponds to the user
-
-                Image profile = new Image(getClass().getResourceAsStream("/images/default_profile.png"));
-                profileImage.setImage(profile);
-            }
+        // 6) Show profile on selection
+        friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldU, newU) -> {
+            if (newU != null) loadUserProfile(newU);
         });
 
-        // update date on rhs
-        for (int i = 0; i < 24; i++) {
-            Label hourLabel = new Label(String.format("%02d:00", i));
-            hourLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #1A1A1A;");
-            miniDayView.add(hourLabel, 0, i);
-        }
-        renderMiniDayView();
-
-        searchResultsList.setItems(FXCollections.observableArrayList()); // initially empty
-
-        // Live search
-        searchUserField.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null || newVal.isBlank()) {
-                searchResultsList.setItems(FXCollections.observableArrayList()); // safe blank list
-            } else {
-                searchResultsList.setItems(
-                        FXCollections.observableArrayList(
-                                allUsers.filtered(user -> user.toLowerCase().contains(newVal.toLowerCase()))
-                        )
-                );
-            }
-        });
-
-
-        // requests sent to a user
-        incomingRequestsList.setItems(incomingRequests);
-
-        // Add selected user to pending requests
-        pendingRequestsList.setItems(pendingRequests);
-    }
-
-    @FXML
-    private void handleAcceptRequest() {
-        String selected = incomingRequestsList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            incomingRequests.remove(selected);
-            friendList.add(selected); // Add to friend list
-            showAlert("Friend Request Accepted", selected + " is now your friend!");
-        } else {
-            showAlert("No Selection", "Please select a request to accept.");
-        }
-    }
-
-
-    @FXML
-    private void handleDeclineRequest() {
-        String selected = incomingRequestsList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            incomingRequests.remove(selected);
-            // TODO: Add logic to remove/ignore this request in DB
-            showAlert("Friend Request Declined", selected + " has been declined.");
-        } else {
-            showAlert("No Selection", "Please select a request to decline.");
-        }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    @FXML
-    private void handleSendRequest() {
-        String selectedUser = searchResultsList.getSelectionModel().getSelectedItem();
-
-        if (selectedUser != null) {
-            if (friendList.contains(selectedUser)) {
-                showAlert("Already Friends", selectedUser + " is already your friend.");
-            } else if (pendingRequests.contains(selectedUser)) {
-                showAlert("Already Requested", "You already sent a request to " + selectedUser + ".");
-            } else {
-                // Send request
-                pendingRequests.add(selectedUser);
-                showAlert("Request Sent", "Friend request sent to " + selectedUser + ".");
-
-                // Clear search input and results
-                searchUserField.clear();
+        // 7) Live search logic (always set a fresh list)
+        searchUserField.textProperty().addListener((obs, oldText, text) -> {
+            if (text == null || text.isBlank()) {
                 searchResultsList.setItems(FXCollections.observableArrayList());
+            } else {
+                List<String> matches = allUsers.stream()
+                        .filter(u -> u.toLowerCase().contains(text.toLowerCase()))
+                        .collect(Collectors.toList());
+                searchResultsList.setItems(FXCollections.observableArrayList(matches));
             }
-        } else {
-            showAlert("No Selection", "Please select a user to send request.");
+        });
+
+        // 8) Render the mini-day view
+        renderMiniDayView();
+    }
+
+    // ─── Data Loaders ──────────────────────────────────────────────────
+
+    private void loadAllUsers() {
+        allUsers.clear();
+        String me = Session.getLoggedInUser().getUsername();
+
+        String sql = "SELECT username FROM users";
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String u = rs.getString("username");
+                if (!u.equals(me)) {
+                    allUsers.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleDeleteRequest() {
-        String selected = pendingRequestsList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            pendingRequests.remove(selected);
-            showAlert("Deleted", "Request to " + selected + " removed.");
-        } else {
-            showAlert("No Selection", "Please select a request to delete.");
-        }
-    }
-
-
-//    Navigation buttons between pages
-    @FXML
-    private void goToHome() {
+    private void refreshFriendList() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
-            Parent homeRoot = loader.load();
+            friendList.setAll(
+                    userDAO.getFriends(Session.getLoggedInUser().getUsername())
+                            .stream()
+                            .map(User::getUsername)
+                            .collect(Collectors.toList())
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-            Stage homeStage = new Stage();
-            homeStage.setTitle("Smart Schedule Assistant");
+    private void refreshIncomingRequests() {
+        incomingReqs.setAll(
+                userDAO.getPendingFriendRequests(Session.getLoggedInUser().getUsername())
+                        .stream()
+                        .map(User::getUsername)
+                        .collect(Collectors.toList())
+        );
+    }
 
-            Scene scene = new Scene(homeRoot);
-            homeStage.setScene(scene);
+    private void refreshOutgoingRequests() {
+        pendingOutgoing.clear();
+        String sql = """
+            SELECT receiver_email
+              FROM friend_requests
+             WHERE sender_email = (SELECT email FROM users WHERE username = ?)
+               AND status = 'pending'
+        """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, Session.getLoggedInUser().getUsername());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = userDAO.getUserByEmail(rs.getString("receiver_email"));
+                    if (u != null) pendingOutgoing.add(u.getUsername());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-            //  Set it to full screen
-            homeStage.setMaximized(true); // Maximize the window
+    private void loadUserProfile(String username) {
+        User u = userDAO.getUserByUsername(username);
+        if (u == null) return;
+        profileHeaderLabel.setText(username + "'s Profile");
+        usernameLabel.setText("@" + u.getUsername());
+        nameLabel.setText(u.getUsername());       // if you add fullName in User, use it here
+        bioLabel.setText("Bio for " + username); // likewise, pull from DB if you extend User
 
-            homeStage.show();
+        InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
+        profileImage.setImage(new Image(is));
+    }
 
-            //  Close the current Settings page
-            Stage currentStage = (Stage) mainContent.getScene().getWindow();
-            currentStage.close();
+    // ─── Button Handlers ────────────────────────────────────────────────
 
+    @FXML private void handleSendRequest() {
+        String selected = searchResultsList.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No Selection","Please select a user to send request.");
+            return;
+        }
+        String me = Session.getLoggedInUser().getUsername();
+        if (friendList.contains(selected)) {
+            showAlert("Already Friends", selected + " is already your friend.");
+        } else if (pendingOutgoing.contains(selected)) {
+            showAlert("Already Requested","You already sent a request to " + selected + ".");
+        } else {
+            boolean ok = userDAO.sendFriendRequest(me, selected);
+            if (ok) {
+                showAlert("Request Sent","Friend request sent to " + selected + ".");
+                refreshOutgoingRequests();
+            } else {
+                showAlert("Error","Could not send request. Ensure user exists and no pending request.");
+            }
+        }
+        searchUserField.clear();
+        searchResultsList.setItems(FXCollections.observableArrayList());
+    }
+
+    @FXML private void handleAcceptRequest() {
+        String sel = incomingRequestsList.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            showAlert("No Selection","Please select a request to accept.");
+            return;
+        }
+        String me = Session.getLoggedInUser().getUsername();
+        if (userDAO.acceptFriendRequest(sel, me)) {
+            showAlert("Accepted", sel + " is now your friend!");
+            refreshIncomingRequests();
+            refreshFriendList();
+        } else {
+            showAlert("Error","Could not accept. Try again.");
+        }
+    }
+
+    @FXML private void handleDeclineRequest() {
+        String sel = incomingRequestsList.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            showAlert("No Selection","Please select a request to decline.");
+            return;
+        }
+        String me = Session.getLoggedInUser().getUsername();
+        if (userDAO.declineFriendRequest(sel, me)) {
+            showAlert("Declined", sel + " has been declined.");
+            refreshIncomingRequests();
+        } else {
+            showAlert("Error","Could not decline. Try again.");
+        }
+    }
+
+    @FXML private void handleDeleteRequest() {
+        String sel = pendingRequestsList.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            showAlert("No Selection","Please select a request to delete.");
+            return;
+        }
+        String sql = """
+            DELETE FROM friend_requests
+             WHERE sender_email   = (SELECT email FROM users WHERE username = ?)
+               AND receiver_email = (SELECT email FROM users WHERE username = ?)
+        """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, Session.getLoggedInUser().getUsername());
+            ps.setString(2, sel);
+            ps.executeUpdate();
+            showAlert("Deleted","Request to " + sel + " removed.");
+            refreshOutgoingRequests();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ─── Navigation & AI ───────────────────────────────────────────────
+
+    @FXML private void goToHome() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
+            Stage stage = (Stage)mainContent.getScene().getWindow();
+            stage.close();
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setMaximized(true);
+            newStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void openSettingsPage() {
+    @FXML private void openSettingsPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
-            Parent settingsRoot = loader.load();
-
-            Stage settingsStage = new Stage();
-            settingsStage.setTitle("Settings");
-
-            Scene scene = new Scene(settingsRoot);
-            settingsStage.setScene(scene);
-
-            // Set it to full screen
-            settingsStage.setMaximized(true);
-
-            // Close the current Calendar window
-            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
-            currentStage.close();
-
-            settingsStage.show();
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
+            Stage stage = (Stage)mainContent.getScene().getWindow();
+            stage.close();
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setMaximized(true);
+            newStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleAIPrompt() {
+    @FXML private void handleAIPrompt() {
         String prompt = aiPromptField.getText().trim();
         if (!prompt.isEmpty()) {
-            String response = generateResponse(prompt);
+            String response = "You said: \"" + prompt + "\" — AI will respond to this once implemented!!!";
             playTypingAnimation(aiResponseLabel, response);
         }
     }
 
-    private String generateResponse(String userInput) {
-        return "You said: \"" + userInput + "\" — AI will respond to this once implemented!!!";
-    }
-
-//     Just a fun animation effect which shows AI typing while it generates a response
     private void playTypingAnimation(Label label, String fullText) {
-        final int[] charIndex = {0};
-
-      javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-            new javafx.animation.KeyFrame(
-                  javafx.util.Duration.millis(40), // Speed of typing
-                event -> {
-                  if (charIndex[0] < fullText.length()) {
-                    label.setText(fullText.substring(0, charIndex[0] + 1));
-                  charIndex[0]++;
-            }
-      }
-    )
-    );
-    timeline.setCycleCount(fullText.length());
-    timeline.play();
+        final int[] idx = {0};
+        Timeline tl = new Timeline(new KeyFrame(
+                Duration.millis(40),
+                ev -> {
+                    if (idx[0] < fullText.length()) {
+                        label.setText(fullText.substring(0, idx[0]+1));
+                        idx[0]++;
+                    }
+                }
+        ));
+        tl.setCycleCount(fullText.length());
+        tl.play();
     }
+
+    // ─── Mini Day View ────────────────────────────────────────────────
 
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
-        // Add a label for the current day and month (no year)
-        Label dateLabel = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
-        dateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 50px; -fx-text-fill: #333; ");
-        dateLabel.setMaxWidth(Double.MAX_VALUE);
-        dateLabel.setAlignment(Pos.TOP_LEFT);
-        miniDayView.add(dateLabel, 0, 0, 2, 1); // Span across 2 columns
+        Label dateLbl = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
+        dateLbl.setStyle("-fx-font-weight:bold; -fx-font-size:50px; -fx-text-fill:#333;");
+        dateLbl.setMaxWidth(Double.MAX_VALUE);
+        dateLbl.setAlignment(Pos.TOP_LEFT);
+        miniDayView.add(dateLbl, 0, 0, 2, 1);
 
-        // Add a small spacer after the date label
-        RowConstraints spacer = new RowConstraints();
-        spacer.setMinHeight(40);
+        RowConstraints spacer = new RowConstraints(); spacer.setMinHeight(40);
         miniDayView.getRowConstraints().add(spacer);
 
-        // Add RowConstraints for each hour
-        for (int hour = 0; hour < 24; hour++) {
-            RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setMinHeight(30); // Smaller because it's a mini version
-            miniDayView.getRowConstraints().add(rowConstraints);
+        for (int h = 0; h < 24; h++) {
+            RowConstraints rc = new RowConstraints(); rc.setMinHeight(30);
+            miniDayView.getRowConstraints().add(rc);
 
-            // Create time label (hour on the left)
-            Label timeLabel = new Label(String.format("%02d:00", hour));
-            timeLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
-            timeLabel.setMaxWidth(Double.MAX_VALUE);
-            timeLabel.setAlignment(Pos.CENTER_RIGHT);
+            Label time = new Label(String.format("%02d:00", h));
+            time.setStyle("-fx-font-size:13px; -fx-text-fill:#666;");
+            time.setMaxWidth(Double.MAX_VALUE);
+            time.setAlignment(Pos.CENTER_RIGHT);
 
-            // Create event slot (on the right side)
-            Label eventSlot = new Label();
-            eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;");
-            eventSlot.setMaxWidth(Double.MAX_VALUE);
-            eventSlot.setAlignment(Pos.CENTER_LEFT);
+            Label slot = new Label();
+            slot.setStyle("-fx-border-color:#ccc; -fx-border-width:0 0 1px 0;");
+            slot.setMaxWidth(Double.MAX_VALUE);
+            slot.setAlignment(Pos.CENTER_LEFT);
 
-            miniDayView.add(timeLabel, 0, hour + 1);
-            miniDayView.add(eventSlot, 1, hour + 1);
-            GridPane.setHgrow(eventSlot, Priority.ALWAYS);
+            miniDayView.add(time, 0, h+1);
+            miniDayView.add(slot, 1, h+1);
+            GridPane.setHgrow(slot, Priority.ALWAYS);
         }
     }
 
+    // ─── Helper ───────────────────────────────────────────────────────
+
+    private void showAlert(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.setContentText(msg);
+        a.showAndWait();
+    }
 }
