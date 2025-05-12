@@ -81,8 +81,8 @@ public class FriendsController {
 
                 // Simulate user info lookup — replace this with SQL later
                 usernameLabel.setText("@" + newVal.toLowerCase());
-                nameLabel.setText(newVal + " Full Name pls extract from db");
-                bioLabel.setText("Bio for " + newVal + ". This will also come from the database.");
+                nameLabel.setText("Please extract " + newVal + "'s Full Name from db");
+                bioLabel.setText("hsfdjkosdguhej gydwwjcsba gudehcnjds uhdbk This is a dummy bio for " + newVal + ". This will also come from the database.");
 
                 // dummy image for profile used
                 // TODO: make this interact with data base so the profile picture corresponds to the user

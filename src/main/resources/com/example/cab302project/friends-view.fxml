@@ -78,10 +78,10 @@
                     <StackPane style="-fx-background-color: #E6E6FA; -fx-border-color: #999; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 15;"
                                 alignment="CENTER">
                         <VBox fx:id="profileSection" spacing="10" prefHeight="500" alignment="CENTER" >
-                            <ImageView fx:id="profileImage" fitHeight="100" fitWidth="100" />
-                            <Label fx:id="usernameLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                            <Label fx:id="nameLabel" style="-fx-font-size: 13px;" />
-                            <Label fx:id="bioLabel" wrapText="true" maxWidth="200" style="-fx-font-size: 13px;" />
+                            <ImageView fx:id="profileImage" fitHeight="200" fitWidth="200" />
+                            <Label fx:id="usernameLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+                            <Label fx:id="nameLabel" style="-fx-font-size: 18px;" />
+                            <Label fx:id="bioLabel" wrapText="true" alignment="CENTER" maxWidth="750" style="-fx-font-size: 16px;" />
                         </VBox>
                     </StackPane>
 
