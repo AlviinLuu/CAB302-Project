@@ -356,21 +356,55 @@ public class FriendsController {
     }
 
     // ─── Mini Day View ────────────────────────────────────────────────
-
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
-        Label dateLbl = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
-        dateLbl.setStyle("-fx-font-weight:bold; -fx-font-size:50px; -fx-text-fill:#333;");
-        dateLbl.setMaxWidth(Double.MAX_VALUE);
-        dateLbl.setAlignment(Pos.TOP_LEFT);
-        miniDayView.add(dateLbl, 0, 0, 2, 1);
+        // Top date header
+        Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
+        header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.TOP_LEFT);
+        miniDayView.add(header, 0, 0, 2, 1);
 
-        RowConstraints spacer = new RowConstraints();
-        spacer.setVgrow(Priority.ALWAYS);
+        // Spacer
+        RowConstraints spacer = new RowConstraints(30);
         miniDayView.getRowConstraints().add(spacer);
+
+        // Hour slots
+        for (int hour = 0; hour < 24; hour++) {
+            miniDayView.getRowConstraints().add(new RowConstraints(30));
+
+            Label time = new Label(String.format("%02d:00", hour));
+            time.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
+            time.setMaxWidth(Double.MAX_VALUE);
+            time.setAlignment(Pos.CENTER_RIGHT);
+
+            Label event = new Label();
+            event.setStyle("-fx-border-color: #bbb; -fx-border-width: 0 0 1px 0;");
+            event.setMaxWidth(Double.MAX_VALUE);
+            event.setAlignment(Pos.CENTER_LEFT);
+
+            miniDayView.add(time, 0, hour + 1);
+            miniDayView.add(event, 1, hour + 1);
+            GridPane.setHgrow(event, Priority.ALWAYS);
+        }
     }
+
+//    private void renderMiniDayView() {
+//        miniDayView.getChildren().clear();
+//        miniDayView.getRowConstraints().clear();
+//
+//        Label dateLbl = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
+//        dateLbl.setStyle("-fx-font-weight:bold; -fx-font-size:50px; -fx-text-fill:#333;");
+//        dateLbl.setMaxWidth(Double.MAX_VALUE);
+//        dateLbl.setAlignment(Pos.TOP_LEFT);
+//        miniDayView.add(dateLbl, 0, 0, 2, 1);
+//
+//        RowConstraints spacer = new RowConstraints();
+//        spacer.setVgrow(Priority.ALWAYS);
+//        miniDayView.getRowConstraints().add(spacer);
+//    }
 
     // ─── Helper ────────────────────────────────────────────────────────
 

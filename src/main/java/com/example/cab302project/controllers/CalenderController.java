@@ -741,39 +741,34 @@ public class CalenderController {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
-        // Add a label for the current day and month (no year)
-        Label dateLabel = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
-        dateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 50px; -fx-text-fill: #333; ");
-        dateLabel.setMaxWidth(Double.MAX_VALUE);
-        dateLabel.setAlignment(Pos.TOP_LEFT);
-        miniDayView.add(dateLabel, 0, 0, 2, 1); // Span across 2 columns
+        // Top date header
+        Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
+        header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.TOP_LEFT);
+        miniDayView.add(header, 0, 0, 2, 1);
 
-        // Add a small spacer after the date label
-        RowConstraints spacer = new RowConstraints();
-        spacer.setMinHeight(40);
+        // Spacer
+        RowConstraints spacer = new RowConstraints(30);
         miniDayView.getRowConstraints().add(spacer);
 
-        // Add RowConstraints for each hour
+        // Hour slots
         for (int hour = 0; hour < 24; hour++) {
-            RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setMinHeight(30); // Smaller because it's a mini version
-            miniDayView.getRowConstraints().add(rowConstraints);
+            miniDayView.getRowConstraints().add(new RowConstraints(30));
 
-            // Create time label (hour on the left)
-            Label timeLabel = new Label(String.format("%02d:00", hour));
-            timeLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
-            timeLabel.setMaxWidth(Double.MAX_VALUE);
-            timeLabel.setAlignment(Pos.CENTER_RIGHT);
+            Label time = new Label(String.format("%02d:00", hour));
+            time.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
+            time.setMaxWidth(Double.MAX_VALUE);
+            time.setAlignment(Pos.CENTER_RIGHT);
 
-            // Create event slot (on the right side)
-            Label eventSlot = new Label();
-            eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;");
-            eventSlot.setMaxWidth(Double.MAX_VALUE);
-            eventSlot.setAlignment(Pos.CENTER_LEFT);
+            Label event = new Label();
+            event.setStyle("-fx-border-color: #bbb; -fx-border-width: 0 0 1px 0;");
+            event.setMaxWidth(Double.MAX_VALUE);
+            event.setAlignment(Pos.CENTER_LEFT);
 
-            miniDayView.add(timeLabel, 0, hour + 1);
-            miniDayView.add(eventSlot, 1, hour + 1);
-            GridPane.setHgrow(eventSlot, Priority.ALWAYS);
+            miniDayView.add(time, 0, hour + 1);
+            miniDayView.add(event, 1, hour + 1);
+            GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
 
