@@ -47,12 +47,19 @@
 
                     <VBox spacing="10">
                         <ListView fx:id="searchResultsList" prefHeight="150"
-                                  style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>
+                                  style="-fx-background-color: #E6E6FA; -fx-border-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" />
+                        <!--                                  style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>-->
                     </VBox>
 
                     <Label text="Your Requests" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
                     <VBox spacing="10">
-                        <ListView fx:id="incomingRequestsList" prefHeight="120"/>
+                        <ListView fx:id="incomingRequestsList" prefHeight="120"
+                                  style="-fx-control-inner-background: #F5F0FF;
+                                         -fx-background-insets: 0;
+                                         -fx-background-color: #E6E6FA;
+                                         -fx-border-color: #D8B9FF;
+                                         -fx-border-radius: 10;
+                                         -fx-background-radius: 10;" />
                         <HBox spacing="10" alignment="CENTER_RIGHT">
                             <Button text="Accept" onAction="#handleAcceptRequest"
                                     style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
@@ -63,7 +70,13 @@
 
                     <Label text="Pending Requests to Others" style="-fx-font-weight: bold;"/>
                     <VBox spacing="10" alignment="CENTER_RIGHT">
-                        <ListView fx:id="pendingRequestsList" prefHeight="120" />
+                        <ListView fx:id="pendingRequestsList" prefHeight="120"
+                                  style="-fx-control-inner-background: #F5F0FF;
+                                         -fx-background-insets: 0;
+                                         -fx-background-color: #E6E6FA;
+                                         -fx-border-color: #D8B9FF;
+                                         -fx-border-radius: 10;
+                                         -fx-background-radius: 10;" />
                         <Button text="Delete Request" onAction="#handleDeleteRequest"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                     </VBox>
@@ -81,7 +94,8 @@
                             <ImageView fx:id="profileImage" fitHeight="200" fitWidth="200" />
                             <Label fx:id="usernameLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
                             <Label fx:id="nameLabel" style="-fx-font-size: 18px;" />
-                            <Label fx:id="bioLabel" wrapText="true" alignment="CENTER" maxWidth="750" style="-fx-font-size: 16px;" />
+                            <Label fx:id="bioLabel" wrapText="true" alignment="CENTER" maxWidth="750"
+                                   style="-fx-font-size: 16px; -fx-text-alignment: center; -fx-alignment: center;" />
                         </VBox>
                     </StackPane>
 
