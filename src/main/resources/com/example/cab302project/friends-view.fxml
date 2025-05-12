@@ -16,7 +16,7 @@
         <VBox prefWidth="521.0" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
             <HBox spacing="20" style="-fx-padding: 10;">
                 <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true"/>
-                <Label text="Smart Schedule Assistant - Friends" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" />
+                <Label text="Friends" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" />
                 <Region HBox.hgrow="ALWAYS"/>
             </HBox>
         </VBox>
@@ -40,8 +40,8 @@
                     <Label text="Search Users" />
                     <HBox spacing="10">
                         <TextField fx:id="searchUserField" promptText="Enter username..." />
-                        <Button text="Send Request" onAction="#handleSendRequest"
-                                style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
+                        <Button text="Request" onAction="#handleSendRequest"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                     </HBox>
 
                     <ListView fx:id="searchResultsList" prefHeight="150"
@@ -52,16 +52,16 @@
                         <ListView fx:id="incomingRequestsList" prefHeight="120"/>
                         <HBox spacing="10" alignment="CENTER">
                             <Button text="Accept" onAction="#handleAcceptRequest"
-                                    style= "-fx-font-weight: bold;"/>
+                                    style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                             <Button text="Decline" onAction="#handleDeclineRequest"
-                                    style="-fx-font-weight: bold;"/>
+                                    style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                         </HBox>
                     </VBox>
 
                     <Label text="Pending Requests to Others" />
                     <ListView fx:id="pendingRequestsList" prefHeight="120" />
                     <Button text="Delete Request" onAction="#handleDeleteRequest"
-                            style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
+                            style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                 </VBox>
 
                 <!-- Friend Profile and AI Area -->
@@ -82,7 +82,7 @@
                                   wrapText="true" prefRowCount="3"
                                   style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
                         <Button text="Ask" onAction="#handleAIPrompt"
-                                style="-fx-text-fill: white; -fx-background-color: #8000FF; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);-fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                                 maxWidth="100" alignment="CENTER"/>
                         <StackPane maxWidth="Infinity">
                             <Label fx:id="aiResponseLabel"

@@ -47,7 +47,7 @@ public class FriendsController {
 
     @FXML private ListView<String> incomingRequestsList;
     private ObservableList<String> incomingRequests = FXCollections.observableArrayList(
-            "Papi", "Jordan", "Liam" // mock data update using sql once set up
+            "Papi", "Julio", "Lily", "Belle", "Barbie", "Cinderella", "Jasmine", "Aladdin", "Naveen" // mock data update using sql once set up
     );
 
     @FXML private ComboBox<String> friendSelector;
@@ -59,7 +59,7 @@ public class FriendsController {
         // Populate the ComboBox with some mock usernames (replace with actual logic later)
         friendSelector.getItems().addAll("Username1", "Username2", "Username3");
         friendSelector.setItems(friendList);
-        friendList.addAll("Username1", "Username2"); // Pre-existing friends
+        friendList.addAll(); // this is the preexisting freinds list, update with SQL once set up
 
 
         // Listen for selection changes
@@ -82,13 +82,16 @@ public class FriendsController {
         // Live search
         searchUserField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null || newVal.isBlank()) {
-                searchResultsList.getItems().clear();
+                searchResultsList.setItems(FXCollections.observableArrayList()); // safe blank list
             } else {
                 searchResultsList.setItems(
-                        allUsers.filtered(user -> user.toLowerCase().contains(newVal.toLowerCase()))
+                        FXCollections.observableArrayList(
+                                allUsers.filtered(user -> user.toLowerCase().contains(newVal.toLowerCase()))
+                        )
                 );
             }
         });
+
 
         // requests sent to a user
         incomingRequestsList.setItems(incomingRequests);
@@ -133,13 +136,23 @@ public class FriendsController {
     @FXML
     private void handleSendRequest() {
         String selectedUser = searchResultsList.getSelectionModel().getSelectedItem();
+
         if (selectedUser != null) {
-            // Your logic to send the request
-            System.out.println("Request sent to: " + selectedUser);
-            // Optionally add to pending list
-            pendingRequestsList.getItems().add(selectedUser);
+            if (friendList.contains(selectedUser)) {
+                showAlert("Already Friends", selectedUser + " is already your friend.");
+            } else if (pendingRequests.contains(selectedUser)) {
+                showAlert("Already Requested", "You already sent a request to " + selectedUser + ".");
+            } else {
+                // Send request
+                pendingRequests.add(selectedUser);
+                showAlert("Request Sent", "Friend request sent to " + selectedUser + ".");
+
+                // Clear search input and results
+                searchUserField.clear();
+                searchResultsList.setItems(FXCollections.observableArrayList());
+            }
         } else {
-            System.out.println("No user selected.");
+            showAlert("No Selection", "Please select a user to send request.");
         }
     }
 
