@@ -20,7 +20,8 @@ public class SqliteUserDAO implements IUserDAO {
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "username TEXT NOT NULL UNIQUE,"
                     + "password TEXT NOT NULL,"
-                    + "email TEXT NOT NULL UNIQUE"
+                    + "email TEXT NOT NULL UNIQUE,"
+                    + "bio TEXT DEFAULT ''"
                     + ")";
             statement.execute(usersTableQuery);
 
@@ -51,11 +52,16 @@ public class SqliteUserDAO implements IUserDAO {
             return;
         }
 
-        String query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+        if (user.getBio() == null) {
+            user.setBio(""); // Set bio to an empty string if it's null
+        }
+
+        String query = "INSERT INTO users (username, password, email, bio) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getBio());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,11 +75,13 @@ public class SqliteUserDAO implements IUserDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new User(
+                User user = new User(
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("email")
                 );
+                user.setBio(rs.getString("bio"));
+                return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,8 +106,7 @@ public class SqliteUserDAO implements IUserDAO {
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-
-            return rs.next(); // returns true if a match is found
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -112,8 +119,6 @@ public class SqliteUserDAO implements IUserDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
-
-            // If count is greater than 0, the user exists
             return rs.getInt(1) > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,11 +128,12 @@ public class SqliteUserDAO implements IUserDAO {
 
     @Override
     public void updateUser(User user) {
-        String query = "UPDATE users SET password = ?, email = ? WHERE username = ?";
+        String query = "UPDATE users SET password = ?, email = ?, bio = ? WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getPassword());
             stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getUsername());
+            stmt.setString(3, user.getBio());
+            stmt.setString(4, user.getUsername());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,7 +142,6 @@ public class SqliteUserDAO implements IUserDAO {
 
     @Override
     public void deleteUser(String username) {
-        // Deleting a user may fail if they have related friend requests, consider handling that
         String query = "DELETE FROM users WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
@@ -253,11 +258,24 @@ public class SqliteUserDAO implements IUserDAO {
     }
 
     @Override
+    public boolean updateBio(String email, String newBio) {
+        String query = "UPDATE users SET bio = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, newBio);
+            stmt.setString(2, email);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public List<User> getPendingFriendRequests(String username) {
         User user = getUserByUsername(username);
         List<User> pendingRequests = new ArrayList<>();
         if (user != null) {
-            String query = "SELECT u.username, u.password, u.email FROM users u "
+            String query = "SELECT u.username, u.password, u.email, u.bio FROM users u "
                     + "JOIN friend_requests fr ON u.email = fr.sender_email "
                     + "WHERE fr.receiver_email = ? AND fr.status = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -265,11 +283,13 @@ public class SqliteUserDAO implements IUserDAO {
                 stmt.setString(2, "pending");
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    pendingRequests.add(new User(
+                    User requester = new User(
                             rs.getString("username"),
                             rs.getString("password"),
                             rs.getString("email")
-                    ));
+                    );
+                    requester.setBio(rs.getString("bio"));
+                    pendingRequests.add(requester);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -283,9 +303,8 @@ public class SqliteUserDAO implements IUserDAO {
         User user = getUserByUsername(username);
         List<User> friends = new ArrayList<>();
         if (user != null) {
-            // Added "AND u.username <> ?" to exclude the user themself
             String query =
-                    "SELECT u.username, u.password, u.email " +
+                    "SELECT u.username, u.password, u.email, u.bio " +
                             "FROM users u " +
                             "JOIN friend_requests fr " +
                             "  ON (u.email = fr.sender_email OR u.email = fr.receiver_email) " +
@@ -296,15 +315,17 @@ public class SqliteUserDAO implements IUserDAO {
                 stmt.setString(1, user.getEmail());
                 stmt.setString(2, user.getEmail());
                 stmt.setString(3, "accepted");
-                stmt.setString(4, username);            // ← filter out self here
+                stmt.setString(4, username);
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
-                        friends.add(new User(
+                        User friend = new User(
                                 rs.getString("username"),
                                 rs.getString("password"),
                                 rs.getString("email")
-                        ));
+                        );
+                        friend.setBio(rs.getString("bio"));
+                        friends.add(friend);
                     }
                 }
             } catch (SQLException e) {

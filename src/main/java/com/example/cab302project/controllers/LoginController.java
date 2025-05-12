@@ -83,6 +83,7 @@ public class LoginController {
     @FXML
     protected void onSubmitButtonClick() {
         this.errorLabel.setVisible(false);
+        String username = this.usernameField.getText();
         String email = this.emailField.getText();
         String password = this.passwordField.getText();
         String rptPassword = this.repeatPasswordField.getText();
@@ -116,7 +117,7 @@ public class LoginController {
                 } else if(!isValidPassword(password)){
                     this.showError("Password Does Not Meet Requirements");
                 }else {
-                    User newUser = new User(email, password, email);
+                    User newUser = new User(username, password, email);
                     this.userDAO.addUser(newUser); // No return value, so we assume success only after checks
                     System.out.println("User registered successfully!");
                     this.showError("Registration successful!");

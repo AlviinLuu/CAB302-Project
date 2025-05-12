@@ -62,11 +62,13 @@ public class SettingsController {
         updateDateLabel();
         renderMiniDayView();
 
-        bioTextArea.setDisable(!canEditBio);
-        //TODO: get bio text from database and set it here
-        bioText = "Hello there";
-        
-        bioTextArea.setText(bioText);
+        bioTextArea.setDisable(false); // Always allow editing
+        User currentUser = Session.getLoggedInUser();
+        if (currentUser != null) {
+            bioTextArea.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
+        } else {
+            bioTextArea.setText("Unable to load bio.");
+        }
     }
 
     //private void applySidebarButtonStyle() {
@@ -272,27 +274,22 @@ public class SettingsController {
 
 
     @FXML
-    private void handleEditBio(){
-        //enable editing of text
-        if (canEditBio){
-            canEditBio = false;
-            editBioButton.setText("Save");
-            bioTextArea.setDisable(false);
-            editBioButton.isDefaultButton();
+    private void handleEditBio() {
+        // Always editable, just save the current text to DB
+        String newBio = bioTextArea.getText();
+        User currentUser = Session.getLoggedInUser();
 
+        if (currentUser != null && newBio != null) {
+            currentUser.setBio(newBio);
+            boolean success = userDAO.updateBio(currentUser.getEmail(), newBio);
 
-        }else {
-            //disable field and change text to edit state
-            canEditBio = true;
-            editBioButton.setText("Edit");
-            bioTextArea.setDisable(true);
-            editBioButton.setDefaultButton(false);
-
-            //TODO:send off new text to database
-
+            if (success) {
+                Session.setLoggedInUser(currentUser);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Bio updated successfully!");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to update bio. Try again.");
+            }
         }
-
-
     }
 
     // @FXML

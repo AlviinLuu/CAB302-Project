@@ -4,6 +4,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String bio;
 
     // Constructor
     public User(String username, String password, String email) {
@@ -33,7 +34,9 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) {this.email = email;}
+
+    public void setBio(String bio) {this.bio = bio;}
+
+    public String getBio() {return bio;}
 }

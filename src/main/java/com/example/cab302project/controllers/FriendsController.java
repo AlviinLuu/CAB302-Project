@@ -172,15 +172,15 @@ public class FriendsController {
         String sql = """
             SELECT receiver_email
               FROM friend_requests
-             WHERE sender_email = (SELECT email FROM users WHERE username = ?)
+             WHERE sender_email = ?
                AND status = 'pending'
         """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, Session.getLoggedInUser().getUsername());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    User u = userDAO.getUserByEmail(rs.getString("receiver_email"));
-                    if (u != null) pendingOutgoing.add(u.getUsername());
+                    String username = rs.getString("receiver_email");
+                    pendingOutgoing.add(username);
                 }
             }
         } catch (SQLException e) {
@@ -190,14 +190,17 @@ public class FriendsController {
 
     private void loadUserProfile(String username) {
         User u = userDAO.getUserByUsername(username);
-        if (u == null) return;
-        profileHeaderLabel.setText(username + "'s Profile");
-        usernameLabel.setText("@" + u.getUsername());
-        nameLabel.setText(u.getUsername());       // if you add fullName in User, use it here
-        bioLabel.setText("Bio for " + username); // likewise, pull from DB if you extend User
 
-        InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
-        profileImage.setImage(new Image(is));
+        if (u != null) {
+            profileHeaderLabel.setText(username + "'s Profile");
+            usernameLabel.setText("@" + u.getUsername());
+            nameLabel.setText(u.getEmail());
+            bioLabel.setText(u.getBio());
+
+            InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
+            assert is != null;
+            profileImage.setImage(new Image(is));
+        }
     }
 
     // ─── Button Handlers ────────────────────────────────────────────────
@@ -285,8 +288,8 @@ public class FriendsController {
         }
         String sql = """
             DELETE FROM friend_requests
-             WHERE sender_email   = (SELECT email FROM users WHERE username = ?)
-               AND receiver_email = (SELECT email FROM users WHERE username = ?)
+             WHERE sender_email   = ?
+               AND receiver_email = ?
         """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, Session.getLoggedInUser().getUsername());
@@ -364,36 +367,18 @@ public class FriendsController {
         dateLbl.setAlignment(Pos.TOP_LEFT);
         miniDayView.add(dateLbl, 0, 0, 2, 1);
 
-        RowConstraints spacer = new RowConstraints(); spacer.setMinHeight(40);
+        RowConstraints spacer = new RowConstraints();
+        spacer.setVgrow(Priority.ALWAYS);
         miniDayView.getRowConstraints().add(spacer);
-
-        for (int h = 0; h < 24; h++) {
-            RowConstraints rc = new RowConstraints(); rc.setMinHeight(30);
-            miniDayView.getRowConstraints().add(rc);
-
-            Label time = new Label(String.format("%02d:00", h));
-            time.setStyle("-fx-font-size:13px; -fx-text-fill:#666;");
-            time.setMaxWidth(Double.MAX_VALUE);
-            time.setAlignment(Pos.CENTER_RIGHT);
-
-            Label slot = new Label();
-            slot.setStyle("-fx-border-color:#ccc; -fx-border-width:0 0 1px 0;");
-            slot.setMaxWidth(Double.MAX_VALUE);
-            slot.setAlignment(Pos.CENTER_LEFT);
-
-            miniDayView.add(time, 0, h+1);
-            miniDayView.add(slot, 1, h+1);
-            GridPane.setHgrow(slot, Priority.ALWAYS);
-        }
     }
 
-    // ─── Helper ───────────────────────────────────────────────────────
+    // ─── Helper ────────────────────────────────────────────────────────
 
-    private void showAlert(String title, String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.showAndWait();
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

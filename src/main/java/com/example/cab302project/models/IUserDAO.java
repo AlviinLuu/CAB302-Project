@@ -38,6 +38,8 @@ public interface IUserDAO {
     // Decline a pending friend request
     boolean declineFriendRequest(String senderUsername, String receiverUsername);
 
+    boolean updateBio(String email, String newBio);
+
     // Get all pending friend requests for a user
     List<User> getPendingFriendRequests(String username);
 
