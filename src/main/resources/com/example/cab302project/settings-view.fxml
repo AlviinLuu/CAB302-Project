@@ -35,7 +35,7 @@
                 <!-- Calendar Sync -->
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label text="Calendar Sync" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                    <Button text="Sync Google Calendar"
+                    <Button text="Sync Google Calendar" onAction="#handleSyncGoogleCalendar"
                             style="-fx-background-color: #D8B9FF; -fx-text-fill: black; -fx-background-radius: 10; -fx-font-weight: bold;"/>
                 </VBox>
 

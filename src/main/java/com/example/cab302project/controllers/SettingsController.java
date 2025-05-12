@@ -1,4 +1,6 @@
 package com.example.cab302project.controllers;
+
+import com.example.cab302project.services.CalendarService;
 import com.example.cab302project.models.IUserDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
@@ -256,6 +258,18 @@ public class SettingsController {
             friendsStage.show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSyncGoogleCalendar() {
+        try {
+            com.example.cab302project.services.CalendarService.initialize();  // Replace with your package
+            com.example.cab302project.services.CalendarService.listUpcomingEvents();  // Log or handle data as needed
+            showAlert(Alert.AlertType.INFORMATION, "Sync Success", "Google Calendar synced successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Sync Failed", "Failed to sync Google Calendar.");
         }
     }
 
