@@ -20,26 +20,19 @@ import java.time.format.DateTimeFormatter;
 
 
 public class FriendsController {
-    private final ToggleGroup friendsToggleGroup = new ToggleGroup();
+//    private final ToggleGroup friendsToggleGroup = new ToggleGroup();
 
-    @FXML
-    private javafx.scene.layout.VBox mainContent;
-    @FXML
-    private TextArea aiPromptField;
-    @FXML
-    private Label aiResponseLabel;
-    @FXML
-    private Label profileHeaderLabel;
-    @FXML
-    private ImageView profileImage;
-    @FXML
-    private Label usernameLabel;
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label bioLabel;
-    @FXML
-    private GridPane miniDayView;
+    @FXML private javafx.scene.layout.VBox mainContent;
+    @FXML private TextArea aiPromptField;
+    @FXML private Label aiResponseLabel;
+    @FXML private Label profileHeaderLabel;
+    @FXML private ImageView profileImage;
+    @FXML private Label usernameLabel;
+    @FXML private Label nameLabel;
+    @FXML private Label bioLabel;
+    @FXML private GridPane miniDayView;
+    @FXML private ImageView logoImage;
+
 
     private LocalDate currentDate = LocalDate.now();
 
@@ -65,6 +58,10 @@ public class FriendsController {
 
     @FXML
     public void initialize() {
+        // Load logo
+        Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
+        logoImage.setImage(logo);
+
         // Populate the ComboBox with some mock usernames (replace with actual logic later)
         friendSelector.getItems().addAll("Username1", "Username2", "Username3");
         friendSelector.setItems(friendList);
@@ -81,10 +78,10 @@ public class FriendsController {
                 bioLabel.setText("Bio for " + newVal + ". This will also come from the database.");
 
                 // dummy image for profile used
-                InputStream stream = getClass().getClassLoader().getResourceAsStream("com/example/cab302project/images/default_profile.png");
-                if (stream != null) {
-                    profileImage.setImage(new Image(stream));
-                }
+                // TODO: make this interact with data base so the profile picture corresponds to the user
+
+                Image profile = new Image(getClass().getResourceAsStream("/images/default_profile.png"));
+                profileImage.setImage(profile);
             }
         });
 
