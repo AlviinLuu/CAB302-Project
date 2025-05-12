@@ -3,18 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="HORIZONTAL" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.cab302project.controllers.SettingsController">
+<SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="HORIZONTAL" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302project.controllers.SettingsController">
 
     <!-- Left (Main Settings Area) -->
     <VBox fx:id="mainContent" minWidth="0" style="-fx-padding: 0; -fx-background-color: #F0F8FF;" VBox.vgrow="ALWAYS">
@@ -23,7 +21,7 @@
         <VBox maxHeight="100" minHeight="100" prefHeight="100" style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
             <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 20;">
                 <ImageView fx:id="logoImage" fitHeight="60" onMouseEntered="#onLogoHover" onMouseExited="#onLogoExit" preserveRatio="true" />
-                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Smart Schedule Assistant - Settings" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Smart Schedule Assistant - Profile" />
                 <Region HBox.hgrow="ALWAYS" />
             </HBox>
         </VBox>
@@ -34,40 +32,13 @@
                 <padding>
                     <Insets bottom="40" left="40" right="40" top="40" />
                 </padding>
-
-                <!-- Calendar Sync -->
-                <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Calendar Sync" />
-                    <Button style="-fx-background-color: #D8B9FF; -fx-text-fill: black; -fx-background-radius: 10; -fx-font-weight: bold;" text="Sync Google Calendar" />
-                </VBox>
-
-                <!-- Email -->
-                <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Email" />
-                    <TextField fx:id="emailField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
-                    <Button fx:id="changeEmailButton" maxWidth="250" onAction="#handleChangeEmail" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Change Email Address" />
-                </VBox>
-
-                <!-- Password -->
-                <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Password" />
-                    <PasswordField fx:id="passwordField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
-                    <Button fx:id="changePasswordButton" maxWidth="250" onAction="#handleChangePassword" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Change Password" />
-                </VBox>
-
-                <!-- Profile Picture (Shrunken) -->
-                <VBox spacing="10" style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Profile Picture" />
-                    <ImageView fx:id="profileImage" fitHeight="90" preserveRatio="true" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
-                    <Button fx:id="uploadImageButton" maxWidth="200" prefHeight="40" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Upload Image" />
-                </VBox>
-            <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
-               <children>
-                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Bio" />
-                  <TextArea fx:id="bioTextArea" maxWidth="-Infinity" prefWidth="350.0" />
-                  <Button fx:id="editBioButton" maxWidth="250" onAction="#handleEditBio" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Edit" />
-               </children>
-            </VBox>
+            <children>
+               <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+               <Label text="Alvin" />
+               <Label maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="198.0" text="Bio" />
+               <TextArea prefHeight="200.0" prefWidth="200.0" />
+               <Button mnemonicParsing="false" text="Add Friend +" />
+            </children>
             </VBox>
         </ScrollPane>
     </VBox>
