@@ -35,9 +35,14 @@ public class SettingsController {
     @FXML private SplitPane splitPane;
     @FXML
     private VBox mainContent;
+    @FXML private Button editBioButton;
+    @FXML private TextArea bioTextArea;
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
     private final IUserDAO userDAO = new SqliteUserDAO();
+
+    private boolean canEditBio = false;
+    private String bioText;
 
     @FXML
     private void initialize() {
@@ -56,6 +61,12 @@ public class SettingsController {
         //applySidebarButtonStyle();
         updateDateLabel();
         renderMiniDayView();
+
+        bioTextArea.setDisable(!canEditBio);
+        //TODO: get bio text from database and set it here
+        bioText = "Hello there";
+        
+        bioTextArea.setText(bioText);
     }
 
     //private void applySidebarButtonStyle() {
@@ -257,6 +268,31 @@ public class SettingsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @FXML
+    private void handleEditBio(){
+        //enable editing of text
+        if (canEditBio){
+            canEditBio = false;
+            editBioButton.setText("Save");
+            bioTextArea.setDisable(false);
+            editBioButton.isDefaultButton();
+
+
+        }else {
+            //disable field and change text to edit state
+            canEditBio = true;
+            editBioButton.setText("Edit");
+            bioTextArea.setDisable(true);
+            editBioButton.setDefaultButton(false);
+
+            //TODO:send off new text to database
+
+        }
+
+
     }
 
     // @FXML
