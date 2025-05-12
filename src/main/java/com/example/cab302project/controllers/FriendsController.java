@@ -8,20 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ListView;
-
-
+import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 
 
 public class FriendsController {
@@ -38,29 +30,37 @@ public class FriendsController {
     @FXML
     private Label profileContentLabel;
     @FXML
-    private ComboBox<String> friendSelector;
-    @FXML
     private GridPane miniDayView;
 
     private LocalDate currentDate = LocalDate.now();
 
-    @FXML private TextField searchField;
     @FXML private ListView<String> searchResultsList;
-    @FXML private ListView<String> pendingRequestsList;
+    @FXML private TextField searchUserField;
 
+
+    @FXML private ListView<String> pendingRequestsList;
     private ObservableList<String> allUsers = FXCollections.observableArrayList(
-            "Username1", "Username2", "Username3", "Harpi", "Simran", "Alex", "Jas"
+            "Username1", "Username2", "Username3", "Harpi", "Simran", "Alex", "Jas" // mock data update using sql once set up
     );
 
     private ObservableList<String> pendingRequests = FXCollections.observableArrayList();
 
+    @FXML private ListView<String> incomingRequestsList;
+    private ObservableList<String> incomingRequests = FXCollections.observableArrayList(
+            "Papi", "Jordan", "Liam" // mock data update using sql once set up
+    );
 
+    @FXML private ComboBox<String> friendSelector;
+    private ObservableList<String> friendList = FXCollections.observableArrayList();
 
 
     @FXML
     public void initialize() {
         // Populate the ComboBox with some mock usernames (replace with actual logic later)
         friendSelector.getItems().addAll("Username1", "Username2", "Username3");
+        friendSelector.setItems(friendList);
+        friendList.addAll("Username1", "Username2"); // Pre-existing friends
+
 
         // Listen for selection changes
         friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -80,7 +80,7 @@ public class FriendsController {
         searchResultsList.setItems(FXCollections.observableArrayList()); // initially empty
 
         // Live search
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+        searchUserField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null || newVal.isBlank()) {
                 searchResultsList.getItems().clear();
             } else {
@@ -90,18 +90,72 @@ public class FriendsController {
             }
         });
 
+        // requests sent to a user
+        incomingRequestsList.setItems(incomingRequests);
+
         // Add selected user to pending requests
         pendingRequestsList.setItems(pendingRequests);
-
-        searchResultsList.setOnMouseClicked(event -> {
-            String selectedUser = searchResultsList.getSelectionModel().getSelectedItem();
-            if (selectedUser != null && !pendingRequests.contains(selectedUser)) {
-                pendingRequests.add(selectedUser);
-                searchResultsList.getSelectionModel().clearSelection();
-            }
-        });
     }
 
+    @FXML
+    private void handleAcceptRequest() {
+        String selected = incomingRequestsList.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            incomingRequests.remove(selected);
+            friendList.add(selected); // Add to friend list
+            showAlert("Friend Request Accepted", selected + " is now your friend!");
+        } else {
+            showAlert("No Selection", "Please select a request to accept.");
+        }
+    }
+
+
+    @FXML
+    private void handleDeclineRequest() {
+        String selected = incomingRequestsList.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            incomingRequests.remove(selected);
+            // TODO: Add logic to remove/ignore this request in DB
+            showAlert("Friend Request Declined", selected + " has been declined.");
+        } else {
+            showAlert("No Selection", "Please select a request to decline.");
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void handleSendRequest() {
+        String selectedUser = searchResultsList.getSelectionModel().getSelectedItem();
+        if (selectedUser != null) {
+            // Your logic to send the request
+            System.out.println("Request sent to: " + selectedUser);
+            // Optionally add to pending list
+            pendingRequestsList.getItems().add(selectedUser);
+        } else {
+            System.out.println("No user selected.");
+        }
+    }
+
+    @FXML
+    private void handleDeleteRequest() {
+        String selected = pendingRequestsList.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            pendingRequests.remove(selected);
+            showAlert("Deleted", "Request to " + selected + " removed.");
+        } else {
+            showAlert("No Selection", "Please select a request to delete.");
+        }
+    }
+
+
+//    Navigation buttons between pages
     @FXML
     private void goToHome() {
         try {
@@ -151,8 +205,6 @@ public class FriendsController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
@@ -167,13 +219,6 @@ public class FriendsController {
     private String generateResponse(String userInput) {
         return "You said: \"" + userInput + "\" — AI will respond to this once implemented!!!";
     }
-
-
-
-    // Example simple AI response ****NEED TO BE REPLACED WHEN AI SET UP*******
-//    private String generateResponse(String userInput) {
-//       return "You said \"" + userInput;
-//    }
 
 //     Just a fun animation effect which shows AI typing while it generates a response
     private void playTypingAnimation(Label label, String fullText) {

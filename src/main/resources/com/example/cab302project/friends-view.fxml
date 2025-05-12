@@ -37,18 +37,31 @@
                     <Label text="Pick a friend - drop down menu" />
                     <ComboBox fx:id="friendSelector" prefWidth="200"/>
 
-                    <Label text="Search Users" style="-fx-font-weight: bold;"/>
-                    <TextField fx:id="searchField" promptText="Search users..."
-                               style="-fx-background-color: white; -fx-border-color: #D8B9FF; -fx-border-radius: 8; -fx-background-radius: 8;"/>
+                    <Label text="Search Users" />
+                    <HBox spacing="10">
+                        <TextField fx:id="searchUserField" promptText="Enter username..." />
+                        <Button text="Send Request" onAction="#handleSendRequest"
+                                style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
+                    </HBox>
 
                     <ListView fx:id="searchResultsList" prefHeight="150"
                               style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>
 
-                    <Button text="Your Requests"
-                            style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
+                    <Label text="Your Requests" style="-fx-font-weight: bold;"/>
+                    <VBox spacing="10">
+                        <ListView fx:id="incomingRequestsList" prefHeight="120"/>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Accept" onAction="#handleAcceptRequest"
+                                    style= "-fx-font-weight: bold;"/>
+                            <Button text="Decline" onAction="#handleDeclineRequest"
+                                    style="-fx-font-weight: bold;"/>
+                        </HBox>
+                    </VBox>
 
-                    <Label text="Pending Requests to others" style="-fx-font-weight: bold;"/>
-                    <ListView fx:id="pendingRequestsList" prefHeight="120"/>
+                    <Label text="Pending Requests to Others" />
+                    <ListView fx:id="pendingRequestsList" prefHeight="120" />
+                    <Button text="Delete Request" onAction="#handleDeleteRequest"
+                            style="-fx-background-color: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
                 </VBox>
 
                 <!-- Friend Profile and AI Area -->
