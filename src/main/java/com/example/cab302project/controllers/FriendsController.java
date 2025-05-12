@@ -86,8 +86,22 @@ public class FriendsController {
 
         // 5) Wire UI list views
         friendSelector.setItems(friendList);
+        // if nothing in list show message
+        Label placeholderLabel2 = new Label("Select a user");
+        placeholderLabel2.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
+        searchResultsList.setPlaceholder(placeholderLabel2);
+
         pendingRequestsList.setItems(pendingOutgoing);
+        // if nothing in list show message
+        Label placeholderLabel = new Label("No pending requests");
+        placeholderLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
+        pendingRequestsList.setPlaceholder(placeholderLabel);
+
         incomingRequestsList.setItems(incomingReqs);
+        // if nothing in list show message
+        Label placeholderLabel1 = new Label("No incoming requests");
+        placeholderLabel1.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
+        incomingRequestsList.setPlaceholder(placeholderLabel1);
 
         // 6) Show profile on selection
         friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldU, newU) -> {
@@ -187,6 +201,26 @@ public class FriendsController {
     }
 
     // ─── Button Handlers ────────────────────────────────────────────────
+
+    @FXML
+    private void handleRemoveFriend() {
+        String selectedFriend = friendSelector.getSelectionModel().getSelectedItem();
+        if (selectedFriend != null && friendList.contains(selectedFriend)) {
+            friendList.remove(selectedFriend);
+            friendSelector.getSelectionModel().clearSelection();
+
+            // Clear profile display
+            profileHeaderLabel.setText("Friend profile");
+            usernameLabel.setText("");
+            nameLabel.setText("");
+            bioLabel.setText("");
+            profileImage.setImage(null);  // Optional: set to a default image instead
+
+            showAlert("Friend Removed", selectedFriend + " has been removed from your friend list.");
+        } else {
+            showAlert("No Selection", "Please select a friend to remove.");
+        }
+    }
 
     @FXML private void handleSendRequest() {
         String selected = searchResultsList.getSelectionModel().getSelectedItem();
