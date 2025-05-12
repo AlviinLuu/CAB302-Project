@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
@@ -12,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -28,7 +31,13 @@ public class FriendsController {
     @FXML
     private Label profileHeaderLabel;
     @FXML
-    private Label profileContentLabel;
+    private ImageView profileImage;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label bioLabel;
     @FXML
     private GridPane miniDayView;
 
@@ -47,7 +56,7 @@ public class FriendsController {
 
     @FXML private ListView<String> incomingRequestsList;
     private ObservableList<String> incomingRequests = FXCollections.observableArrayList(
-            "Papi", "Julio", "Lily", "Belle", "Barbie", "Cinderella", "Jasmine", "Aladdin", "Naveen" // mock data update using sql once set up
+            "Papi", "Julio", "Belle", "Barbie", "Cinderella", "Jasmine", "Aladdin", "Naveen" // mock data update using sql once set up
     );
 
     @FXML private ComboBox<String> friendSelector;
@@ -59,17 +68,27 @@ public class FriendsController {
         // Populate the ComboBox with some mock usernames (replace with actual logic later)
         friendSelector.getItems().addAll("Username1", "Username2", "Username3");
         friendSelector.setItems(friendList);
-        friendList.addAll(); // this is the preexisting freinds list, update with SQL once set up
-
+        friendList.addAll(); // this is the pre-existing freinds list, update with SQL once set up
 
         // Listen for selection changes
         friendSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 profileHeaderLabel.setText(newVal + "'s Profile");
-                profileContentLabel.setText("Details about " + newVal + " will be shown here.");
+
+                // Simulate user info lookup — replace this with SQL later
+                usernameLabel.setText("@" + newVal.toLowerCase());
+                nameLabel.setText(newVal + " Full Name pls extract from db");
+                bioLabel.setText("Bio for " + newVal + ". This will also come from the database.");
+
+                // dummy image for profile used
+                InputStream stream = getClass().getClassLoader().getResourceAsStream("com/example/cab302project/images/default_profile.png");
+                if (stream != null) {
+                    profileImage.setImage(new Image(stream));
+                }
             }
         });
 
+        // update date on rhs
         for (int i = 0; i < 24; i++) {
             Label hourLabel = new Label(String.format("%02d:00", i));
             hourLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #1A1A1A;");

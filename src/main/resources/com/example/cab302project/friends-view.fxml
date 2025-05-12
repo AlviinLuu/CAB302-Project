@@ -31,23 +31,26 @@
                 <!-- FRIENDS LIST PANEL -->
                 <VBox spacing="15" VBox.vgrow="ALWAYS" HBox.hgrow="NEVER" maxWidth="250"
                       style="-fx-background-color: #CCCCFF; -fx-padding: 20; -fx-background-radius: 12;">
+
                     <Label text="FRIENDS LIST"
                            style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10;"/>
 
-                    <Label text="Pick a friend - drop down menu" />
+                    <Label text="Pick a friend - drop down menu" style="-fx-font-weight: bold;" />
                     <ComboBox fx:id="friendSelector" prefWidth="200"/>
 
-                    <Label text="Search Users" />
+                    <Label text="Search Users" style="-fx-font-weight: bold;" />
                     <HBox spacing="10">
                         <TextField fx:id="searchUserField" promptText="Enter username..." />
                         <Button text="Request" onAction="#handleSendRequest"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
                     </HBox>
 
-                    <ListView fx:id="searchResultsList" prefHeight="150"
-                              style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>
+                    <VBox spacing="10">
+                        <ListView fx:id="searchResultsList" prefHeight="150"
+                                  style="-fx-background-color: #f5f5ff; -fx-border-color: #CCCCFF; -fx-border-radius: 8;"/>
+                    </VBox>
 
-                    <Label text="Your Requests" style="-fx-font-weight: bold;"/>
+                    <Label text="Your Requests" style="-fx-font-weight: bold; -fx-padding: 5 0 0 0;"/>
                     <VBox spacing="10">
                         <ListView fx:id="incomingRequestsList" prefHeight="120"/>
                         <HBox spacing="10" alignment="CENTER">
@@ -58,10 +61,12 @@
                         </HBox>
                     </VBox>
 
-                    <Label text="Pending Requests to Others" />
-                    <ListView fx:id="pendingRequestsList" prefHeight="120" />
-                    <Button text="Delete Request" onAction="#handleDeleteRequest"
-                            style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
+                    <Label text="Pending Requests to Others" style="-fx-font-weight: bold;"/>
+                    <VBox spacing="10">
+                        <ListView fx:id="pendingRequestsList" prefHeight="120" />
+                        <Button text="Delete Request" onAction="#handleDeleteRequest"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"/>
+                    </VBox>
                 </VBox>
 
                 <!-- Friend Profile and AI Area -->
@@ -70,16 +75,21 @@
                     <Label fx:id="profileHeaderLabel" text="Friend profile"
                            style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10;"/>
 
-                    <StackPane VBox.vgrow="ALWAYS"
-                               style="-fx-background-color: #E6E6FA; -fx-border-color: #999; -fx-border-radius: 10; -fx-background-radius: 10;">
-                        <Label fx:id="profileContentLabel" text="Selected Friend’s Bio here"
-                               style="-fx-text-fill: #444; -fx-font-size: 14px;"/>
+                    <StackPane style="-fx-background-color: #E6E6FA; -fx-border-color: #999; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 15;"
+                                alignment="CENTER">
+                        <VBox fx:id="profileSection" spacing="10" prefHeight="500" alignment="CENTER" >
+                            <ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" />
+                            <Label fx:id="usernameLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                            <Label fx:id="nameLabel" style="-fx-font-size: 13px;" />
+                            <Label fx:id="bioLabel" wrapText="true" maxWidth="200" style="-fx-font-size: 13px;" />
+                        </VBox>
                     </StackPane>
+
 
                     <!-- AI Prompt Input -->
                     <VBox spacing="10">
                         <TextArea fx:id="aiPromptField" promptText="enter AI prompt in this textbox"
-                                  wrapText="true" prefRowCount="3"
+                                  wrapText="true" prefRowCount="3" prefHeight="150"
                                   style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
                         <Button text="Ask" onAction="#handleAIPrompt"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);-fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
