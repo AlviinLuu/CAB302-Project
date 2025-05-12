@@ -41,17 +41,24 @@ public class FriendsController {
 
 
     @FXML private ListView<String> pendingRequestsList;
+    // This should be a list of all existing users on the database
     private ObservableList<String> allUsers = FXCollections.observableArrayList(
-            "Username1", "Username2", "Username3", "Harpi", "Simran", "Alex", "Jas" // mock data update using sql once set up
+            "HarpiSwaggy", "HarpimoreSwaggy",
+            "Anns", "Annzy", "Annsthecoder",
+            "Alvin1", "AlvinthechipMunk",
+            "Alexthedesigner", "Alex1",
+            "Arshdeep1", "JustArsh"// mock data update using sql once set up
     );
 
     private ObservableList<String> pendingRequests = FXCollections.observableArrayList();
 
+    // This the list of people who have sent the user a friend request (user chooses to accept or reject)
     @FXML private ListView<String> incomingRequestsList;
     private ObservableList<String> incomingRequests = FXCollections.observableArrayList(
-            "Papi", "Julio", "Belle", "Barbie", "Cinderella", "Jasmine", "Aladdin", "Naveen" // mock data update using sql once set up
+            "PapiCore", "BelleTheBaddie", "BarbieDreams", "Cinderella_sLostShoe", "Jas_mine", "Official_Aladd1n", "nastyNav33n" // mock data update using sql once set up
     );
 
+    // This the list of user's current friends available on the dropdown menu
     @FXML private ComboBox<String> friendSelector;
     private ObservableList<String> friendList = FXCollections.observableArrayList();
 
@@ -63,7 +70,7 @@ public class FriendsController {
         logoImage.setImage(logo);
 
         // Populate the ComboBox with some mock usernames (replace with actual logic later)
-        friendSelector.getItems().addAll("Username1", "Username2", "Username3");
+//        friendSelector.getItems().addAll("Username1", "Username2", "Username3");
         friendSelector.setItems(friendList);
         friendList.addAll(); // this is the pre-existing freinds list, update with SQL once set up
 
