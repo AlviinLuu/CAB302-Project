@@ -31,6 +31,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FriendsController {
@@ -333,7 +334,20 @@ public class FriendsController {
 
     @FXML private void openSettingsPage() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/settings-view.fxml")));
+            Stage stage = (Stage)mainContent.getScene().getWindow();
+            stage.close();
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setMaximized(true);
+            newStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML private void openProfilePage() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
             Stage stage = (Stage)mainContent.getScene().getWindow();
             stage.close();
             Stage newStage = new Stage();

@@ -85,7 +85,10 @@
             </GridPane>
         </ScrollPane>
 
-        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="ACCOUNT" />
+        <Button text="PROFILE"
+                onAction="#openProfilePage"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
         <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#handleLogOut" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="LOG OUT" />
         <VBox.margin>
             <Insets top="10" />

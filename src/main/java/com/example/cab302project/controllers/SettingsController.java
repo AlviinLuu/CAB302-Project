@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class SettingsController {
 
@@ -301,7 +302,19 @@ public class SettingsController {
             e.printStackTrace();
         }
     }
-
+    @FXML private void openProfilePage() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
+            Stage stage = (Stage)mainContent.getScene().getWindow();
+            stage.close();
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setMaximized(true);
+            newStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void handleEditBio() {

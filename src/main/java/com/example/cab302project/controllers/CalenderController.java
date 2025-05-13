@@ -20,6 +20,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Objects;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -350,7 +352,19 @@ public class CalenderController {
         }
     }
 
-
+    @FXML private void openProfilePage() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
+            Stage stage = (Stage)mainContent.getScene().getWindow();
+            stage.close();
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setMaximized(true);
+            newStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Example simple AI response ****NEED TO BE REPLACED WHEN AI SET UP*******
     //private String generateResponse(String userInput) {
