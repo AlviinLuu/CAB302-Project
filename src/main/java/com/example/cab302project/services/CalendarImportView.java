@@ -18,7 +18,7 @@ public class CalendarImportView {
             String summary = null, dtStart = null, dtEnd = null;
             boolean insideEvent = false;
 
-            // ✅ Get email from logged-in user
+            // ✅ Get email from jlogged-in user
             User user = Session.getLoggedInUser();
             if (user == null) {
                 System.out.println("❌ No user logged in.");
