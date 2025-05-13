@@ -221,7 +221,7 @@ public class CalenderController {
         dayView.setVisible(false);
         dayView.setManaged(false);
 
-        monthRadio.setSelected(true); // Ensure the Month button stays selected.
+        monthRadio.setSelected(true); // Ensure the Month button stays selected.hiii
     }
 
     @FXML
