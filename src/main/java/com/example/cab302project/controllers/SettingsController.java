@@ -2,6 +2,7 @@ package com.example.cab302project.controllers;
 import com.example.cab302project.models.IUserDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
+import com.example.cab302project.services.CalendarImportView;
 import com.example.cab302project.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 public class SettingsController {
 
@@ -30,7 +30,7 @@ public class SettingsController {
     @FXML private PasswordField passwordField;
     @FXML private ImageView profileImage;
     @FXML private ImageView logoImage;
-    @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton;
+    @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton, UploadingGoogleCalendar;
     //@FXML private Button homeButton, settingsButton, friendsButton, signOutButton;
     @FXML private Label dateLabel;
     @FXML private VBox aiSidebar;
@@ -83,13 +83,13 @@ public class SettingsController {
     }
 
     //private void applySidebarButtonStyle() {
-     //   homeButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-      //          "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-       // settingsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; " +
-       //         "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-       // friendsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-        //        "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-   // }
+    //   homeButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
+    //          "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+    // settingsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; " +
+    //         "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+    // friendsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
+    //        "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
+    // }
 
     private void updateDateLabel() {
         if (dateLabel != null) {
@@ -142,6 +142,26 @@ public class SettingsController {
     private void onLogoExit() {
         logoImage.setScaleX(1.0);
         logoImage.setScaleY(1.0);
+    }
+
+    @FXML
+    private void handleUploadGoogleCalendar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Upload Google Calendar (.ics)");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("iCalendar Files", "*.ics")
+        );
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            try {
+                // Pass the file to a separate parser or display window
+                CalendarImportView.show(selectedFile); // this would be your custom class/view
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to load calendar file.");
+            }
+        }
     }
 
     @FXML
@@ -274,7 +294,7 @@ public class SettingsController {
     }
 
 
-//    @FXML
+    //    @FXML
 //    private void goToFriends() {
 //        System.out.println("Navigating to Friends Page (to be implemented).");
 //    }
@@ -302,19 +322,7 @@ public class SettingsController {
             e.printStackTrace();
         }
     }
-    @FXML private void openProfilePage() {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     @FXML
     private void handleEditBio() {
