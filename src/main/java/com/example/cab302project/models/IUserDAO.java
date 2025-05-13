@@ -40,6 +40,10 @@ public interface IUserDAO {
 
     boolean updateBio(String email, String newBio);
 
+    boolean updateProfileImage(String email, byte[] imageData);
+
+    byte[] getProfileImage(String email);
+
     // Get all pending friend requests for a user
     List<User> getPendingFriendRequests(String username);
 

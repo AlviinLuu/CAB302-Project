@@ -21,7 +21,8 @@ public class SqliteUserDAO implements IUserDAO {
                     + "username TEXT NOT NULL UNIQUE,"
                     + "password TEXT NOT NULL,"
                     + "email TEXT NOT NULL UNIQUE,"
-                    + "bio TEXT DEFAULT ''"
+                    + "bio TEXT DEFAULT '',"
+                    + "profile_image BLOB"
                     + ")";
             statement.execute(usersTableQuery);
 
@@ -149,6 +150,34 @@ public class SqliteUserDAO implements IUserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean updateProfileImage(String email, byte[] imageData) {
+        String query = "UPDATE users SET profile_image = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setBytes(1, imageData);  // Store the byte array in the database
+            stmt.setString(2, email);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public byte[] getProfileImage(String email) {
+        String query = "SELECT profile_image FROM users WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBytes("profile_image");  // Return the byte array
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;  // No image found
     }
 
     @Override

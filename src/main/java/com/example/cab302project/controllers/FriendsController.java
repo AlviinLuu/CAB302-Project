@@ -24,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDate;
@@ -197,11 +199,22 @@ public class FriendsController {
             nameLabel.setText(u.getEmail());
             bioLabel.setText(u.getBio());
 
-            InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
-            assert is != null;
-            profileImage.setImage(new Image(is));
+            // Check if user has a profile image
+            byte[] profileImageData = userDAO.getProfileImage(u.getEmail()); // Get the image data from the database
+
+            if (profileImageData != null && profileImageData.length > 0) {
+                // If user has a profile image, load it from the byte array
+                Image image = new Image(new ByteArrayInputStream(profileImageData));
+                profileImage.setImage(image);
+            } else {
+                // If no profile image, load the default
+                InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
+                assert is != null;
+                profileImage.setImage(new Image(is));
+            }
         }
     }
+
 
     // ─── Button Handlers ────────────────────────────────────────────────
 

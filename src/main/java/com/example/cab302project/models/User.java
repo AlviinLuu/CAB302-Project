@@ -5,6 +5,7 @@ public class User {
     private String password;
     private String email;
     private String bio;
+    private String profileImage;
 
     // Constructor
     public User(String username, String password, String email) {
@@ -34,9 +35,25 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {this.email = email;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public void setBio(String bio) {this.bio = bio;}
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
-    public String getBio() {return bio;}
+    public String getBio() {
+        return bio;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }
+
+

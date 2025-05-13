@@ -59,7 +59,7 @@
                 <VBox spacing="10" style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Profile Picture" />
                     <ImageView fx:id="profileImage" fitHeight="90" preserveRatio="true" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
-                    <Button fx:id="uploadImageButton" maxWidth="200" prefHeight="40" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Upload Image" />
+                    <Button fx:id="uploadImageButton" onAction="#handleUploadImage" maxWidth="200" prefHeight="40" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Upload Image" />
                 </VBox>
             <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                <children>

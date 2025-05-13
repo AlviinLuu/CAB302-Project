@@ -15,8 +15,10 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -66,6 +68,14 @@ public class SettingsController {
         User currentUser = Session.getLoggedInUser();
         if (currentUser != null) {
             bioTextArea.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
+
+            // Load profile image from DB
+            byte[] imageData = userDAO.getProfileImage(currentUser.getEmail());
+            if (imageData != null) {
+                InputStream is = new ByteArrayInputStream(imageData);
+                profileImage.setImage(new Image(is));
+            }
+
         } else {
             bioTextArea.setText("Unable to load bio.");
         }
@@ -142,7 +152,27 @@ public class SettingsController {
         );
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            profileImage.setImage(new Image(selectedFile.toURI().toString()));
+            try {
+                // Load image into JavaFX ImageView
+                Image image = new Image(selectedFile.toURI().toString());
+                profileImage.setImage(image);
+
+                // Convert to byte array
+                byte[] imageData = java.nio.file.Files.readAllBytes(selectedFile.toPath());
+
+                User currentUser = Session.getLoggedInUser();
+                if (currentUser != null) {
+                    boolean success = userDAO.updateProfileImage(currentUser.getEmail(), imageData);
+                    if (success) {
+                        showAlert(Alert.AlertType.INFORMATION, "Success", "Profile image updated!");
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Error", "Failed to save image.");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to read image file.");
+            }
         }
     }
 
