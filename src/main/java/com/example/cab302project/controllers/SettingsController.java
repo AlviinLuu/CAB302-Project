@@ -168,12 +168,9 @@ public class SettingsController {
 
                 // ✅ Get the logged-in user from the Session
                 User user = Session.getLoggedInUser();
-
                 if (user != null) {
-                    int userId = user.getId(); // Get ID from User object
+                    CalendarImportView.importCalendarFile(selectedFile, user.getId(), user.getEmail());
 
-                    // ✅ Call the CalendarImportView to handle file parsing
-                    CalendarImportView.importCalendarFile(selectedFile, userId);
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Error", "No user is currently logged in.");
                 }

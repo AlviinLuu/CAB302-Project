@@ -12,19 +12,22 @@ import java.io.IOException;
 
 public class CalendarImportView {
 
-    public static void importCalendarFile(File selectedFile, int userId) {
+    public static void importCalendarFile(File selectedFile, int userId, String email) {
         try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
             String line;
             String summary = null, dtStart = null, dtEnd = null;
             boolean insideEvent = false;
 
-            // ✅ Get email from logged-in user
-            User user = Session.getLoggedInUser();
-            if (user == null) {
-                System.out.println("❌ No user logged in.");
-                return;
+            // Get user email (either passed in or fallback from Session)
+            String userEmail = email;
+            if (userEmail == null || userEmail.isEmpty()) {
+                User user = Session.getLoggedInUser();
+                if (user == null) {
+                    System.out.println("❌ No user is logged in.");
+                    return;
+                }
+                userEmail = user.getEmail();
             }
-            String userEmail = user.getEmail();
 
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -35,20 +38,20 @@ public class CalendarImportView {
                     dtStart = null;
                     dtEnd = null;
                 } else if (line.startsWith("SUMMARY:") && insideEvent) {
-                    summary = line.substring(8).trim();
+                    summary = line.substring("SUMMARY:".length()).trim();
                 } else if (line.startsWith("DTSTART:") && insideEvent) {
-                    dtStart = line.substring(8).trim();
+                    dtStart = line.substring("DTSTART:".length()).trim();
                 } else if (line.startsWith("DTEND:") && insideEvent) {
-                    dtEnd = line.substring(6).trim();
+                    dtEnd = line.substring("DTEND:".length()).trim();
                 } else if (line.equals("END:VEVENT") && insideEvent) {
                     insideEvent = false;
 
                     if (summary != null && dtStart != null && dtEnd != null) {
-                        Event event = new Event(summary, dtStart, dtEnd, userEmail); // ✅ now with email
-                        saveEventToDatabase(event, userId);
+                        Event event = new Event(summary, dtStart, dtEnd, userEmail);
+                        saveEventToDatabase(event, userId, userEmail);
                         System.out.println("✅ Event saved: " + summary);
                     } else {
-                        System.out.println("⚠️ Skipped incomplete event block");
+                        System.out.println("⚠️ Skipped incomplete event block.");
                     }
                 }
             }
@@ -58,8 +61,8 @@ public class CalendarImportView {
         }
     }
 
-    private static void saveEventToDatabase(Event event, int userId) {
-        SqliteUserDAO eventDAO = new SqliteUserDAO();
-        eventDAO.insertEvent(userId, event.getUserEmail(), event.getSummary(), event.getStartTime(), event.getEndTime());
+    private static void saveEventToDatabase(Event event, int userId, String userEmail) {
+        SqliteUserDAO dao = new SqliteUserDAO();
+        dao.insertEvent(userId, userEmail, event.getSummary(), event.getStartTime(), event.getEndTime());
     }
 }
