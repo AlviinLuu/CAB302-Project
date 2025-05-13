@@ -38,7 +38,7 @@
                 <!-- Calendar Sync -->
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Calendar Sync" />
-                    <Button style="-fx-background-color: #D8B9FF; -fx-text-fill: black; -fx-background-radius: 10; -fx-font-weight: bold;" text="Sync Google Calendar" />
+                    <Button fx:id="UploadingGoogleCalendar" onAction="#handleUploadGoogleCalendar" style="-fx-background-color: #D8B9FF; -fx-text-fill: black; -fx-background-radius: 10; -fx-font-weight: bold;" text="Upload Google Calendar"/>
                 </VBox>
 
                 <!-- Email -->
