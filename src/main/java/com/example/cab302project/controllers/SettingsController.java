@@ -149,6 +149,12 @@ public class SettingsController {
     private void handleUploadGoogleCalendar() {
         System.out.println("📂 Upload button clicked.");
 
+        // 🔴 Step 1: Clear the events table immediately after clicking the button
+        SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
+        sqliteUserDAO.clearEvents();
+        System.out.println("🧹 Events table cleared.");
+
+        // 🟢 Step 2: Proceed with file selection
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Upload Google Calendar (.ics)");
         fileChooser.getExtensionFilters().add(

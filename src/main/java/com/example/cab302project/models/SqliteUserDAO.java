@@ -16,6 +16,9 @@ public class SqliteUserDAO implements IUserDAO {
     private void createTables() {
         try {
             Statement statement = connection.createStatement();
+            String dropEventsTable = "DROP TABLE IF EXISTS events";
+            statement.execute(dropEventsTable);
+
             String usersTableQuery = "CREATE TABLE IF NOT EXISTS users ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "username TEXT NOT NULL UNIQUE,"
@@ -40,6 +43,7 @@ public class SqliteUserDAO implements IUserDAO {
             String eventsTableQuery = "CREATE TABLE IF NOT EXISTS events ("
                     + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + "user_id INTEGER NOT NULL,"
+                    + "user_email TEXT NOT NULL,"
                     + "name TEXT NOT NULL,"
                     + "start_time TEXT NOT NULL,"
                     + "end_time TEXT NOT NULL,"
@@ -375,14 +379,15 @@ public class SqliteUserDAO implements IUserDAO {
         return friends;
     }
 
-    public void insertEvent(int userId, String name, String startTime, String endTime) {
-        String query = "INSERT INTO events (user_id, name, start_time, end_time) VALUES (?, ?, ?, ?)";
+    public void insertEvent(int userId, String userEmail, String summary, String startTime, String endTime) {
+        String query = "INSERT INTO events (user_id, user_email, name, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, userId);      // User ID as a foreign key
-            stmt.setString(2, name);     // Event name
-            stmt.setString(3, startTime); // Event start time
-            stmt.setString(4, endTime);  // Event end time
-            stmt.executeUpdate();        // Execute the insert
+            stmt.setInt(1, userId);
+            stmt.setString(2, userEmail);
+            stmt.setString(3, summary);
+            stmt.setString(4, startTime);
+            stmt.setString(5, endTime);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
