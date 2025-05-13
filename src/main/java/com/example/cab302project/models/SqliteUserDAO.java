@@ -1,4 +1,3 @@
-
 package com.example.cab302project.models;
 
 import java.sql.*;
@@ -18,45 +17,43 @@ public class SqliteUserDAO implements IUserDAO {
         try {
             Statement statement = connection.createStatement();
 
-            // Drop events table if exists (for testing purposes)
-            String dropEventsTable = "DROP TABLE IF EXISTS events";
-            statement.execute(dropEventsTable);
-
-            String usersTableQuery = "CREATE TABLE IF NOT EXISTS users (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "username TEXT NOT NULL UNIQUE," +
-                    "password TEXT NOT NULL," +
-                    "email TEXT NOT NULL UNIQUE," +
-                    "bio TEXT DEFAULT ''," +
-                    "profile_image BLOB" +
-                    ")";
+            String usersTableQuery = "CREATE TABLE IF NOT EXISTS users ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "username TEXT NOT NULL UNIQUE,"
+                    + "password TEXT NOT NULL,"
+                    + "email TEXT NOT NULL UNIQUE,"
+                    + "bio TEXT DEFAULT '',"
+                    + "profile_image BLOB"
+                    + ")";
             statement.execute(usersTableQuery);
 
-            String friendRequestsTableQuery = "CREATE TABLE IF NOT EXISTS friend_requests (" +
-                    "sender_email TEXT NOT NULL," +
-                    "receiver_email TEXT NOT NULL," +
-                    "status TEXT NOT NULL," +
-                    "PRIMARY KEY (sender_email, receiver_email)," +
-                    "FOREIGN KEY (sender_email) REFERENCES users (email)," +
-                    "FOREIGN KEY (receiver_email) REFERENCES users (email)" +
-                    ")";
+            String friendRequestsTableQuery = "CREATE TABLE IF NOT EXISTS friend_requests ("
+                    + "sender_email TEXT NOT NULL,"
+                    + "receiver_email TEXT NOT NULL,"
+                    + "status TEXT NOT NULL,"
+                    + "PRIMARY KEY (sender_email, receiver_email),"
+                    + "FOREIGN KEY (sender_email) REFERENCES users (email),"
+                    + "FOREIGN KEY (receiver_email) REFERENCES users (email)"
+                    + ")";
             statement.execute(friendRequestsTableQuery);
 
-            String eventsTableQuery = "CREATE TABLE IF NOT EXISTS events (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "user_id INTEGER NOT NULL," +
-                    "user_email TEXT NOT NULL," +
-                    "name TEXT NOT NULL," +
-                    "start_time TEXT NOT NULL," +
-                    "end_time TEXT NOT NULL," +
-                    "FOREIGN KEY (user_id) REFERENCES users(id)" +
-                    ")";
+            // Create events table if not exists
+            String eventsTableQuery = "CREATE TABLE IF NOT EXISTS events ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "user_id INTEGER NOT NULL,"
+                    + "user_email TEXT NOT NULL,"
+                    + "name TEXT NOT NULL,"
+                    + "start_time TEXT NOT NULL,"
+                    + "end_time TEXT NOT NULL,"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id)"
+                    + ")";
             statement.execute(eventsTableQuery);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void addUser(User user) {
         if (userExists(user.getEmail())) {
@@ -379,6 +376,7 @@ public class SqliteUserDAO implements IUserDAO {
         }
         return friends;
     }
+
     public void insertEvent(int userId, String userEmail, String summary, String startTime, String endTime) {
         String query = "INSERT INTO events (user_id, user_email, name, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -393,14 +391,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
-
     public void clearEvents() {
         String query = "DELETE FROM events";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.executeUpdate();
+            stmt.executeUpdate(); // Executes the delete operation
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }
