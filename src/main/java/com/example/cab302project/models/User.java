@@ -6,12 +6,14 @@ public class User {
     private String email;
     private String bio;
     private String profileImage;
+    private int id;
 
     // Constructor
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.id = id;
     }
 
     // Getters and Setters
@@ -53,6 +55,14 @@ public class User {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 

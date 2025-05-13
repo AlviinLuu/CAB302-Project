@@ -147,6 +147,8 @@ public class SettingsController {
 
     @FXML
     private void handleUploadGoogleCalendar() {
+        System.out.println("📂 Upload button clicked.");
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Upload Google Calendar (.ics)");
         fileChooser.getExtensionFilters().add(
@@ -156,12 +158,26 @@ public class SettingsController {
 
         if (selectedFile != null) {
             try {
-                // Pass the file to a separate parser or display window
-                CalendarImportView.show(selectedFile); // this would be your custom class/view
+                System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
+
+                // ✅ Get the logged-in user from the Session
+                User user = Session.getLoggedInUser();
+
+                if (user != null) {
+                    int userId = user.getId(); // Get ID from User object
+
+                    // ✅ Call the CalendarImportView to handle file parsing
+                    CalendarImportView.importCalendarFile(selectedFile, userId);
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Error", "No user is currently logged in.");
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to load calendar file.");
             }
+        } else {
+            System.out.println("⚠️ No file selected.");
         }
     }
 

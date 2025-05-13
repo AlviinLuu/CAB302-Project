@@ -1,31 +1,25 @@
 package com.example.cab302project.models;
 
-import java.time.LocalDateTime;
-
 public class Event {
-    private String title;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String summary;
+    private String startTime;
+    private String endTime;
 
-    // Constructor
-    public Event(String title, LocalDateTime startTime, LocalDateTime endTime) {
-        this.title = title;
+    public Event(String summary, String startTime, String endTime) {
+        this.summary = summary;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    // Getters
-    public String getTitle() {
-        return title;
+    public String getSummary() {
+        return summary;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
-
-    // Optionally, you can add setters, toString, etc., as needed
 }

@@ -36,6 +36,17 @@ public class SqliteUserDAO implements IUserDAO {
                     + ")";
             statement.execute(friendRequestsTableQuery);
 
+            // Create events table if not exists
+            String eventsTableQuery = "CREATE TABLE IF NOT EXISTS events ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "user_id INTEGER NOT NULL,"
+                    + "name TEXT NOT NULL,"
+                    + "start_time TEXT NOT NULL,"
+                    + "end_time TEXT NOT NULL,"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id)"
+                    + ")";
+            statement.execute(eventsTableQuery);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -362,5 +373,27 @@ public class SqliteUserDAO implements IUserDAO {
             }
         }
         return friends;
+    }
+
+    public void insertEvent(int userId, String name, String startTime, String endTime) {
+        String query = "INSERT INTO events (user_id, name, start_time, end_time) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, userId);      // User ID as a foreign key
+            stmt.setString(2, name);     // Event name
+            stmt.setString(3, startTime); // Event start time
+            stmt.setString(4, endTime);  // Event end time
+            stmt.executeUpdate();        // Execute the insert
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearEvents() {
+        String query = "DELETE FROM events";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.executeUpdate(); // Executes the delete operation
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
