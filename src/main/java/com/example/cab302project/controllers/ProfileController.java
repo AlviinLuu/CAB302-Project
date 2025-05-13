@@ -1,5 +1,6 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -31,6 +33,8 @@ public class ProfileController {
     @FXML private ImageView logoImage;
 
     private final LocalDate currentDate = LocalDate.now();
+    private final SqliteUserDAO userDAO = new SqliteUserDAO();
+
 
     @FXML
     private void initialize() {
@@ -39,8 +43,10 @@ public class ProfileController {
         if (user != null) {
             profileNameLabel.setText(user.getUsername() != null ? user.getUsername() : "User");
             bioTextArea.setText(user.getBio() != null ? user.getBio() : "No bio provided.");
-            if (user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
-                profileImageView.setImage(new Image(user.getProfileImage()));
+
+            byte[] imgData = userDAO.getProfileImage(user.getEmail());
+            if (imgData != null && imgData.length > 0) {
+                profileImageView.setImage(new Image(new ByteArrayInputStream(imgData)));
             } else {
                 setDefaultProfileImage();
             }
