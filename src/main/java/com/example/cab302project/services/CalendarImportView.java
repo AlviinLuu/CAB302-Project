@@ -23,10 +23,9 @@ public class CalendarImportView {
             for (Object obj : calendar.getComponents(VEvent.VEVENT)) {
                 VEvent event = (VEvent) obj;
 
-                // Retrieve summary/title
+                // Retrieve values
                 String summary = event.getSummary() != null ? event.getSummary().getValue() : "Untitled Event";
 
-                // Parse start and end dates using DateTime
                 String rawStart = event.getStartDate()
                         .orElseThrow(() -> new RuntimeException("Missing start date"))
                         .getValue().toString();
@@ -35,6 +34,7 @@ public class CalendarImportView {
                         .orElseThrow(() -> new RuntimeException("Missing end date"))
                         .getValue().toString();
 
+                // Parse into Date
                 Date start = new DateTime(rawStart);
                 Date end = new DateTime(rawEnd);
 
@@ -42,7 +42,7 @@ public class CalendarImportView {
                 LocalDateTime startDateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 LocalDateTime endDateTime = end.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-                // Create and save event
+                // Build and save event
                 Event parsedEvent = new Event(summary, startDateTime, endDateTime);
                 saveEventToDatabase(parsedEvent);
 
@@ -54,6 +54,6 @@ public class CalendarImportView {
     }
 
     private static void saveEventToDatabase(Event event) {
-        // TODO:
+        // TODO: Implement saving to DB
     }
 }
