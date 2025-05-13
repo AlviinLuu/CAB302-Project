@@ -1,5 +1,3 @@
-package java;
-
 import com.example.cab302project.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

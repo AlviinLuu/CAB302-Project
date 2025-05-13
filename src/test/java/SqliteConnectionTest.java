@@ -1,5 +1,3 @@
-package java;
-
 import com.example.cab302project.models.SqliteConnection;
 import com.example.cab302project.services.Authentication;
 import org.junit.jupiter.api.Test;

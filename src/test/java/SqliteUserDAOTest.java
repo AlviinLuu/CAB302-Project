@@ -1,5 +1,3 @@
-package java;
-
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.models.SqliteConnection;
