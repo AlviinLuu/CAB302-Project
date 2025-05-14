@@ -6,6 +6,7 @@ import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,6 +28,10 @@ import javafx.util.Duration;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -359,27 +364,109 @@ public class FriendsController {
         }
     }
 
-    @FXML private void handleAIPrompt() {
+    @FXML
+    private void handleAIPrompt() {
         String prompt = aiPromptField.getText().trim();
-        if (!prompt.isEmpty()) {
-            String response = "You said: \"" + prompt + "\" — AI will respond to this once implemented!!!";
-            playTypingAnimation(aiResponseLabel, response);
+        if (prompt.isEmpty()) {
+            return;
+        }
+
+        // Clear input field right away
+        aiPromptField.clear();
+
+        // Show user's prompt above the response
+        aiResponseLabel.setText("You: " + prompt + "\n\nAI: ...");
+
+        // Call Ollama and get the response
+        String response = callOllama(prompt);
+
+        if (response != null && !response.isEmpty()) {
+            // Unescape and clean AI response
+            response = response.replace("\\u003c", "<").replace("\\u003e", ">");
+            response = response.replaceAll("(?i)<[^>]*>", "").strip();
+
+            // Start typing animation to gradually replace "AI: ..." with actual response
+            playTypingAnimation(aiResponseLabel, "You: " + prompt + "\n\nAI: " + response);
+        } else {
+            aiResponseLabel.setText("You: " + prompt + "\n\nAI: (No response)");
         }
     }
 
-    private void playTypingAnimation(Label label, String fullText) {
-        final int[] idx = {0};
-        Timeline tl = new Timeline(new KeyFrame(
-                Duration.millis(40),
-                ev -> {
-                    if (idx[0] < fullText.length()) {
-                        label.setText(fullText.substring(0, idx[0]+1));
-                        idx[0]++;
+
+    private String callOllama(String prompt) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            String jsonPayload = String.format(
+                    "{\"model\":\"deepseek-r1\", \"stream\": false, \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
+                    prompt.replace("\"", "\\\"")
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:11434/api/chat"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            String body = response.body();
+
+            // Match content using regex instead of brittle substring parsing
+            String content = extractContentFromJson(body);
+            if (content != null) {
+                content = content.replace("\\n", "\n").replace("\\\"", "\"");
+
+                // Remove leading "Think" phrases if present
+                if (content.toLowerCase().startsWith("think")) {
+                    int dot = content.indexOf('.');
+                    if (dot != -1 && dot < 15) {
+                        content = content.substring(dot + 1).trim();
                     }
                 }
-        ));
-        tl.setCycleCount(fullText.length());
-        tl.play();
+
+                return content;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String extractContentFromJson(String json) {
+        String marker = "\"content\":\"";
+        int index = json.indexOf(marker);
+        if (index != -1) {
+            int start = index + marker.length();
+            int end = json.indexOf("\"", start);
+            // keep extending end index while it ends in a backslash (escaped quote)
+            while (end != -1 && json.charAt(end - 1) == '\\') {
+                end = json.indexOf("\"", end + 1);
+            }
+            if (end != -1) {
+                return json.substring(start, end);
+            }
+        }
+        return null;
+    }
+
+
+    private void playTypingAnimation(Label label, String text) {
+        label.setText("");
+
+        Thread typingThread = new Thread(() -> {
+            try {
+                for (int i = 0; i < text.length(); i++) {
+                    final int index = i;
+                    Platform.runLater(() -> label.setText(text.substring(0, index + 1)));
+                    Thread.sleep(50);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        typingThread.start();
     }
 
     // ─── Mini Day View ────────────────────────────────────────────────
