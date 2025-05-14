@@ -129,8 +129,11 @@
                         <Button text="Ask" onAction="#handleAIPrompt"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);-fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                                 maxWidth="100" alignment="CENTER"/>
-                        <StackPane maxWidth="Infinity" VBox.vgrow="ALWAYS"> <TextArea fx:id="aiResponseLabel"
-                                                                                      editable="false"  /> </StackPane>
+                        <StackPane maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                            <TextArea fx:id="aiResponseLabel"
+                                      editable="false"
+                                      style="-fx-control-inner-background: #CCCCFF; -fx-border-color: #CCCCFF;"/>
+                        </StackPane>
                     </VBox>
                 </VBox>
             </HBox>
