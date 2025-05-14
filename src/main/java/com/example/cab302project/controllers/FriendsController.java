@@ -46,7 +46,7 @@ public class FriendsController {
 
     @FXML private VBox mainContent;
     @FXML private TextArea aiPromptField;
-    @FXML private Label aiResponseLabel;
+    @FXML private TextArea aiResponseLabel;
     @FXML private Label profileHeaderLabel;
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
@@ -734,26 +734,38 @@ public class FriendsController {
         return cleaned;
     }
 
-    private void playTypingAnimation(Label label, String text) {
+    private void playTypingAnimation(TextArea textArea, String text) {
         System.out.println("Attempting to play typing animation for text of length: " + (text != null ? text.length() : 0)); // Debug log
 
-        label.setText("");
+        textArea.setText("");
 
         Thread typingThread = new Thread(() -> {
             try {
                 for (int i = 0; i < text.length(); i++) {
                     final int index = i;
-                    Platform.runLater(() -> label.setText(text.substring(0, index + 1)));
-                    Thread.sleep(50);
+                    Platform.runLater(() -> textArea.setText(text.substring(0, index + 1)));
+                    Thread.sleep(20); // Reduced sleep time for faster typing
                 }
-                Platform.runLater(() -> label.setText(text));
+                // Ensure the full text is set at the very end and request layout
+                Platform.runLater(() -> {
+                    textArea.setText(text);
+                    textArea.requestLayout(); // Request a layout pass
+                });
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                Platform.runLater(() -> label.setText(text));
+                // Ensure full text is set even if interrupted and request layout
+                Platform.runLater(() -> {
+                    textArea.setText(text);
+                    textArea.requestLayout();
+                });
             } catch (Exception e) {
                 e.printStackTrace();
-                Platform.runLater(() -> label.setText(text));
+                // Ensure full text is set even if other errors occur and request layout
+                Platform.runLater(() -> {
+                    textArea.setText(text);
+                    textArea.requestLayout();
+                });
             }
         });
 
