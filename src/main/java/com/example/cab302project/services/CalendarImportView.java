@@ -60,6 +60,6 @@ public class CalendarImportView {
 
     private static void saveEventToDatabase(Event event, int userId) {
         SqliteUserDAO eventDAO = new SqliteUserDAO();
-        eventDAO.insertEvent(userId, event.getUserEmail(), event.getSummary(), event.getStartTime(), event.getEndTime());
+        eventDAO.insertEvent(userId, event.getUser_email(), event.getSummary(), event.getStart_time(), event.getEnd_time());
     }
 }

@@ -1,11 +1,10 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.Event;
 import com.example.cab302project.models.SqliteConnection;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,16 +16,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -371,35 +367,115 @@ public class FriendsController {
             return;
         }
 
-        // Clear input field right away
         aiPromptField.clear();
+        aiResponseLabel.setText("You: " + prompt + "\n\nAI: Thinking...");
 
-        // Show user's prompt above the response
-        aiResponseLabel.setText("You: " + prompt + "\n\nAI: ...");
-
-        // Call Ollama and get the response
-        String response = callOllama(prompt);
-
-        if (response != null && !response.isEmpty()) {
-            // Unescape and clean AI response
-            response = response.replace("\\u003c", "<").replace("\\u003e", ">");
-            response = response.replaceAll("(?i)<[^>]*>", "").strip();
-
-            // Start typing animation to gradually replace "AI: ..." with actual response
-            playTypingAnimation(aiResponseLabel, "You: " + prompt + "\n\nAI: " + response);
-        } else {
-            aiResponseLabel.setText("You: " + prompt + "\n\nAI: (No response)");
+        User currentUser = Session.getLoggedInUser();
+        if (currentUser == null) {
+            aiResponseLabel.setText("You: " + prompt + "\n\nAI: Error: Please log in first");
+            return;
         }
+
+        System.out.println("Original prompt: " + prompt);
+
+        String aiPrompt = buildAIPrompt(prompt, currentUser);
+
+        System.out.println("Final AI prompt: " + aiPrompt);
+
+        new Thread(() -> {
+            try {
+                String response = callOllama(aiPrompt);
+
+                Platform.runLater(() -> {
+                    if (response != null && !response.isEmpty()) {
+                        System.out.println("Raw AI response: " + response);
+
+                        String cleanedResponse = cleanResponse(response);
+                        playTypingAnimation(aiResponseLabel,
+                                "You: " + prompt + "\n\nAI: " + cleanedResponse);
+                    } else {
+                        aiResponseLabel.setText("You: " + prompt +
+                                "\n\nAI: Sorry, I couldn't get a response. Is Ollama running?");
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    aiResponseLabel.setText("You: " + prompt +
+                            "\n\nAI: Error: " + e.getMessage());
+                });
+            }
+        }).start();
     }
 
+    private String buildAIPrompt(String userPrompt, User currentUser) {
+        StringBuilder prompt = new StringBuilder();
+
+        // System instruction
+        prompt.append("You are a helpful calendar assistant. ")
+                .append("When asked about availability, analyze the events carefully. ")
+                .append("Respond concisely but helpfully.\n\n");
+
+        // Add calendar context if relevant
+        if (isCalendarRelated(userPrompt)) {
+            List<Event> events = userDAO.getUserEventsByEmail(currentUser.getEmail());
+
+            prompt.append("USER'S CURRENT EVENTS:\n");
+            if (events.isEmpty()) {
+                prompt.append("No events scheduled.\n\n");
+            } else {
+                for (Event event : events) {
+                    prompt.append("- ").append(event.getSummary())
+                            .append(" (")
+                            .append(event.getStart_time())
+                            .append(" to ")
+                            .append(event.getEnd_time())
+                            .append(")\n");
+                }
+                prompt.append("\n");
+            }
+        }
+
+        // Add the actual user question
+        prompt.append("USER QUESTION: ").append(userPrompt);
+
+        return prompt.toString();
+    }
+
+    private boolean isCalendarRelated(String prompt) {
+        String lower = prompt.toLowerCase();
+        return lower.contains("free") ||
+                lower.contains("busy") ||
+                lower.contains("schedule") ||
+                lower.contains("available") ||
+                lower.contains("calendar");
+    }
 
     private String callOllama(String prompt) {
         try {
             HttpClient client = HttpClient.newHttpClient();
+
+            String escapedPromptContent = prompt
+                    .replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\b", "\\b")
+                    .replace("\f", "\\f")
+                    .replace("\n", "\\n")
+                    .replace("\r", "\\r")
+                    .replace("\t", "\\t");
+
             String jsonPayload = String.format(
-                    "{\"model\":\"deepseek-r1\", \"stream\": false, \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
-                    prompt.replace("\"", "\\\"")
+                    "{\"model\":\"deepseek-r1\"," +
+                            "\"stream\":false," +
+                            "\"messages\":[{" +
+                            "\"role\":\"user\"," +
+                            "\"content\":\"%s\"" +
+                            "}]}",
+                    escapedPromptContent
             );
+
+            // Debug: Print the exact JSON being sent
+            System.out.println("Sending JSON: " + jsonPayload);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:11434/api/chat"))
@@ -407,47 +483,56 @@ public class FriendsController {
                     .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString());
 
-            String body = response.body();
+            // Debug: Print the full response
+            System.out.println("API Response: " + response.statusCode() +
+                    " - " + response.body());
 
-            // Match content using regex instead of brittle substring parsing
-            String content = extractContentFromJson(body);
-            if (content != null) {
-                content = content.replace("\\n", "\n").replace("\\\"", "\"");
+            if (response.statusCode() == 200) {
+                return extractContent(response.body());
+            } else {
+                System.err.println("API Error: " + response.body());
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("API Call Failed:");
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-                // Remove leading "Think" phrases if present
-                if (content.toLowerCase().startsWith("think")) {
-                    int dot = content.indexOf('.');
-                    if (dot != -1 && dot < 15) {
-                        content = content.substring(dot + 1).trim();
-                    }
-                }
+    private String extractContent(String json) {
+        try {
+            int start = json.indexOf("\"content\":\"") + 11;
+            if (start < 11) return null;
 
-                return content;
+            int end = json.indexOf("\"", start);
+            while (end > 0 && json.charAt(end-1) == '\\') {
+                end = json.indexOf("\"", end+1);
             }
 
+            if (end > start) {
+                return json.substring(start, end)
+                        .replace("\\n", "\n")
+                        .replace("\\\"", "\"");
+            }
         } catch (Exception e) {
+            System.err.println("Failed to parse response:");
             e.printStackTrace();
         }
         return null;
     }
 
-    private String extractContentFromJson(String json) {
-        String marker = "\"content\":\"";
-        int index = json.indexOf(marker);
-        if (index != -1) {
-            int start = index + marker.length();
-            int end = json.indexOf("\"", start);
-            // keep extending end index while it ends in a backslash (escaped quote)
-            while (end != -1 && json.charAt(end - 1) == '\\') {
-                end = json.indexOf("\"", end + 1);
-            }
-            if (end != -1) {
-                return json.substring(start, end);
-            }
-        }
-        return null;
+    private String cleanResponse(String response) {
+        if (response == null) return "";
+
+        String cleaned = response.replaceAll("(?s)<think>.*?</think>\\s*", "");
+
+        cleaned = cleaned.replaceAll("^\"|\"$", "").trim();
+
+        return cleaned;
     }
 
 

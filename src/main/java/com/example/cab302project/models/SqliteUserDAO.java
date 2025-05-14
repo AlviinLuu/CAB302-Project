@@ -45,7 +45,9 @@ public class SqliteUserDAO implements IUserDAO {
                     + "name TEXT NOT NULL,"
                     + "start_time TEXT NOT NULL,"
                     + "end_time TEXT NOT NULL,"
+                    + "summary TEXT NOT NULL,"
                     + "FOREIGN KEY (user_id) REFERENCES users(id)"
+
                     + ")";
             statement.execute(eventsTableQuery);
 
@@ -377,14 +379,14 @@ public class SqliteUserDAO implements IUserDAO {
         return friends;
     }
 
-    public void insertEvent(int userId, String userEmail, String summary, String startTime, String endTime) {
+    public void insertEvent(int userId, String user_email, String summary, String start_time, String end_time) {
         String query = "INSERT INTO events (user_id, user_email, name, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, userId);
-            stmt.setString(2, userEmail);
+            stmt.setString(2, user_email);
             stmt.setString(3, summary);
-            stmt.setString(4, startTime);
-            stmt.setString(5, endTime);
+            stmt.setString(4, start_time);
+            stmt.setString(5, end_time);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -394,9 +396,36 @@ public class SqliteUserDAO implements IUserDAO {
     public void clearEvents() {
         String query = "DELETE FROM events";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.executeUpdate(); // Executes the delete operation
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public List<Event> getUserEventsByEmail(String email) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT summary, start_time, end_time, user_email FROM events WHERE user_email = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String summary = resultSet.getString("summary");
+                String start_time = resultSet.getString("start_time");
+                String endTime = resultSet.getString("end_time");
+                String user_email = resultSet.getString("user_email");
+
+                String eventSummaryWithUser = summary + " (User: " + user_email + ")";
+                Event event = new Event(eventSummaryWithUser, start_time, endTime, user_email);
+
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving events: " + e.getMessage());
+        }
+
+        return events;
+    }
 }
+
