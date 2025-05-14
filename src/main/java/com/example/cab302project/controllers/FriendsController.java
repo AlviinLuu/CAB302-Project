@@ -64,7 +64,7 @@ public class FriendsController {
     private LocalDate currentDate = LocalDate.now();
     private Connection connection;
     private SqliteUserDAO userDAO;
-
+    private String loadedFriendEmail = null;
     @FXML
     public void initialize() {
         // 1) Ensure session has a user
@@ -200,6 +200,7 @@ public class FriendsController {
             usernameLabel.setText("@" + u.getUsername());
             nameLabel.setText(u.getEmail());
             bioLabel.setText(u.getBio());
+            loadedFriendEmail = u.getEmail();
 
             // Check if user has a profile image
             byte[] profileImageData = userDAO.getProfileImage(u.getEmail()); // Get the image data from the database
@@ -419,13 +420,14 @@ public class FriendsController {
 
         // Add calendar context if relevant
         if (isCalendarRelated(userPrompt)) {
-            List<Event> events = userDAO.getUserEventsByEmail(currentUser.getEmail());
+            // Get current user's events
+            List<Event> currentUserEvents = userDAO.getUserEventsByEmail(currentUser.getEmail());
 
-            prompt.append("USER'S CURRENT EVENTS:\n");
-            if (events.isEmpty()) {
+            prompt.append("YOUR CURRENT EVENTS:\n");
+            if (currentUserEvents.isEmpty()) {
                 prompt.append("No events scheduled.\n\n");
             } else {
-                for (Event event : events) {
+                for (Event event : currentUserEvents) {
                     prompt.append("- ").append(event.getName())
                             .append(" (")
                             .append(event.getStart_time())
@@ -435,9 +437,34 @@ public class FriendsController {
                 }
                 prompt.append("\n");
             }
-        }
 
-        // Add the actual user question
+            // Get selected friend's events using the stored email
+            if (loadedFriendEmail != null && !loadedFriendEmail.isEmpty()) {
+                // Retrieve the friend's User object to get their username for the prompt heading
+                User friendUser = userDAO.getUserByEmail(loadedFriendEmail);
+                String friendUsername = (friendUser != null) ? friendUser.getUsername() : "Selected Friend";
+
+                List<Event> friendEvents = userDAO.getUserEventsByEmail(loadedFriendEmail); // Use existing method
+
+                prompt.append(friendUsername.toUpperCase()).append("'S CURRENT EVENTS:\n");
+                if (friendEvents.isEmpty()) {
+                    prompt.append("No events scheduled.\n\n");
+                } else {
+                    for (Event event : friendEvents) {
+                        prompt.append("- ").append(event.getName())
+                                .append(" (")
+                                .append(event.getStart_time())
+                                .append(" to ")
+                                .append(event.getEnd_time())
+                                .append(")\n");
+                    }
+                    prompt.append("\n");
+                }
+            } else {
+                // Instruct AI if no friend is selected for calendar comparison
+                prompt.append("NO FRIEND SELECTED: Cannot compare schedules with a friend because no friend's profile is currently loaded.\n\n");
+            }
+        }
         prompt.append("USER QUESTION: ").append(userPrompt);
 
         return prompt.toString();

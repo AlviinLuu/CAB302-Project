@@ -1,32 +1,38 @@
 package com.example.cab302project.models;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class Event {
     private String name;
     private String start_time;
     private String end_time;
-    private String user_email;
+    private String username;
 
-    public Event(String summary, String start_time, String end_time, String user_email) {
-        this.name = summary;
+    public Event(String name, String start_time, String end_time, String username) {
+        this.name = name;
         this.start_time = start_time;
         this.end_time = end_time;
-        this.user_email = user_email;
+        this.username = username;
     }
 
-    private String parseIcsDate(String icsDate) {
+    private String parseIcsDate(String dateString) {
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-            inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date date = inputFormat.parse(icsDate);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date date = inputFormat.parse(dateString);
+
             SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
             return outputFormat.format(date);
-        } catch (Exception e) {
+        } catch (ParseException e) {
+            System.err.println("Error parsing date: " + dateString);
             e.printStackTrace();
-            return null;
+            return "Invalid Date"; // Return a default string or handle error as needed
+        } catch (Exception e) {
+            System.err.println("Unexpected error parsing date: " + dateString);
+            e.printStackTrace();
+            return "Error";
         }
     }
 
@@ -42,13 +48,13 @@ public class Event {
         return parseIcsDate(end_time); //Parse the end time to human-readable format
     }
 
-    public String getUser_email() {
-        return user_email;
+    public String getUsername() {
+        return username;
     }
 
     public String toFormattedString() {
         return String.format("User: %s | Event: %s | Start: %s | End: %s",
-                getUser_email(), getName(), getStart_time(), getEnd_time());
+                getUsername(), getName(), getStart_time(), getEnd_time());
     }
 
 }

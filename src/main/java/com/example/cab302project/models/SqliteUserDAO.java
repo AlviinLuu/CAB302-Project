@@ -404,25 +404,26 @@ public class SqliteUserDAO implements IUserDAO {
 
     public List<Event> getUserEventsByEmail(String email) {
         List<Event> events = new ArrayList<>();
-        String query = "SELECT name, start_time, end_time, user_email FROM events WHERE user_email = ?";
+        String query = "SELECT e.name, e.start_time, e.end_time, u.username " +
+                "FROM events e JOIN users u ON e.user_email = u.email " +
+                "WHERE e.user_email = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, email);
             ResultSet resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
+                // Retrieve name, start_time, end_time, and username
                 String name = resultSet.getString("name");
-                String start_time = resultSet.getString("start_time");
+                String startTime = resultSet.getString("start_time");
                 String endTime = resultSet.getString("end_time");
-                String user_email = resultSet.getString("user_email");
+                String username = resultSet.getString("username");
 
-                String eventnameWithUser = name + " (User: " + user_email + ")";
-                Event event = new Event(eventnameWithUser, start_time, endTime, user_email);
-
+                Event event = new Event(name, startTime, endTime, username);
                 events.add(event);
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving events: " + e.getMessage());
+            System.err.println("Error retrieving events by email: " + e.getMessage());
         }
 
         return events;
