@@ -391,10 +391,11 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
-    public void clearEvents() {
-        String query = "DELETE FROM events";
+    public void clearEventsByEmail(String userEmail) {
+        String query = "DELETE FROM events WHERE user_email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.executeUpdate(); // Executes the delete operation
+            stmt.setString(1, userEmail);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
