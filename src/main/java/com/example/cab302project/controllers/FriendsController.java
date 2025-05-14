@@ -5,6 +5,7 @@ import com.example.cab302project.models.SqliteConnection;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
+import com.fasterxml.jackson.databind.JsonNode;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +22,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
@@ -30,9 +31,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FriendsController {
@@ -47,30 +54,53 @@ public class FriendsController {
     @FXML private Label bioLabel;
     @FXML private GridPane miniDayView;
     @FXML private ImageView logoImage;
-
     @FXML private ListView<String> searchResultsList;
     @FXML private TextField searchUserField;
-
     @FXML private ListView<String> pendingRequestsList;   // outgoing
     @FXML private ListView<String> incomingRequestsList;  // incoming
-
     @FXML private ComboBox<String> friendSelector;
 
-    private ObservableList<String> allUsers        = FXCollections.observableArrayList();
-    private ObservableList<String> pendingOutgoing = FXCollections.observableArrayList();
-    private ObservableList<String> incomingReqs    = FXCollections.observableArrayList();
-    private ObservableList<String> friendList      = FXCollections.observableArrayList();
-
+    private final ObservableList<String> allUsers        = FXCollections.observableArrayList();
+    private final ObservableList<String> pendingOutgoing = FXCollections.observableArrayList();
+    private final ObservableList<String> incomingReqs    = FXCollections.observableArrayList();
+    private final ObservableList<String> friendList      = FXCollections.observableArrayList();
+    private String lastAIResponse = null;
+    private List<Event> lastUserEvents = null;
+    private List<Event> lastFriendEvents = null;
+    private LocalDate lastQueryDate = null;
     private LocalDate currentDate = LocalDate.now();
     private Connection connection;
     private SqliteUserDAO userDAO;
     private String loadedFriendEmail = null;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    private static final Pattern DATE_PATTERN = Pattern.compile(
+            "\\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s+\\d{1,2}(?:,\\s*\\d{4})?\\b",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    private static final DateTimeFormatter EVENT_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
+
+    private static final DateTimeFormatter FLEXIBLE_DATE_FORMATTER = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive() // Case-insensitive parsing for month names
+            .appendPattern("MMMM d") // Full month name, day
+            .optionalStart()         // Year and comma are optional
+            .appendLiteral(",")
+            .optionalStart()
+            .appendLiteral(" ")
+            .optionalEnd()
+            .appendPattern("yyyy")   // Year
+            .optionalEnd()
+            .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear()) // Default to current year if not present
+            .toFormatter();
     @FXML
     public void initialize() {
         // 1) Ensure session has a user
         User sessionUser = Session.getLoggedInUser();
         if (sessionUser == null) {
-            System.err.println("ERROR: No user in session! Call Session.setLoggedInUser(...) after login.");
+            System.err.println("ERROR: No user in session Call Session.setLoggedInUser(...) after login.");
             return;
         }
 
@@ -112,7 +142,6 @@ public class FriendsController {
             if (newU != null) loadUserProfile(newU);
         });
 
-        // 7) Live search logic (always set a fresh list)
         searchUserField.textProperty().addListener((obs, oldText, text) -> {
             if (text == null || text.isBlank()) {
                 searchResultsList.setItems(FXCollections.observableArrayList());
@@ -124,7 +153,6 @@ public class FriendsController {
             }
         });
 
-        // 8) Render the mini-day view
         renderMiniDayView();
     }
 
@@ -392,11 +420,14 @@ public class FriendsController {
                         System.out.println("Raw AI response: " + response);
 
                         String cleanedResponse = cleanResponse(response);
+                        lastAIResponse = cleanedResponse;
+
                         playTypingAnimation(aiResponseLabel,
                                 "You: " + prompt + "\n\nAI: " + cleanedResponse);
                     } else {
                         aiResponseLabel.setText("You: " + prompt +
                                 "\n\nAI: Sorry, I couldn't get a response. Is Ollama running?");
+                        lastAIResponse = null;
                     }
                 });
             } catch (Exception e) {
@@ -405,29 +436,148 @@ public class FriendsController {
                     aiResponseLabel.setText("You: " + prompt +
                             "\n\nAI: Error: " + e.getMessage());
                 });
+                lastAIResponse = null; // Clear last response on error
             }
         }).start();
+    }
+
+    private String calculateFreeTimeSlots(List<Event> userEvents, List<Event> friendEvents, LocalDate date) {
+        if (userEvents == null) userEvents = new ArrayList<>();
+        if (friendEvents == null) friendEvents = new ArrayList<>();
+
+        List<Event> allEvents = new ArrayList<>(userEvents);
+        allEvents.addAll(friendEvents);
+
+
+        allEvents.sort(Comparator.comparing(event -> LocalDateTime.parse(event.getStart_time(), EVENT_TIME_FORMATTER)));
+
+
+        LocalTime startOfDay = LocalTime.of(7, 0); // 7 AM
+        LocalTime endOfDay = LocalTime.of(23, 0);   // 11 PM
+
+        LocalDateTime windowStart = LocalDateTime.of(date, startOfDay);
+        LocalDateTime windowEnd = LocalDateTime.of(date, endOfDay);
+
+        List<String> freeSlots = new ArrayList<>();
+        LocalDateTime currentFreeStart = windowStart;
+
+        for (Event event : allEvents) {
+            LocalDateTime eventStart = LocalDateTime.parse(event.getStart_time(), EVENT_TIME_FORMATTER);
+            LocalDateTime eventEnd = LocalDateTime.parse(event.getEnd_time(), EVENT_TIME_FORMATTER);
+
+
+            eventStart = eventStart.isBefore(windowStart) ? windowStart : eventStart;
+            eventEnd = eventEnd.isAfter(windowEnd) ? windowEnd : eventEnd;
+
+
+
+            if (currentFreeStart.isBefore(eventStart)) {
+
+                LocalDateTime freeEnd = eventStart.isAfter(windowEnd) ? windowEnd : eventStart;
+                if (currentFreeStart.isBefore(freeEnd)) {
+                    freeSlots.add(formatTimeRange(currentFreeStart, freeEnd));
+                }
+            }
+
+
+            currentFreeStart = currentFreeStart.isAfter(eventEnd) ? currentFreeStart : eventEnd;
+
+            if (currentFreeStart.isAfter(windowEnd)) {
+                break;
+            }
+        }
+
+        // Add any remaining free time after the last event until the end of the window
+        if (currentFreeStart.isBefore(windowEnd)) {
+            freeSlots.add(formatTimeRange(currentFreeStart, windowEnd));
+        }
+
+
+        if (freeSlots.isEmpty()) {
+            return "No free time slots available between 7 AM and 11 PM.";
+        } else {
+            StringBuilder sb = new StringBuilder("Free time slots:\n");
+            for (String slot : freeSlots) {
+                sb.append("- ").append(slot).append("\n");
+            }
+            return sb.toString();
+        }
+    }
+
+    private String formatTimeRange(LocalDateTime start, LocalDateTime end) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        return start.format(timeFormatter) + " to " + end.format(timeFormatter);
+    }
+
+    private String getFriendEmailFromLastEvents() {
+        if (lastFriendEvents != null && !lastFriendEvents.isEmpty()) {
+
+            String sampleEventEmail = null;
+            for (Event event : lastFriendEvents) {
+                User friendUser = userDAO.getUserByUsername(event.getUsername());
+                if (friendUser != null) {
+                    sampleEventEmail = friendUser.getEmail();
+                    break;
+                }
+            }
+            return sampleEventEmail;
+
+        }
+        return null;
     }
 
     private String buildAIPrompt(String userPrompt, User currentUser) {
         StringBuilder prompt = new StringBuilder();
 
-        // System instruction
+        // System instruction - Tell AI to simply output the provided free time slots
         prompt.append("You are a helpful calendar assistant. ")
-                .append("When asked about availability, analyze the events carefully. ")
-                .append("Assume typical waking hours are between 7 AM and 11 PM unless the user specifies a different time range. ")
-                .append("Respond concisely but helpfully.\n\n");
+                .append("You have been provided with a list of calculated free time slots based on the user's and their friend's schedules. ")
+                .append("Your task is to present these free time slots to the user in a concise and friendly manner. ")
+                .append("Do NOT perform any analysis or calculation yourself. ")
+                .append("Simply state the free time slots that were provided in the 'CALCULATED FREE TIME SLOTS' section. ")
+                .append("Do NOT refer to specific names from the event data; use 'Your events' and 'Friend's events' if necessary for context, but the primary output is the calculated free slots. ")
+                .append("If the user's question is not about calendar availability, respond based on the conversation history and the provided event data, still being concise.\n\n");
 
-        // Add calendar context if relevant
+
+        // Include previous conversation turn if available
+        if (lastAIResponse != null && !lastAIResponse.isEmpty()) {
+            prompt.append("PREVIOUS CONVERSATION:\n");
+            prompt.append("AI: ").append(lastAIResponse).append("\n\n");
+        }
+
+
+
         if (isCalendarRelated(userPrompt)) {
-            // Get current user's events
-            List<Event> currentUserEvents = userDAO.getUserEventsByEmail(currentUser.getEmail());
+            // Attempt to extract date from the user prompt
+            Optional<LocalDate> queryDate = extractDateFromPrompt(userPrompt);
+            LocalDate targetDate = queryDate.orElse(LocalDate.now());
 
-            prompt.append("YOUR CURRENT EVENTS:\n");
-            if (currentUserEvents.isEmpty()) {
+
+            boolean needsNewEvents = lastUserEvents == null || lastFriendEvents == null ||
+                    !targetDate.equals(lastQueryDate) ||
+                    (loadedFriendEmail != null && (lastFriendEvents == null || !userDAO.getUserByEmail(loadedFriendEmail).getEmail().equals(getFriendEmailFromLastEvents()))); // Simple check if friend changed
+
+            if (needsNewEvents) {
+
+                lastUserEvents = userDAO.getUserEventsByEmailAndDate(currentUser.getEmail(), targetDate);
+
+                if (loadedFriendEmail != null && !loadedFriendEmail.isEmpty()) {
+                    lastFriendEvents = userDAO.getUserEventsByEmailAndDate(loadedFriendEmail, targetDate);
+                } else {
+                    lastFriendEvents = new ArrayList<>();
+                }
+                lastQueryDate = targetDate;
+            }
+
+            // Add the target date to the prompt instruction for clarity
+            prompt.append("ANALYZING EVENTS FOR: ").append(lastQueryDate.format(DateTimeFormatter.ofPattern("MMMM d,yyyy"))).append("\n\n");
+
+            // Include current user's events for the target date, using generic term
+            prompt.append("YOUR EVENTS ON ").append(lastQueryDate.format(DateTimeFormatter.ofPattern("MMMM d"))).append(":\n");
+            if (lastUserEvents == null || lastUserEvents.isEmpty()) {
                 prompt.append("No events scheduled.\n\n");
             } else {
-                for (Event event : currentUserEvents) {
+                for (Event event : lastUserEvents) {
                     prompt.append("- ").append(event.getName())
                             .append(" (")
                             .append(event.getStart_time())
@@ -438,19 +588,15 @@ public class FriendsController {
                 prompt.append("\n");
             }
 
-            // Get selected friend's events using the stored email
             if (loadedFriendEmail != null && !loadedFriendEmail.isEmpty()) {
-                // Retrieve the friend's User object to get their username for the prompt heading
                 User friendUser = userDAO.getUserByEmail(loadedFriendEmail);
                 String friendUsername = (friendUser != null) ? friendUser.getUsername() : "Selected Friend";
 
-                List<Event> friendEvents = userDAO.getUserEventsByEmail(loadedFriendEmail); // Use existing method
-
-                prompt.append(friendUsername.toUpperCase()).append("'S CURRENT EVENTS:\n");
-                if (friendEvents.isEmpty()) {
+                prompt.append("FRIEND'S EVENTS ON ").append(lastQueryDate.format(DateTimeFormatter.ofPattern("MMMM d"))).append(":\n");
+                if (lastFriendEvents == null || lastFriendEvents.isEmpty()) {
                     prompt.append("No events scheduled.\n\n");
                 } else {
-                    for (Event event : friendEvents) {
+                    for (Event event : lastFriendEvents) {
                         prompt.append("- ").append(event.getName())
                                 .append(" (")
                                 .append(event.getStart_time())
@@ -461,14 +607,43 @@ public class FriendsController {
                     prompt.append("\n");
                 }
             } else {
-                // Instruct AI if no friend is selected for calendar comparison
                 prompt.append("NO FRIEND SELECTED: Cannot compare schedules with a friend because no friend's profile is currently loaded.\n\n");
             }
+
+            String calculatedFreeTime = calculateFreeTimeSlots(lastUserEvents, lastFriendEvents, lastQueryDate);
+            prompt.append("CALCULATED FREE TIME SLOTS:\n");
+            prompt.append(calculatedFreeTime).append("\n\n");
+            // ---------------------------------------------
+
+        } else {
+            lastUserEvents = null;
+            lastFriendEvents = null;
+            lastQueryDate = null;
         }
+
         prompt.append("USER QUESTION: ").append(userPrompt);
 
         return prompt.toString();
     }
+
+
+    private Optional<LocalDate> extractDateFromPrompt(String prompt) {
+        Matcher matcher = DATE_PATTERN.matcher(prompt);
+        LocalDate today = LocalDate.now();
+
+        while (matcher.find()) {
+            String dateString = matcher.group();
+            try {
+                LocalDate parsedDate = LocalDate.parse(dateString.trim(), FLEXIBLE_DATE_FORMATTER);
+                return Optional.of(parsedDate);
+
+            } catch (DateTimeParseException e) {
+                System.err.println("Could not parse date from prompt: " + dateString + " - " + e.getMessage());
+            }
+        }
+        return Optional.empty();
+    }
+
 
     private boolean isCalendarRelated(String prompt) {
         String lower = prompt.toLowerCase();
@@ -502,7 +677,6 @@ public class FriendsController {
                     escapedPromptContent
             );
 
-            // Debug: Print the exact JSON being sent
             System.out.println("Sending JSON: " + jsonPayload);
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -533,29 +707,21 @@ public class FriendsController {
 
     private String extractContent(String json) {
         try {
-            int start = json.indexOf("\"content\":\"") + 11;
-            if (start < 11) return null;
+            JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode contentNode = rootNode.path("message").path("content");
 
-            int end = json.indexOf("\"", start);
-            while (end > 0 && json.charAt(end-1) == '\\') {
-                end = json.indexOf("\"", end+1);
+            if (contentNode.isTextual()) {
+                return contentNode.asText();
+            } else {
+                System.err.println("JSON response does not contain expected 'message.content' text node.");
+                return null;
             }
 
-            if (end > start) {
-                String content = json.substring(start, end)
-                        .replace("\\n", "\n")
-                        .replace("\\\"", "\"");
-
-                content = content.replace("\\u003c", "<").replace("\\u003e", ">");
-
-                return content;
-
-            }
         } catch (Exception e) {
-            System.err.println("Failed to parse response:");
+            System.err.println("Failed to parse response with Jackson:");
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     private String cleanResponse(String response) {
@@ -569,6 +735,8 @@ public class FriendsController {
     }
 
     private void playTypingAnimation(Label label, String text) {
+        System.out.println("Attempting to play typing animation for text of length: " + (text != null ? text.length() : 0)); // Debug log
+
         label.setText("");
 
         Thread typingThread = new Thread(() -> {
@@ -578,8 +746,14 @@ public class FriendsController {
                     Platform.runLater(() -> label.setText(text.substring(0, index + 1)));
                     Thread.sleep(50);
                 }
+                Platform.runLater(() -> label.setText(text));
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Platform.runLater(() -> label.setText(text));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> label.setText(text));
             }
         });
 
@@ -591,18 +765,15 @@ public class FriendsController {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
-        // Top date header
         Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
         header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
         header.setMaxWidth(Double.MAX_VALUE);
         header.setAlignment(Pos.TOP_LEFT);
         miniDayView.add(header, 0, 0, 2, 1);
 
-        // Spacer
         RowConstraints spacer = new RowConstraints(30);
         miniDayView.getRowConstraints().add(spacer);
 
-        // Hour slots
         for (int hour = 0; hour < 24; hour++) {
             miniDayView.getRowConstraints().add(new RowConstraints(30));
 

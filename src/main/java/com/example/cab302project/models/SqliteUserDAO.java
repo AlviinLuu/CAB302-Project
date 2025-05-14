@@ -1,6 +1,8 @@
 package com.example.cab302project.models;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -402,18 +404,21 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
-    public List<Event> getUserEventsByEmail(String email) {
+    public List<Event> getUserEventsByEmailAndDate(String email, LocalDate date) {
         List<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String dateString = date.format(formatter);
+
         String query = "SELECT e.name, e.start_time, e.end_time, u.username " +
                 "FROM events e JOIN users u ON e.user_email = u.email " +
-                "WHERE e.user_email = ?";
+                "WHERE e.user_email = ? AND e.start_time LIKE ? || '%'";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, email);
+            stmt.setString(2, dateString);
             ResultSet resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                // Retrieve name, start_time, end_time, and username
                 String name = resultSet.getString("name");
                 String startTime = resultSet.getString("start_time");
                 String endTime = resultSet.getString("end_time");
@@ -423,7 +428,7 @@ public class SqliteUserDAO implements IUserDAO {
                 events.add(event);
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving events by email: " + e.getMessage());
+            System.err.println("Error retrieving events by email and date: " + e.getMessage());
         }
 
         return events;

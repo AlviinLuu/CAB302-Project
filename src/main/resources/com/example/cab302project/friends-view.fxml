@@ -133,7 +133,7 @@
                         <StackPane maxWidth="Infinity">
                             <Label fx:id="aiResponseLabel"
                                    wrapText="true"
-                                   maxWidth="600"
+                                   maxWidth="800"
                                    style="-fx-text-fill: #1A1A1A;"/>
                         </StackPane>
                     </VBox>
