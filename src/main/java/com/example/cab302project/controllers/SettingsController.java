@@ -149,41 +149,41 @@ public class SettingsController {
     private void handleUploadGoogleCalendar() {
         System.out.println("📂 Upload button clicked.");
 
-        // 🔴 Step 1: Clear the events table immediately after clicking the button
-        SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
-        sqliteUserDAO.clearEvents();
-        System.out.println("🧹 Events table cleared.");
+        // ✅ Get the logged-in user
+        User user = Session.getLoggedInUser();
 
-        // 🟢 Step 2: Proceed with file selection
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Upload Google Calendar (.ics)");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("iCalendar Files", "*.ics")
-        );
-        File selectedFile = fileChooser.showOpenDialog(null);
+        if (user != null) {
+            String userEmail = user.getEmail(); // or however you store it
 
-        if (selectedFile != null) {
-            try {
-                System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
+            // 🔴 Clear only that user's events
+            SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
+            sqliteUserDAO.clearEventsByEmail(userEmail);
+            System.out.println("🧹 Events for user " + userEmail + " cleared.");
 
-                // ✅ Get the logged-in user from the Session
-                User user = Session.getLoggedInUser();
+            // 🟢 Proceed with file selection
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Upload Google Calendar (.ics)");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("iCalendar Files", "*.ics")
+            );
+            File selectedFile = fileChooser.showOpenDialog(null);
 
-                if (user != null) {
-                    int userId = user.getId(); // Get ID from User object
+            if (selectedFile != null) {
+                try {
+                    System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
 
-                    // ✅ Call the CalendarImportView to handle file parsing
-                    CalendarImportView.importCalendarFile(selectedFile, userId);
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Error", "No user is currently logged in.");
+                    // ✅ Parse the file for this user
+                    CalendarImportView.importCalendarFile(selectedFile, user.getId());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to load calendar file.");
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to load calendar file.");
+            } else {
+                System.out.println("⚠️ No file selected.");
             }
         } else {
-            System.out.println("⚠️ No file selected.");
+            showAlert(Alert.AlertType.ERROR, "Error", "No user is currently logged in.");
         }
     }
 
