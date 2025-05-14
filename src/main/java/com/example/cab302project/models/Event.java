@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class Event {
-    private String summary;
+    private String name;
     private String start_time;
     private String end_time;
     private String user_email;
 
     public Event(String summary, String start_time, String end_time, String user_email) {
-        this.summary = summary;
+        this.name = summary;
         this.start_time = start_time;
         this.end_time = end_time;
         this.user_email = user_email;
@@ -30,8 +30,8 @@ public class Event {
         }
     }
 
-    public String getSummary() {
-        return summary;
+    public String getName() {
+        return name;
     }
 
     public String getStart_time() {
@@ -48,7 +48,7 @@ public class Event {
 
     public String toFormattedString() {
         return String.format("User: %s | Event: %s | Start: %s | End: %s",
-                getUser_email(), getSummary(), getStart_time(), getEnd_time());
+                getUser_email(), getName(), getStart_time(), getEnd_time());
     }
 
 }

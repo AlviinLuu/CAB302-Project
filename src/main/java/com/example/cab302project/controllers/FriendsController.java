@@ -414,6 +414,7 @@ public class FriendsController {
         // System instruction
         prompt.append("You are a helpful calendar assistant. ")
                 .append("When asked about availability, analyze the events carefully. ")
+                .append("Assume typical waking hours are between 7 AM and 11 PM unless the user specifies a different time range. ")
                 .append("Respond concisely but helpfully.\n\n");
 
         // Add calendar context if relevant
@@ -425,7 +426,7 @@ public class FriendsController {
                 prompt.append("No events scheduled.\n\n");
             } else {
                 for (Event event : events) {
-                    prompt.append("- ").append(event.getSummary())
+                    prompt.append("- ").append(event.getName())
                             .append(" (")
                             .append(event.getStart_time())
                             .append(" to ")
@@ -514,9 +515,14 @@ public class FriendsController {
             }
 
             if (end > start) {
-                return json.substring(start, end)
+                String content = json.substring(start, end)
                         .replace("\\n", "\n")
                         .replace("\\\"", "\"");
+
+                content = content.replace("\\u003c", "<").replace("\\u003e", ">");
+
+                return content;
+
             }
         } catch (Exception e) {
             System.err.println("Failed to parse response:");
@@ -528,13 +534,12 @@ public class FriendsController {
     private String cleanResponse(String response) {
         if (response == null) return "";
 
-        String cleaned = response.replaceAll("(?s)<think>.*?</think>\\s*", "");
+        String cleaned = response.replaceAll("(?s)\\s*<think>.*?<\\/think>\\s*", "");
 
         cleaned = cleaned.replaceAll("^\"|\"$", "").trim();
 
         return cleaned;
     }
-
 
     private void playTypingAnimation(Label label, String text) {
         label.setText("");
