@@ -24,12 +24,24 @@ public class Event {
 
             SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
+
             return outputFormat.format(date);
-        } catch (ParseException e) {
-            System.err.println("Error parsing date: " + dateString);
-            e.printStackTrace();
-            return "Invalid Date"; // Return a default string or handle error as needed
-        } catch (Exception e) {
+
+        }catch (ParseException e){
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+                Date date = inputFormat.parse(dateString);
+                SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                return outputFormat.format(date);
+
+            }catch (ParseException f){
+                System.err.println("Error parsing date: " + dateString);
+                e.printStackTrace();
+                return "Invalid Date"; // Return a default string or handle error as needed
+            }
+
+
+        }catch (Exception e) {
             System.err.println("Unexpected error parsing date: " + dateString);
             e.printStackTrace();
             return "Error";
