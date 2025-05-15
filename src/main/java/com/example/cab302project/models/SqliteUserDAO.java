@@ -404,6 +404,16 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    public void clearAllEvents() {
+        String query = "DELETE FROM events";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Event> getUserEventsByEmailAndDate(String email, LocalDate date) {
         List<Event> events = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -429,6 +439,31 @@ public class SqliteUserDAO implements IUserDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving events by email and date: " + e.getMessage());
+        }
+
+        return events;
+    }
+
+    public List<Event> getAllEvents() {
+        List<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+        String query = "SELECT * " +
+                "FROM events";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String startTime = resultSet.getString("start_time");
+                String endTime = resultSet.getString("end_time");
+
+                Event event = new Event(name, startTime, endTime, "username");
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving all events: " + e.getMessage());
         }
 
         return events;

@@ -1,28 +1,23 @@
-package com.example.cab302project.services;
+package com.example.cab302project.models;
 
-import com.example.cab302project.models.Event;
-import com.example.cab302project.models.SqliteConnection;
-import com.example.cab302project.models.SqliteUserDAO;
-import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
 
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Calendar {
+public class CalendarDAO {
     private Connection connection;
     private SqliteUserDAO userDAO;
     private User currentUser;
     private String userEmail;
 
-    public Calendar(){
+    public CalendarDAO(){
         connection = SqliteConnection.getInstance();
         userDAO    = new SqliteUserDAO();
         currentUser = Session.getLoggedInUser();
         userEmail = currentUser.getEmail();
     }
-
 
     /**
      *
@@ -41,6 +36,14 @@ public class Calendar {
     public List<Event> getEventsByDate(String date){
         LocalDate dateV = LocalDate.parse(date);
         return userDAO.getUserEventsByEmailAndDate(userEmail,dateV);
+    }
+
+    public void ClearEvents(){
+        userDAO.clearAllEvents();
+    }
+
+    public List<Event> getAllEvents(){
+        return userDAO.getAllEvents();
     }
 
 }
