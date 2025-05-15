@@ -1,1 +1,33 @@
+Scrum Meeting Brief  
 
+Date: 15/05/2025
+Time: 4:09PM
+Attendees: Harpinder, Alex, Alvin, Anns
+
+1. Previous Progress
+Finished most of the UI and backend stuff, done most of our tests, database development done 
+
+2. Today's Plan  
+Discuss what else we need to do to finish the off project 
+
+3. Roadblocks/Challenges
+communication, the API, the AI, the tests, everything
+
+
+4. Additional Notes
+report and user testing - alvin
+calender events view - alex
+upload calendar should have an alert message - anns
+settings page, bio aspect needs to be fixed - word limit, email section should display the user's email not exampleemail.com, overall fix the
+layout of the settings page - anns and harpi
+jumping between the page sizes - anns and harpi
+profile page - bio needs to be fixed, logo - arsh
+friends page - move ask button to the right side - harpi
+calendar page - back and forth buttons in the all the views, autofill for month names - anns
+log out button on each page - arsh
+instead of having profile button - have the user's name - harpi
+when u logout, the screen size changes - arsh
+when u register - the register message should be green - these messages need to be slightly bigger as well - anns 
+need to do tests - everyone
+
+End time 4:51PM, 24/04/2025
