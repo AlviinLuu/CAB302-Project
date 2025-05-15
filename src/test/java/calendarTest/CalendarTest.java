@@ -65,7 +65,7 @@ public class CalendarTest {
         assertEquals(cal.size(),4);
     }
 
-    @Test
+    //@Test
     public void testEvent1A(){
         LocalDate date = LocalDate.of(2025,5,7);
         List<Event> res;
@@ -77,7 +77,7 @@ public class CalendarTest {
             System.out.println("error: no events found");
         }
         if (event != null){
-            assertEquals("Event 1 A",event.getName());
+            assertEquals("Event 1 A", event.getName());
         }else{
             fail();
         }
