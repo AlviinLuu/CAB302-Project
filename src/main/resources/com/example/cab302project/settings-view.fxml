@@ -38,36 +38,76 @@
                 <!-- Calendar Sync -->
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Calendar Sync" />
-                    <Button fx:id="UploadingGoogleCalendar" onAction="#handleUploadGoogleCalendar" style="-fx-background-color: #D8B9FF; -fx-text-fill: black; -fx-background-radius: 10; -fx-font-weight: bold;" text="Upload Google Calendar"/>
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button fx:id="UploadingGoogleCalendar" onAction="#handleUploadGoogleCalendar"
+                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
+                                   -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                                   -fx-background-radius: 12;"
+                                text="Upload Google Calendar"/>
+                    </HBox>
                 </VBox>
 
                 <!-- Email -->
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Email" />
                     <TextField fx:id="emailField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
-                    <Button fx:id="changeEmailButton" maxWidth="250" onAction="#handleChangeEmail" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Change Email Address" />
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button fx:id="changeEmailButton" onAction="#handleChangeEmail"
+                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
+                                   -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                                   -fx-background-radius: 12;"
+                                text="Change Email Address" />
+                    </HBox>
                 </VBox>
 
                 <!-- Password -->
                 <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Password" />
                     <PasswordField fx:id="passwordField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
-                    <Button fx:id="changePasswordButton" maxWidth="250" onAction="#handleChangePassword" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Change Password" />
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button fx:id="changePasswordButton" onAction="#handleChangePassword"
+                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
+                                   -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                                   -fx-background-radius: 12;"
+                                text="Change Password" />
+                    </HBox>
                 </VBox>
 
                 <!-- Profile Picture (Shrunken) -->
                 <VBox spacing="10" style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Profile Picture" />
                     <ImageView fx:id="profileImage" fitHeight="90" preserveRatio="true" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
-                    <Button fx:id="uploadImageButton" onAction="#handleUploadImage" maxWidth="200" prefHeight="40" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Upload Image" />
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button fx:id="uploadImageButton" onAction="#handleUploadImage"
+                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
+                                   -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                                   -fx-background-radius: 12;"
+                                text="Upload Image" />
+                    </HBox>
                 </VBox>
-            <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
-               <children>
-                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Bio" />
-                  <TextArea fx:id="bioTextArea" maxWidth="-Infinity" prefWidth="350.0" />
-                  <Button fx:id="editBioButton" maxWidth="250" onAction="#handleEditBio" prefHeight="45" style="-fx-background-color: #CCCCFF; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #1A1A1A;" text="Save" />
-               </children>
-            </VBox>
+                <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
+                    <children>
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Bio" />
+                        <TextArea fx:id="bioTextArea"
+                                  maxWidth="-Infinity"
+                                  prefWidth="1070"
+                                  maxHeight="-Infinity"
+                                  prefHeight="100"
+                                  wrapText="true"/>
+                        <HBox alignment="CENTER_RIGHT">
+                            <Button fx:id="editBioButton" onAction="#handleEditBio"
+                                    prefWidth="240" prefHeight="40" maxWidth="240"
+                                    style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
+                                   -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                                   -fx-background-radius: 12;"
+                                    text="Save" />
+                        </HBox>
+                    </children>
+                </VBox>
             </VBox>
         </ScrollPane>
     </VBox>
