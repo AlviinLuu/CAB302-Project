@@ -76,8 +76,12 @@ public class CalendarTest {
         }catch (Exception e){
             System.out.println("error: no events found");
         }
+        if (event != null){
+            assertEquals("Event 1 A",event.getName());
+        }else{
+            fail();
+        }
 
-        assertEquals("Event 1 A",event.getName());
     }
 
     @Test
