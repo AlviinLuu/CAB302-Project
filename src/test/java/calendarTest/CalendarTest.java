@@ -40,13 +40,14 @@ public class CalendarTest {
     private void loadCalendar(){
         //URL calURL = getClass().getResource("timeTable.com.ics");
         //assert calURL != null;
-        File directory = new File("./");
-        System.out.println(directory.getAbsolutePath());
 
         File calFile = new File("./src/test/java/calendarTest/testcalendar2.ics");
         CalendarImportView.importCalendarFile(calFile, Session.getLoggedInUser().getId());
     }
+    @Test
+    public void TestCanReadCalendar(){
 
+    }
     @Test
     public void testGetEventByDateNoEvent(){
         //there is no event on this day, so return value should be null

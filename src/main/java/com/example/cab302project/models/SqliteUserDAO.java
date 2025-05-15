@@ -2,6 +2,8 @@ package com.example.cab302project.models;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -422,6 +424,39 @@ public class SqliteUserDAO implements IUserDAO {
         String query = "SELECT e.name, e.start_time, e.end_time, u.username " +
                 "FROM events e JOIN users u ON e.user_email = u.email " +
                 "WHERE e.user_email = ? AND e.start_time LIKE ? || '%'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            stmt.setString(2, dateString);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String startTime = resultSet.getString("start_time");
+                String endTime = resultSet.getString("end_time");
+                String username = resultSet.getString("username");
+
+                Event event = new Event(name, startTime, endTime, username);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving events by email and date: " + e.getMessage());
+        }
+
+        return events;
+    }
+
+    public List<Event> getUserEventsByEmailAndDateAndTime(String email, LocalDate date, LocalTime time) {
+        List<Event> events = new ArrayList<>();
+
+        LocalDateTime newDateTime = date.atTime(time);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+        String dateString = newDateTime.format(formatter);
+
+        String query = "SELECT e.name, e.start_time, e.end_time, u.username " +
+                "FROM events e JOIN users u ON e.user_email = u.email " +
+                "WHERE e.user_email = ? AND e.start_time = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, email);

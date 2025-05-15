@@ -1,5 +1,6 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.CalendarDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -91,6 +93,7 @@ public class CalenderController {
     private Event newEvent = new Event("Lunch", "20250314T032000Z","20250314T033000Z","test@test.com");
 
 
+    private CalendarDAO calendarDAO;
 
     // === State ===
     private LocalDate currentDate = LocalDate.now();
@@ -159,6 +162,7 @@ public class CalenderController {
         });
         updateCalendar();
 
+        calendarDAO = new CalendarDAO();
     }
 
     // === Navigation Buttons ===
@@ -602,7 +606,17 @@ public class CalenderController {
                 );
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
-                cell.setText("t-"+day.getDayOfMonth());
+                LocalTime time = LocalTime.of((row-1),0,0);
+
+                var events = calendarDAO.getEventsByDate(day,time);
+                System.out.println(events);
+                String labelText;
+                if (events.isEmpty()){
+                    labelText = "";
+                }else{
+                    labelText = events.getFirst().getName();
+                }
+                cell.setText(labelText);
 
                 GridPane.setHgrow(cell, Priority.ALWAYS);
                 GridPane.setVgrow(cell, Priority.ALWAYS);
