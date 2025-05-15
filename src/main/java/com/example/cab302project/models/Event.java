@@ -2,6 +2,7 @@ package com.example.cab302project.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Event {
@@ -31,6 +32,8 @@ public class Event {
             try {
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
                 Date date = inputFormat.parse(dateString);
+                date.setHours(date.getHours() + 10);
+
                 SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                 return outputFormat.format(date);
 
