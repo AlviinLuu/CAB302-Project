@@ -3,6 +3,9 @@ package com.example.cab302project.services;
 import com.example.cab302project.models.User;
 import java.util.HashMap;
 
+/**
+ * Provides in-memory user registration and authentication services.
+ */
 public class Authentication {
     private HashMap<String, User> users = new HashMap<>();
 
