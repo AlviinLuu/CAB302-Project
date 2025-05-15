@@ -1,5 +1,6 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.SqliteUserDAO;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,11 +20,12 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import com.example.cab302project.models.Event;
 
 public class CalenderController {
 
@@ -85,12 +87,18 @@ public class CalenderController {
     @FXML
     private GridPane miniDayView;
 
+    private List<com.example.cab302project.models.Event> testEvents = new ArrayList<Event>();
+    private Event newEvent = new Event("Lunch", "20250314T032000Z","20250314T033000Z","test@test.com");
+
+
+
     // === State ===
     private LocalDate currentDate = LocalDate.now();
 
     // === Initialization ===
     @FXML
     public void initialize() {
+        testEvents.add(newEvent);
         // Load logo image
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
@@ -150,6 +158,7 @@ public class CalenderController {
             }
         });
         updateCalendar();
+
     }
 
     // === Navigation Buttons ===
@@ -534,6 +543,8 @@ public class CalenderController {
             dayLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             dayLabel.setMinHeight(60);
 
+
+
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
                         double size = weekGrid.getWidth() / 40;
@@ -558,6 +569,7 @@ public class CalenderController {
             GridPane.setHgrow(dayLabel, Priority.ALWAYS);
             GridPane.setVgrow(dayLabel, Priority.ALWAYS);
             weekGrid.add(dayLabel, col, 0); // Using weekGrid
+
         }
 
         // Add hour labels on the side (00:00 to 23:00)
@@ -588,6 +600,9 @@ public class CalenderController {
                             );
                         }, weekGrid.widthProperty()) // Using weekGrid width for size binding
                 );
+
+                LocalDate day = startOfWeek.plusDays(col - 1);
+                cell.setText("t-"+day.getDayOfMonth());
 
                 GridPane.setHgrow(cell, Priority.ALWAYS);
                 GridPane.setVgrow(cell, Priority.ALWAYS);
@@ -632,6 +647,7 @@ public class CalenderController {
             eventSlot.setMaxWidth(Double.MAX_VALUE);
             eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;"); // Bottom line only
             eventSlot.setAlignment(Pos.CENTER_LEFT);
+
 
             // Add both to the grid
             dayGrid.add(timeLabel, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
@@ -798,5 +814,6 @@ public class CalenderController {
             dayComboBox.setValue(Math.min(today, daysInMonth));
         }
     }
+
 
 }
