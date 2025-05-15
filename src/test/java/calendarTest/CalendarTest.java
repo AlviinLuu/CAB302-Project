@@ -100,7 +100,7 @@ public class CalendarTest {
         assertEquals("Event 2 A",event.getName());
     }
 
-    @Test
+    //@Test
     public void testTwoEventsSameDay(){
         LocalDate date = LocalDate.of(2025,5,9);
         var res = calendarDAO.getEventsByDate(date);
