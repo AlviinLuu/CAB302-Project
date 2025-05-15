@@ -231,14 +231,14 @@ public class FriendsController {
             loadedFriendEmail = u.getEmail();
 
             // Check if user has a profile image
-            byte[] profileImageData = userDAO.getProfileImage(u.getEmail()); // Get the image data from the database
+            byte[] profileImageData = userDAO.getProfileImage(u.getEmail());
 
             if (profileImageData != null && profileImageData.length > 0) {
-                // If user has a profile image, load it from the byte array
+
                 Image image = new Image(new ByteArrayInputStream(profileImageData));
                 profileImage.setImage(image);
             } else {
-                // If no profile image, load the default
+
                 InputStream is = getClass().getResourceAsStream("/images/default_profile.png");
                 assert is != null;
                 profileImage.setImage(new Image(is));
@@ -436,7 +436,7 @@ public class FriendsController {
                     aiResponseLabel.setText("You: " + prompt +
                             "\n\nAI: Error: " + e.getMessage());
                 });
-                lastAIResponse = null; // Clear last response on error
+                lastAIResponse = null;
             }
         }).start();
     }
@@ -462,13 +462,12 @@ public class FriendsController {
         LocalDateTime currentFreeStart = windowStart;
 
         for (Event event : allEvents) {
+
             LocalDateTime eventStart = LocalDateTime.parse(event.getStart_time(), EVENT_TIME_FORMATTER);
             LocalDateTime eventEnd = LocalDateTime.parse(event.getEnd_time(), EVENT_TIME_FORMATTER);
 
-
             eventStart = eventStart.isBefore(windowStart) ? windowStart : eventStart;
             eventEnd = eventEnd.isAfter(windowEnd) ? windowEnd : eventEnd;
-
 
 
             if (currentFreeStart.isBefore(eventStart)) {
@@ -479,15 +478,12 @@ public class FriendsController {
                 }
             }
 
-
             currentFreeStart = currentFreeStart.isAfter(eventEnd) ? currentFreeStart : eventEnd;
-
             if (currentFreeStart.isAfter(windowEnd)) {
                 break;
             }
         }
 
-        // Add any remaining free time after the last event until the end of the window
         if (currentFreeStart.isBefore(windowEnd)) {
             freeSlots.add(formatTimeRange(currentFreeStart, windowEnd));
         }
