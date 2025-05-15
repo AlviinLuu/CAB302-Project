@@ -68,9 +68,15 @@ public class CalendarTest {
     @Test
     public void testEvent1A(){
         LocalDate date = LocalDate.of(2025,5,7);
-        var res = calendarDAO.getEventsByDate(date);
-        var event = res.getFirst();
-        assertFalse(res.isEmpty());
+        List<Event> res;
+        Event event = null;
+        try {
+            res = calendarDAO.getEventsByDate(date);
+            event = res.getFirst();
+        }catch (Exception e){
+            System.out.println("error: no events found");
+        }
+
         assertEquals("Event 1 A",event.getName());
     }
 
