@@ -1,19 +1,15 @@
 package com.example.cab302project.models;
 
-import java.time.LocalDateTime; // Import LocalDateTime
-import java.time.format.DateTimeFormatter; // Import DateTimeFormatter
-import java.time.format.DateTimeParseException; // Import DateTimeParseException
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class Event {
-    private String name; // Using 'name' for event name
+    private String name;
     private String start_time;
     private String end_time;
     private String username;
-
-    private static final DateTimeFormatter DATABASE_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-
-
 
     public Event(String name, String start_time, String end_time, String username) {
         this.name = name;
@@ -22,19 +18,36 @@ public class Event {
         this.username = username;
     }
 
-    private LocalDateTime parseDatabaseDate(String dateString) {
-        if (dateString == null || dateString.trim().isEmpty()) {
-            return null;
-        }
+    private String parseIcsDate(String dateString) {
         try {
-            return LocalDateTime.parse(dateString, DATABASE_DATE_FORMATTER);
-        } catch (DateTimeParseException e) {
-            System.err.println("Error parsing database date string: '" + dateString + "' - Expected format: MM/dd/yyyy HH:mm:ss - " + e.getMessage());
-            // Return null to indicate parsing failed
-            return null;
-        } catch (Exception e) {
-            System.err.println("Unexpected error parsing database date string: '" + dateString + "' - " + e.getMessage());
-            return null;
+            SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date date = inputFormat.parse(dateString);
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+
+            return outputFormat.format(date);
+
+        }catch (ParseException e){
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+                Date date = inputFormat.parse(dateString);
+                date.setHours(date.getHours() + 10);
+
+                SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                return outputFormat.format(date);
+
+            }catch (ParseException f){
+                System.err.println("Error parsing date: " + dateString);
+                e.printStackTrace();
+                return "Invalid Date"; // Return a default string or handle error as needed
+            }
+
+
+        }catch (Exception e) {
+            System.err.println("Unexpected error parsing date: " + dateString);
+            e.printStackTrace();
+            return "Error";
         }
     }
 
@@ -42,34 +55,21 @@ public class Event {
         return name;
     }
 
-
     public String getStart_time() {
-        if (start_time != null && start_time.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
-            return start_time;
-        }
-
-        LocalDateTime dateTime = parseDatabaseDate(start_time);
-        if (dateTime != null) {
-            return dateTime.format(DATABASE_DATE_FORMATTER);
-        }
-        System.err.println("Stored start_time is not in expected format and could not be parsed: " + start_time);
-        return "Invalid Date";
+        return parseIcsDate(start_time); //Parse the start time to human-readable format
     }
 
     public String getEnd_time() {
-        if (end_time != null && end_time.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}:\\d{2}")) {
-            return end_time;
-        }
-
-        LocalDateTime dateTime = parseDatabaseDate(end_time);
-        if (dateTime != null) {
-            return dateTime.format(DATABASE_DATE_FORMATTER);
-        }
-        System.err.println("Stored end_time is not in expected format and could not be parsed: " + end_time);
-        return "Invalid Date";
+        return parseIcsDate(end_time); //Parse the end time to human-readable format
     }
 
     public String getUsername() {
         return username;
     }
+
+    public String toFormattedString() {
+        return String.format("User: %s | Event: %s | Start: %s | End: %s",
+                getUsername(), getName(), getStart_time(), getEnd_time());
+    }
+
 }
