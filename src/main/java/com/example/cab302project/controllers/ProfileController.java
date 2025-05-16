@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Controller class for the User Profile view.
+ * Displays the logged-in user's profile information, including username, bio, and profile picture.
+ * Provides navigation to other parts of the application (Settings, Home, Friends, Logout).
+ */
 public class ProfileController {
 
     @FXML private Label profileNameLabel;
@@ -36,7 +41,11 @@ public class ProfileController {
     private final LocalDate currentDate = LocalDate.now();
     private final SqliteUserDAO userDAO = new SqliteUserDAO();
 
-
+    /**
+     * Initializes the controller after the FXML file has been loaded.
+     * Loads the logged-in user's data (username, bio, profile image) from the session/database,
+     * sets up the UI elements, and renders the mini-day view.
+     */
     @FXML
     private void initialize() {
         User user = Session.getLoggedInUser();

@@ -11,11 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+/**
+ * Controller class for the Login and Registration views.
+ * Manages the UI elements and logic for users to log in or register for an account.
+ * Handles switching between login and registration states, validating input,
+ * interacting with the user DAO, and managing the user session upon successful authentication.
+ */
 public class LoginController {
     @FXML
     private Label introText;
@@ -38,13 +42,9 @@ public class LoginController {
 
     @FXML
     private ImageView logoImage;
-
-
     private final IUserDAO userDAO = new SqliteUserDAO();
-
     public final String loginText = "Welcome Back!";
     public final String registerText = "Welcome Aboard!";
-
 
     public LoginController() {
     }
@@ -56,7 +56,10 @@ public class LoginController {
         logoImage.setImage(logo);
     }
 
-
+    /**
+     * Handles the action for the button that switches between Login and Registration states.
+     * Toggles the visibility of fields and updates button/label text accordingly.
+     */
     @FXML
     protected void onSwitchStateClick() {
         if (this.isLogin) {
@@ -77,9 +80,14 @@ public class LoginController {
         }
         this.isLogin = !this.isLogin;
     }
-    public void submit(){
-        onSubmitButtonClick();
-    }
+
+    /**
+     * Handles the action for the main submit button (Login or Register).
+     * Reads input fields then performs validation based on the current state (Login or Registration),
+     * interacts with the IUserDAO to authenticate or register the user,
+     * manages the user Session, and navigates to the calendar page on successful login.
+     * Displays error messages for various failure cases.
+     */
     @FXML
     protected void onSubmitButtonClick() {
         this.errorLabel.setVisible(false);

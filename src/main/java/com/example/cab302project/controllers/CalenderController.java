@@ -4,12 +4,10 @@ import com.example.cab302project.models.CalendarDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import javafx.fxml.FXMLLoader;

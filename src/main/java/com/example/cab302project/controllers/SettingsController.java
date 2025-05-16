@@ -25,9 +25,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * Controller class for the Settings view of the application.
+ * Handles user interactions on the settings page, including updating user information,
+ * managing the profile image, importing calendar data, and navigating to other views.
+ */
 public class SettingsController {
 
-    // === FXML UI Elements ===
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private Button profileButton;
@@ -47,23 +51,25 @@ public class SettingsController {
     private final LocalDate currentDate = LocalDate.now();
     private final IUserDAO userDAO = new SqliteUserDAO();
 
-    private boolean canEditBio = false;
-    private String bioText;
-
+    /**
+     * Initializes the controller after the FXML file has been loaded.
+     * Sets up UI elements by loading user data (bio, profile image) from the session/database,
+     * and configures the sidebar and mini-calendar view.
+     */
     @FXML
     private void initialize() {
-        // Load logo
+        //Loads logo
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
 
-        // Sidebar fully expanded on load
+        //Sidebar fully expanded on load
         splitPane.setDividerPositions(0.75);
 
-        // Dummy data for visual feedback
+        //Dummy data for visual feedback
         emailField.setText("example@domain.com");
         passwordField.setText("********");
 
-        // Apply sidebar styling and calendar info
+        //Apply sidebar styling and calendar info
         //applySidebarButtonStyle();
         updateDateLabel();
         renderMiniDayView();
@@ -197,6 +203,12 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles the action of the Upload Image button.
+     * Opens a file chooser for image files, loads the selected image,
+     * converts it to a byte array, and updates the user's profile image in the database.
+     * Then Displays alerts for success or failure.
+     */
     @FXML
     private void handleUploadImage() {
         FileChooser fileChooser = new FileChooser();
@@ -230,6 +242,12 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles the action of the Change Email button.
+     * Retrieves the new email from the email field and validates it,
+     * It then updates the user's email address in the database and session.
+     * Displays alerts for success or failure.
+     */
     @FXML
     private void handleChangeEmail() {
         String newEmail = emailField.getText();
@@ -249,7 +267,12 @@ public class SettingsController {
         }
     }
 
-
+    /**
+     * Handles the action for the Change Password button.
+     * Retrieves the new password from the password field, validates its length,
+     * and updates the user's password in the database and session.
+     * Displays alerts for success or failure.
+     */
     @FXML
     private void handleChangePassword() {
         String newPassword = passwordField.getText();
@@ -369,6 +392,12 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles the action for the Edit Bio and Save Bio buttons.
+     * Retrieves the text from the bio text area, updates the user object in the session,
+     * then saves the updated bio to the database.
+     * Displays alerts for success or failure.
+     */
     @FXML
     private void handleEditBio() {
         // Always editable, just save the current text to DB
