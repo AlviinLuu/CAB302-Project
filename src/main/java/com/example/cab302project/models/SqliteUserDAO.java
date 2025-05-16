@@ -8,15 +8,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SQlite implementation of IUserDAO
+ * This class handles all operations and methods for users, friend request and events
+ * Using sthe connection from SqliteConnection this maanges table creation and methods for user management
+ * friend request handling, event storage and handling
+ */
 public class SqliteUserDAO implements IUserDAO {
-
+    /**
+     * Database connection
+     */
     private Connection connection;
 
+    /**
+     * Grabs the Sqliteconnection and ensures the necessary tables are created
+     */
     public SqliteUserDAO() {
         connection = SqliteConnection.getInstance();
         createTables();
     }
 
+    /**
+     * This creats the following tables with the following columns and their respective types
+     */
     private void createTables() {
         try {
             Statement statement = connection.createStatement();
@@ -59,6 +73,11 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Adds user to the database, checks if the email already exists.
+     * If the bio is initally empty sets it to an empty string.
+     * @param user The respective user object containing its respective details (username, password, email, bio).
+     */
     @Override
     public void addUser(User user) {
         if (userExists(user.getEmail())) {
@@ -87,6 +106,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Retrieves the user based off the specified column
+     * @param column Name of column within db to search
+     * @param value value to match the respective column
+     * @return The user object if it can be found else return null
+     */
     private User getUserByColumn(String column, String value) {
         String query = "SELECT * FROM users WHERE " + column + " = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -108,16 +133,32 @@ public class SqliteUserDAO implements IUserDAO {
         return null;
     }
 
+    /**
+     * Retrieves a user from the database by their username.
+     * @param username The username of the user to retrieve.
+     * @return The User object if found, otherwise null.
+     */
     @Override
     public User getUserByUsername(String username) {
         return getUserByColumn("username", username);
     }
 
+    /**
+     * Retrieves a user from the database by their email.
+     * @param email The username of the user to retrieve.
+     * @return The User object if found, otherwise null.
+     */
     @Override
     public User getUserByEmail(String email) {
         return getUserByColumn("email", email);
     }
 
+    /**
+     * Checks if user exists with its given email and password
+     * @param email email address of the user
+     * @param password password of the user
+     * @return if matching user is found return true, false otherwise
+     */
     @Override
     public boolean validateUser(String email, String password) {
         String query = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -132,6 +173,11 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
+    /**
+     * Checks if user exist based off email
+     * @param email Enmail address to check
+     * @return true if user exist with given email, false otherwise
+     */
     @Override
     public boolean userExists(String email) {
         String query = "SELECT COUNT(*) FROM users WHERE email = ?";
@@ -145,20 +191,10 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
-    @Override
-    public void updateUser(User user) {
-        String query = "UPDATE users SET password = ?, email = ?, bio = ? WHERE username = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, user.getPassword());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getBio());
-            stmt.setString(4, user.getUsername());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Deletes user based off username
+     * @param username The username of the target user
+     */
     @Override
     public void deleteUser(String username) {
         String query = "DELETE FROM users WHERE username = ?";
@@ -170,6 +206,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Updates profile image of the user keyed by their email
+     * @param email email address of user
+     * @param imageData profile image data in byter array format
+     * @return true if updata was successful, else false
+     */
     @Override
     public boolean updateProfileImage(String email, byte[] imageData) {
         String query = "UPDATE users SET profile_image = ? WHERE email = ?";
@@ -183,6 +225,11 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Gets the profile image of the user keyed by their email
+     * @param email Email of the target user
+     * @return The image data of the users profile in byte array format
+     */
     @Override
     public byte[] getProfileImage(String email) {
         String query = "SELECT profile_image FROM users WHERE email = ?";
@@ -198,6 +245,12 @@ public class SqliteUserDAO implements IUserDAO {
         return null;  // No image found
     }
 
+    /**
+     * Updates the email with a new email
+     * @param currentEmail Current users email
+     * @param newEmail The new email the User wants to change it to
+     * @return True if successful, false otherwise
+     */
     @Override
     public boolean updateEmail(String currentEmail, String newEmail) {
         String sql = "UPDATE users SET email = ? WHERE email = ?";
@@ -211,6 +264,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Updates users password to a new password
+     * @param email Current users email
+     * @param newPassword Users new password
+     * @return true if successful, else false
+     */
     @Override
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE email = ?";
@@ -224,6 +283,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Method to send frined request to other users
+     * @param senderUsername Username of user sending request
+     * @param receiverUsername Username of user recieving request
+     * @return True if sent successfully, else false
+     */
     @Override
     public boolean sendFriendRequest(String senderUsername, String receiverUsername) {
         User sender = getUserByUsername(senderUsername);
@@ -248,6 +313,12 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
+    /**
+     * Checks if a friend request is pending between 2 users
+     * @param senderEmail Email of yser sending request
+     * @param receiverEmail Email of user receiving request
+     * @return True if pending exist else false
+     */
     private boolean isFriendRequestPending(String senderEmail, String receiverEmail) {
         String query = "SELECT COUNT(*) FROM friend_requests WHERE sender_email = ? AND receiver_email = ? AND status = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -262,6 +333,12 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
+    /**
+     * Accepts friend request between 2 users
+     * @param senderUsername Username of sender
+     * @param receiverUsername Username receiver
+     * @return True if successful else false
+     */
     @Override
     public boolean acceptFriendRequest(String senderUsername, String receiverUsername) {
         User sender = getUserByUsername(senderUsername);
@@ -283,6 +360,12 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
+    /**
+     * Declines friend request between 2 users
+     * @param senderUsername Username of sender
+     * @param receiverUsername Username receiver
+     * @return True if successful else false
+     */
     @Override
     public boolean declineFriendRequest(String senderUsername, String receiverUsername) {
         User sender = getUserByUsername(senderUsername);
@@ -304,6 +387,12 @@ public class SqliteUserDAO implements IUserDAO {
         return false;
     }
 
+    /**
+     * Updates users bio
+     * @param email Email of user whose bio is being changed
+     * @param newBio The new users bio
+     * @return True if successful else false
+     */
     @Override
     public boolean updateBio(String email, String newBio) {
         String query = "UPDATE users SET bio = ? WHERE email = ?";
@@ -317,6 +406,11 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Grabs list of pending friend request for a user
+     * @param username Username of the user checking their request
+     * @return List of User objects who sent pending request, returns and empty list if no user found or no pending request
+     */
     @Override
     public List<User> getPendingFriendRequests(String username) {
         User user = getUserByUsername(username);
@@ -345,6 +439,12 @@ public class SqliteUserDAO implements IUserDAO {
         return pendingRequests;
     }
 
+    /**
+     * Retrieves list of friends who have accepted the pending request for the specified user
+     * @param username Username of user whose friends are being retrieved
+     * @return List of user objects representing user friends. Returns an empty list if they have no friends
+     * @throws SQLException SQLException if a database error occurs
+     */
     @Override
     public List<User> getFriends(String username) throws SQLException {
         User user = getUserByUsername(username);
@@ -382,6 +482,14 @@ public class SqliteUserDAO implements IUserDAO {
         return friends;
     }
 
+    /**
+     * Inserts new event into the database
+     * @param userId ID of the user whose event this is
+     * @param user_email Email of user whose event this is
+     * @param name Name of the event
+     * @param start_time start time of the event
+     * @param end_time end time of the event
+     */
     public void insertEvent(int userId, String user_email, String name, String start_time, String end_time) {
         String query = "INSERT INTO events (user_id, user_email, name, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -395,6 +503,7 @@ public class SqliteUserDAO implements IUserDAO {
             e.printStackTrace();
         }
     }
+
 
     public void clearEventsByEmail(String userEmail) {
         String query = "DELETE FROM events WHERE user_email = ?";
@@ -416,6 +525,12 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Retrieves list of events for a specific user on given data
+     * @param email email of the specific user whose events are being grabbed
+     * @param date The LocalDate to retrieve events.
+     * @return List of events fpr specified user and data. Returns an empty list if no events are found or if error occurs
+     */
     public List<Event> getUserEventsByEmailAndDate(String email, LocalDate date) {
         List<Event> events = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -446,6 +561,13 @@ public class SqliteUserDAO implements IUserDAO {
         return events;
     }
 
+    /**
+     * Grabs the list of events for a specific user that match a specific data and time
+     * @param email Email of user whose events being retrieved
+     * @param date Specified date of event in LocalTime
+     * @param time Specified time of the event in LocalTime
+     * @return A list of objects for the given date and time from the specified user. Returned empty if no events of if an error occurs
+     */
     public List<Event> getUserEventsByEmailAndDateAndTime(String email, LocalDate date, LocalTime time) {
         List<Event> events = new ArrayList<>();
 
