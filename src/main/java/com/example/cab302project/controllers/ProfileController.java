@@ -36,6 +36,7 @@ public class ProfileController {
     @FXML private GridPane miniDayView;
     @FXML private VBox mainContent;
     @FXML private ImageView logoImage;
+    @FXML private Button profileButton;
 
     private final LocalDate currentDate = LocalDate.now();
     private final SqliteUserDAO userDAO = new SqliteUserDAO();
@@ -70,6 +71,14 @@ public class ProfileController {
         bioTextArea.setStyle("-fx-opacity: 1; -fx-background-color: #ECECFF; -fx-text-fill: black;");
 
         renderMiniDayView();
+
+        User sessionUser = Session.getLoggedInUser();
+        if (sessionUser != null) {
+            profileButton.setText(sessionUser.getUsername());
+        } else {
+            profileButton.setText("Profile");
+        }
+
     }
 
     private void setDefaultProfileImage() {

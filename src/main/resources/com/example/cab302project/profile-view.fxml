@@ -64,7 +64,7 @@
             </GridPane>
         </ScrollPane>
 
-        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="PROFILE" />
+        <Button fx:id="profileButton" alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="PROFILE" />
         <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#handleLogOut" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="LOG OUT" />
         <VBox.margin>
             <Insets top="10" />

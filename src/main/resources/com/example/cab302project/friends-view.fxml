@@ -126,9 +126,12 @@
                     <VBox spacing="10" VBox.vgrow="ALWAYS"> <TextArea fx:id="aiPromptField" promptText="enter AI prompt in this textbox"
                                                                       wrapText="true" prefRowCount="3" prefHeight="150"
                                                                       style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+                        <HBox alignment="CENTER_RIGHT">
                         <Button text="Ask" onAction="#handleAIPrompt"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);-fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                                prefWidth="100"
                                 maxWidth="100" alignment="CENTER"/>
+                        </HBox>
                         <StackPane maxWidth="Infinity" VBox.vgrow="ALWAYS">
                             <TextArea fx:id="aiResponseLabel"
                                       editable="false"
@@ -169,7 +172,8 @@
             </GridPane>
         </ScrollPane>
 
-        <Button text="PROFILE"
+        <Button fx:id="profileButton"
+                text="PROFILE"
                 onAction="#openProfilePage"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>

@@ -125,7 +125,8 @@
             </GridPane>
         </ScrollPane>
 
-        <Button text="PROFILE"
+        <Button fx:id="profileButton"
+                text="PROFILE"
                 onAction="#openProfilePage"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
