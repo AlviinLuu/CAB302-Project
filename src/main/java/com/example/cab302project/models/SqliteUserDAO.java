@@ -504,7 +504,10 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
-
+    /**
+     * Deletes events matching a particular user email
+     * @param userEmail the email to delete events from
+     */
     public void clearEventsByEmail(String userEmail) {
         String query = "DELETE FROM events WHERE user_email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -515,6 +518,9 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Deletes ALL events from the database
+     */
     public void clearAllEvents() {
         String query = "DELETE FROM events";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -601,6 +607,9 @@ public class SqliteUserDAO implements IUserDAO {
         return events;
     }
 
+    /**
+     * @return List of all events from database, regardless of the email
+     */
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");

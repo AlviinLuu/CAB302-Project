@@ -8,6 +8,10 @@ import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Mostly a convience class that automatically uses the username of tge currently logged in user for requests to the
+ * SqliteUSerDAO
+ */
 public class CalendarDAO {
     private Connection connection;
     private SqliteUserDAO userDAO;
@@ -23,8 +27,8 @@ public class CalendarDAO {
 
 
     /**
-     * @param date LocalDate value of events to retrieve
-     * @return list of Event objects
+     * @param date  LocalDate value of events to retrieve
+     * @return      list of Event objects
      */
     public List<Event> getEventsByDate(LocalDate date) {
         return userDAO.getUserEventsByEmailAndDate(userEmail, date);
@@ -32,9 +36,9 @@ public class CalendarDAO {
 
     /**
      *
-     * @param date LocalDate field of date
-     * @param time
-     * @return List of Events
+     * @param date  LocalDate field of date
+     * @param time  LocalTime of event start time
+     * @return      List of Event objects that start at the given date and time
      */
     public List<Event> getEventsByDate(LocalDate date, LocalTime time) {
         return userDAO.getUserEventsByEmailAndDateAndTime(userEmail, date, time);
@@ -42,7 +46,6 @@ public class CalendarDAO {
 
     /**
      * Overloaded convenience function which takes string input of date
-     *
      * @param date string containing date in common date format
      * @return list of Event objects
      */
@@ -52,15 +55,15 @@ public class CalendarDAO {
     }
 
     /**
-     * Clears database
+     * Deletes ALL events in database
      */
     public void ClearEvents() {
         userDAO.clearAllEvents();
     }
 
     /**
-     * Returns all
-     * @return
+     * Returns all events from database
+     * @return      List of Event objects
      */
     public List<Event> getAllEvents() {
         return userDAO.getAllEvents();
