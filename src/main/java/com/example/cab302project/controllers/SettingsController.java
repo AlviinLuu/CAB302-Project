@@ -4,6 +4,7 @@ import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.services.CalendarImportView;
 import com.example.cab302project.util.Session;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -29,6 +30,7 @@ public class SettingsController {
     // === FXML UI Elements ===
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
+    @FXML private Button profileButton;
     @FXML private ImageView profileImage;
     @FXML private ImageView logoImage;
     @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton, UploadingGoogleCalendar;
@@ -81,6 +83,14 @@ public class SettingsController {
         } else {
             bioTextArea.setText("Unable to load bio.");
         }
+
+        User sessionUser = Session.getLoggedInUser();
+        if (sessionUser != null) {
+            profileButton.setText(sessionUser.getUsername());
+        } else {
+            profileButton.setText("Profile");
+        }
+
     }
 
     //private void applySidebarButtonStyle() {

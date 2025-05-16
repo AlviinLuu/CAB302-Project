@@ -120,10 +120,25 @@ public class LoginController {
                     User newUser = new User(username, password, email);
                     this.userDAO.addUser(newUser); // No return value, so we assume success only after checks
                     System.out.println("User registered successfully!");
-                    this.showError("Registration successful!");
+//                    this.showError("Registration successful!");
+
+                    // Show instructional message
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Registration Successful");
+                    alert.setHeaderText("Welcome, " + username + "!");
+                    alert.setContentText(
+                            "To get started with our application, go to the Settings page on the right side and upload your calendar ICS file.\n\n" +
+                                    "This will allow you to view your calendar events. Don't forget to add friends to make use of our AI feature!!\n\n" +
+                            "Press Ok and Login to get started."
+                    );
+                    alert.showAndWait();
+
+                    // Clear fields and reset UI
                     this.emailField.clear();
                     this.passwordField.clear();
                     this.repeatPasswordField.clear();
+                    this.usernameField.clear();
+                    this.onSwitchStateClick(); // Switch back to login mode
                 }
             }
         } else {

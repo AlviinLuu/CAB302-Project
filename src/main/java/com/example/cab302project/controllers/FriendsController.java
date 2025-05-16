@@ -47,6 +47,7 @@ public class FriendsController {
     @FXML private VBox mainContent;
     @FXML private TextArea aiPromptField;
     @FXML private TextArea aiResponseLabel;
+    @FXML private Button profileButton;
     @FXML private Label profileHeaderLabel;
     @FXML private ImageView profileImage;
     @FXML private Label usernameLabel;
@@ -152,6 +153,9 @@ public class FriendsController {
                 searchResultsList.setItems(FXCollections.observableArrayList(matches));
             }
         });
+
+        // 7) Show username on the profile button
+        profileButton.setText(sessionUser.getUsername());
 
         renderMiniDayView();
     }

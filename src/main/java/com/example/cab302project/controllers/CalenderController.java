@@ -2,6 +2,7 @@ package com.example.cab302project.controllers;
 
 import com.example.cab302project.models.CalendarDAO;
 import com.example.cab302project.models.SqliteUserDAO;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,65 +30,44 @@ import javafx.scene.image.ImageView;
 
 import com.example.cab302project.models.Event;
 
+import com.example.cab302project.models.User;
+import com.example.cab302project.util.Session;
+
+
 public class CalenderController {
 
     // === FXML UI Elements ===
-    @FXML
-    private Label monthLabel;
-    @FXML
-    private GridPane calendarGrid;
-    @FXML
-    private GridPane weekGrid;
-    @FXML
-    private GridPane monthGrid;
-    @FXML
-    private GridPane yearGrid;
-    @FXML
-    private GridPane dayGrid;
-    @FXML
-    private ImageView logoImage;
+    @FXML private Label monthLabel;
+    @FXML private GridPane calendarGrid;
+    @FXML private GridPane weekGrid;
+    @FXML private GridPane monthGrid;
+    @FXML private GridPane yearGrid;
+    @FXML private GridPane dayGrid;
+    @FXML private ImageView logoImage;
+    @FXML private VBox weekView;
+    @FXML private VBox yearView;
+    @FXML private VBox monthView;
+    @FXML private VBox dayView;
 
-    @FXML
-    private VBox weekView;
-    @FXML
-    private VBox yearView;
-    @FXML
-    private VBox monthView;
-    @FXML
-    private VBox dayView;
+    @FXML private VBox aiSidebar;
+    @FXML private SplitPane splitPane;
 
-    @FXML
-    private VBox aiSidebar;
-    @FXML
-    private SplitPane splitPane;
+    @FXML private VBox mainContent;
 
-    @FXML
-    private VBox mainContent;
-
-    @FXML
-    private ComboBox<String> monthComboBox;
-    @FXML
-    private ComboBox<Integer> yearComboBox;
-    @FXML
-    private ComboBox<Integer> dayComboBox;
+    @FXML private ComboBox<String> monthComboBox;
+    @FXML private ComboBox<Integer> yearComboBox;
+    @FXML private ComboBox<Integer> dayComboBox;
 
 
-    @FXML
-    private ToggleGroup viewToggleGroup;
-    @FXML
-    private RadioButton dayRadio;
-    @FXML
-    private RadioButton weekRadio;
-    @FXML
-    private RadioButton monthRadio;
-    @FXML
-    private RadioButton yearRadio;
-    @FXML
-    private TextArea userInputArea;
-    @FXML
-    private VBox responseArea;
-    @FXML
-    private GridPane miniDayView;
+    @FXML private ToggleGroup viewToggleGroup;
+    @FXML private RadioButton dayRadio;
+    @FXML private RadioButton weekRadio;
+    @FXML private RadioButton monthRadio;
+    @FXML private RadioButton yearRadio;
+    @FXML private TextArea userInputArea;
+    @FXML private VBox responseArea;
+    @FXML private Button profileButton;
+    @FXML private GridPane miniDayView;
 
     private List<com.example.cab302project.models.Event> testEvents = new ArrayList<Event>();
     private Event newEvent = new Event("Lunch", "20250314T032000Z","20250314T033000Z","test@test.com");
@@ -101,6 +81,12 @@ public class CalenderController {
     // === Initialization ===
     @FXML
     public void initialize() {
+        User sessionUser = Session.getLoggedInUser();
+        if (sessionUser == null) {
+            System.err.println("ERROR: No user in session Call Session.setLoggedInUser(...) after login.");
+            return;
+        }
+
         testEvents.add(newEvent);
         // Load logo image
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
@@ -163,6 +149,26 @@ public class CalenderController {
         updateCalendar();
 
         calendarDAO = new CalendarDAO();
+
+        // Show username on the profile button
+        profileButton.setText(sessionUser.getUsername());
+
+//        // Show welcome alert AFTER the stage is displayed
+//        Platform.runLater(() -> {
+//            if (sessionUser != null && Session.isFirstLogin()) {
+//                Session.setFirstLoginShown();
+//
+//                Alert welcomeAlert = new Alert(Alert.AlertType.INFORMATION);
+//                welcomeAlert.setTitle("Welcome to Smart Schedule Assistant");
+//                welcomeAlert.setHeaderText("Welcome, " + sessionUser.getUsername() + "!");
+//                welcomeAlert.setContentText(
+//                        "If you have not already, please upload your calendar .ics file through the Settings page.\n\n" +
+//                                "You’ll need this to use calendar views, and don’t forget to add friends to access the AI features!"
+//                );
+//                welcomeAlert.showAndWait();
+//            }
+//        });
+
     }
 
     // === Navigation Buttons ===
@@ -234,7 +240,7 @@ public class CalenderController {
         dayView.setVisible(false);
         dayView.setManaged(false);
 
-        monthRadio.setSelected(true); // Ensure the Month button stays selected.hiii
+        monthRadio.setSelected(true);
     }
 
     @FXML
@@ -381,7 +387,7 @@ public class CalenderController {
 
     // Example simple AI response ****NEED TO BE REPLACED WHEN AI SET UP*******
     //private String generateResponse(String userInput) {
-     //   return "You said \"" + userInput;
+     //   return "You said \" + userInput;
     //}
 
     // Just a fun animation effect which shows AI typing while it generates a response
