@@ -548,7 +548,6 @@ public class CalenderController {
             dayLabel.setMinHeight(60);
 
 
-
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
                         double size = weekGrid.getWidth() / 40;
@@ -593,6 +592,7 @@ public class CalenderController {
                 Label cell = new Label();
                 cell.setAlignment(Pos.CENTER);
                 cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                cell.wrapTextProperty();
 
                 // Bind font size to the width of the grid
                 cell.styleProperty().bind(

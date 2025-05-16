@@ -1,84 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="splitPane" orientation="HORIZONTAL" dividerPositions="0.75"
-           xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.cab302project.controllers.CalenderController"
-           prefHeight="Infinity">
+<SplitPane fx:id="splitPane" dividerPositions="0.75" orientation="HORIZONTAL" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.cab302project.controllers.CalenderController">
 
     <!-- Left section of the SplitPane (Main Calendar/Content) -->
-    <VBox fx:id="mainContent" style="-fx-padding: 0; -fx-background-color: #F0F8FF;" minWidth="0" VBox.vgrow="ALWAYS">
+    <VBox fx:id="mainContent" minWidth="0" style="-fx-padding: 0; -fx-background-color: #F0F8FF;" VBox.vgrow="ALWAYS">
 
         <!-- Top Navigation -->
         <VBox style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);">
             <!-- Main Navigation Bar -->
             <HBox spacing="20" style="-fx-padding: 10;">
-                <ImageView fx:id="logoImage" fitHeight="60" preserveRatio="true" onMouseEntered="#onLogoHover" onMouseExited="#onLogoExit"/>
-                <Label text="Smart Schedule Assistant" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;"/>
-                <Region HBox.hgrow="ALWAYS"/>
+                <ImageView fx:id="logoImage" fitHeight="60" onMouseEntered="#onLogoHover" onMouseExited="#onLogoExit" preserveRatio="true" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 20 0 0 0;" text="Smart Schedule Assistant" />
+                <Region HBox.hgrow="ALWAYS" />
             </HBox>
 
             <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
 
                 <!-- Month Navigation (Drop down menu) -->
                 <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
-                    <ComboBox fx:id="monthComboBox" prefWidth="150"/>
-                    <ComboBox fx:id="yearComboBox" prefWidth="100"/>
-                    <ComboBox fx:id="dayComboBox" prefWidth="80" visible="false" managed="false"/>
-                    <Button text="Go" onAction="#onMonthYearSelected" style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A;"/>
-                    <Label fx:id="monthLabel" text="April 2025" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="monthComboBox" prefWidth="150" />
+                    <ComboBox fx:id="yearComboBox" prefWidth="100" />
+                    <ComboBox fx:id="dayComboBox" managed="false" prefWidth="80" visible="false" />
+                    <Button onAction="#onMonthYearSelected" style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A;" text="Go" />
+                    <Label fx:id="monthLabel" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" text="April 2025" />
                 </HBox>
 
 
                 <!-- Spacer to push the view toggle buttons to the right -->
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
 
                 <!-- View Toggle Buttons -->
                 <HBox spacing="10" style="-fx-padding: 10; -fx-alignment: center;">
-                    <Label text="View:" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
-                    <RadioButton fx:id="dayRadio" text="Day" onAction="#onDayView" style="-fx-text-fill: white;"/>
-                    <RadioButton fx:id="weekRadio" text="Week" onAction="#onWeekView" style="-fx-text-fill: white;"/>
-                    <RadioButton fx:id="monthRadio" text="Month" onAction="#onMonthView" style="-fx-text-fill: white;"/>
-                    <RadioButton fx:id="yearRadio" text="Year" onAction="#onYearView" style="-fx-text-fill: white;"/>
+                    <Label style="-fx-text-fill: white; -fx-font-weight: bold;" text="View:" />
+                    <RadioButton fx:id="dayRadio" onAction="#onDayView" style="-fx-text-fill: white;" text="Day" />
+                    <RadioButton fx:id="weekRadio" onAction="#onWeekView" style="-fx-text-fill: white;" text="Week" />
+                    <RadioButton fx:id="monthRadio" onAction="#onMonthView" style="-fx-text-fill: white;" text="Month" />
+                    <RadioButton fx:id="yearRadio" onAction="#onYearView" style="-fx-text-fill: white;" text="Year" />
                 </HBox>
             </HBox>
         </VBox>
 
         <!-- Center content -->
-        <StackPane VBox.vgrow="ALWAYS" style="-fx-background-color: #E6E6FA;">
+        <StackPane style="-fx-background-color: #E6E6FA;" VBox.vgrow="ALWAYS">
             <!-- Week View -->
-            <VBox fx:id="weekView" visible="true" managed="true" alignment="TOP_CENTER" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
-                <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox fx:id="weekView" alignment="TOP_CENTER" managed="true" style="-fx-padding: 20;" visible="true" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <GridPane fx:id="weekGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;"/>
+                        <GridPane fx:id="weekGrid" hgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;" vgap="0" />
                     </content>
                 </ScrollPane>
             </VBox>
 
             <!-- Month View -->
-            <VBox fx:id="monthView" visible="true" managed="true" alignment="TOP_CENTER" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
-                <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                    <GridPane fx:id="monthGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;"/>
+            <VBox fx:id="monthView" alignment="TOP_CENTER" managed="true" style="-fx-padding: 20;" visible="true" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+                    <GridPane fx:id="monthGrid" hgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;" vgap="0" />
                 </ScrollPane>
             </VBox>
 
             <!-- Year View -->
-            <VBox fx:id="yearView" visible="false" managed="false" alignment="TOP_CENTER" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
-                <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox fx:id="yearView" alignment="TOP_CENTER" managed="false" style="-fx-padding: 20;" visible="false" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <GridPane fx:id="yearGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;"/>
+                        <GridPane fx:id="yearGrid" hgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;" vgap="0" />
                     </content>
                 </ScrollPane>
             </VBox>
 
             <!-- Day View -->
-            <VBox fx:id="dayView" visible="false" managed="false" alignment="CENTER_LEFT" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
-                <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox fx:id="dayView" alignment="CENTER_LEFT" managed="false" style="-fx-padding: 20;" visible="false" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <GridPane fx:id="dayGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;"/>
+                        <GridPane fx:id="dayGrid" hgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;" vgap="0" />
                     </content>
                 </ScrollPane>
             </VBox>
@@ -88,33 +95,24 @@
     </VBox>
 
     <!-- Right section of the SplitPane (AI Sidebar) -->
-    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
-        <Button text="HOME"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin>
-            <Insets top="10"/>
-        </VBox.margin>
-        <Button text="SETTINGS" onAction="#openSettingsPage"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
-        <VBox.margin>
-            <Insets top="10"/>
-        </VBox.margin>
-        <Button text="FRIENDS" onAction="#openFriendsPage"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+    <VBox fx:id="aiSidebar" maxWidth="350" minWidth="0" spacing="10" style="-fx-background-color: #E6E6FA; -fx-padding: 20;">
+        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="HOME" />
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#openSettingsPage" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="SETTINGS" />
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#openFriendsPage" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="FRIENDS" />
 
         <!-- Mini Day View -->
-        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="NEVER">
-            <GridPane fx:id="miniDayView" hgap="5" vgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" VBox.vgrow="NEVER">
+        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="NEVER">
+            <GridPane fx:id="miniDayView" hgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" vgap="5" VBox.vgrow="NEVER">
                 <!-- The hourly slots will be populated dynamically here -->
             </GridPane>
         </ScrollPane>
-        <Button text="PROFILE"
-                onAction="#openProfilePage"
-                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
-                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#openProfilePage" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="PROFILE" />
+        <VBox.margin>
+            <Insets top="10" />
+        </VBox.margin>
+        <VBox.margin>
+            <Insets top="10" />
+        </VBox.margin>
 
     </VBox>
 

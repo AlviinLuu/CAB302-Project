@@ -30,6 +30,12 @@ public class CalendarDAO {
         return userDAO.getUserEventsByEmailAndDate(userEmail, date);
     }
 
+    /**
+     *
+     * @param date LocalDate field of date
+     * @param time
+     * @return List of Events
+     */
     public List<Event> getEventsByDate(LocalDate date, LocalTime time) {
         return userDAO.getUserEventsByEmailAndDateAndTime(userEmail, date, time);
     }
@@ -45,10 +51,17 @@ public class CalendarDAO {
         return userDAO.getUserEventsByEmailAndDate(userEmail, dateV);
     }
 
+    /**
+     * Clears database
+     */
     public void ClearEvents() {
         userDAO.clearAllEvents();
     }
 
+    /**
+     * Returns all
+     * @return
+     */
     public List<Event> getAllEvents() {
         return userDAO.getAllEvents();
     }
