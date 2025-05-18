@@ -58,6 +58,10 @@ public class FriendsController {
      */
     @FXML private TextArea aiPromptField;
     /**
+     * Button in the sidebar that shows the current user's profile name.
+     */
+    @FXML private Button profileButton;
+    /**
      * TextArea where the Ollama  response is displayed with a typing animation.
      */
     @FXML private TextArea aiResponseLabel; // Note: Label is a TextArea here
@@ -255,6 +259,9 @@ public class FriendsController {
                 searchResultsList.setItems(FXCollections.observableArrayList(matches));
             }
         });
+
+        // 7) Show username on the profile button
+        profileButton.setText(sessionUser.getUsername());
 
         renderMiniDayView();
     }
