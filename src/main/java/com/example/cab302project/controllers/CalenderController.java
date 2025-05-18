@@ -149,7 +149,12 @@ public class CalenderController {
         calendarDAO = new CalendarDAO();
 
         // Show username on the profile button
-        profileButton.setText(sessionUser.getUsername());
+        try {
+            //FIXME: username is null
+            profileButton.setText(sessionUser.getUsername());
+        } catch (Exception e){
+            System.out.println("Error:"+e);
+        }
 
 //        // Show welcome alert AFTER the stage is displayed
 //        Platform.runLater(() -> {
@@ -594,14 +599,16 @@ public class CalenderController {
         for (int col = 1; col <= 7; col++) {
             for (int row = 1; row <= 24; row++) {
                 Label cell = new Label();
+                cell.setWrapText(true);
                 cell.setAlignment(Pos.CENTER);
-                cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                cell.wrapTextProperty();
-
+                //All days of the week are an even size, a 7th of the total width
+                //TODO: wrap text and extend vertical height of cell to fit full text
+                cell.setMaxSize(weekGrid.getWidth()/7, Double.MAX_VALUE);
                 // Bind font size to the width of the grid
                 cell.styleProperty().bind(
                         Bindings.createStringBinding(() -> {
-                            double size = weekGrid.getWidth() / 40; // Using weekGrid here
+                            //double size = weekGrid.getWidth() / 40; // Using weekGrid here
+                            double size = 20;
                             return String.format(
                                     "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;",
                                     size
@@ -618,9 +625,19 @@ public class CalenderController {
                 if (events.isEmpty()){
                     labelText = "";
                 }else{
+                    //TODO: display multiple events on a single day with iteration
+                    var currentEvent = events.getFirst();
                     labelText = events.getFirst().getName();
+                    if (CalendarDAO.IsEventInProgress(
+                            currentEvent.getStart_Time_LocalDateTime(),currentEvent.getEnd_Time_LocalDateTime(),
+                            day,time)){
+
+                    }
                 }
                 cell.setText(labelText);
+
+                //TODO: Shade cell if event is currently happening
+
 
                 GridPane.setHgrow(cell, Priority.ALWAYS);
                 GridPane.setVgrow(cell, Priority.ALWAYS);
@@ -670,6 +687,8 @@ public class CalenderController {
             // Add both to the grid
             dayGrid.add(timeLabel, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
             dayGrid.add(eventSlot, 1, hour + 1); // Column 1 = Event (shifted by 1 row)
+
+            //TODO: populate event labels with current events
 
             // Optional: GridPane.setHgrow(timeLabel, Priority.ALWAYS);
             GridPane.setHgrow(eventSlot, Priority.ALWAYS);
@@ -813,6 +832,9 @@ public class CalenderController {
             event.setStyle("-fx-border-color: #bbb; -fx-border-width: 0 0 1px 0;");
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
+
+            //TODO: add text of current event to label
+
 
             miniDayView.add(time, 0, hour + 1);
             miniDayView.add(event, 1, hour + 1);

@@ -2,6 +2,8 @@ package com.example.cab302project.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -109,6 +111,24 @@ public class Event {
      */
     public String getEnd_time() {
         return parseIcsDate(end_time); // Parse the end time to readable format for ollama
+    }
+
+    /**
+     * Gets the start time of event, with LocalDateTime Type
+     * @return Start Time of Event
+     */
+    public LocalDateTime getStart_Time_LocalDateTime(){
+        return LocalDateTime.parse(start_time);
+    }
+
+
+    //TODO: write test cases for these functions to make sure they work
+    /**
+     * Gets the end time of event, with LocalDateTime Type
+     * @return End Time of Event
+     */
+    public LocalDateTime getEnd_Time_LocalDateTime(){
+        return LocalDateTime.parse(end_time);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.example.cab302project.models;
 
+import net.fortuna.ical4j.model.DateTime;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -518,17 +520,47 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+
+
     /**
-     * Deletes ALL events from the database
+     * Executes a "one-way" SQL statement (no return value)
+     * @param query query to be executed
      */
-    public void clearAllEvents() {
-        String query = "DELETE FROM events";
+    public void executeQuery(String query) {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Executes given Query
+     * @param email
+     * @param query
+     * @return
+     */
+    public List<Event> executeEventQuery(String email, String query) {
+        List<Event> events = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String startTime = resultSet.getString("start_time");
+                String endTime = resultSet.getString("end_time");
+                String username = resultSet.getString("username");
+
+                Event event = new Event(name, startTime, endTime, username);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving events by email and date: " + e.getMessage());
+        }
+
+        return events;
     }
 
     /**
