@@ -148,30 +148,16 @@ public class CalenderController {
 
         calendarDAO = new CalendarDAO();
 
-        // Show username on the profile button
-        try {
-            //FIXME: username is null
-            profileButton.setText(sessionUser.getUsername());
-        } catch (Exception e){
-            System.out.println("Error:"+e);
-        }
+//        // Show username on the profile button
+//        try {
+//            //FIXME: username is null
+//            profileButton.setText(sessionUser.getUsername());
+//        } catch (Exception e){
+//            System.out.println("Error:"+e);
+//        }
 
-//        // Show welcome alert AFTER the stage is displayed
-//        Platform.runLater(() -> {
-//            if (sessionUser != null && Session.isFirstLogin()) {
-//                Session.setFirstLoginShown();
-//
-//                Alert welcomeAlert = new Alert(Alert.AlertType.INFORMATION);
-//                welcomeAlert.setTitle("Welcome to Smart Schedule Assistant");
-//                welcomeAlert.setHeaderText("Welcome, " + sessionUser.getUsername() + "!");
-//                welcomeAlert.setContentText(
-//                        "If you have not already, please upload your calendar .ics file through the Settings page.\n\n" +
-//                                "You’ll need this to use calendar views, and don’t forget to add friends to access the AI features!"
-//                );
-//                welcomeAlert.showAndWait();
-//            }
-//        });
-
+        // 7) Show username on the profile button
+        profileButton.setText(sessionUser.getUsername());
     }
 
     // === Navigation Buttons ===
