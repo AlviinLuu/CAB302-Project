@@ -326,7 +326,6 @@ public class FriendsController {
                         .collect(Collectors.toList())
         );
     }
-
     /**
      * Refreshes the list of pending friend requests sent by the current user (outgoing requests).
      * Fetches data directly using a SQL query and updates the pendingOutgoing observable list.
@@ -351,7 +350,6 @@ public class FriendsController {
             e.printStackTrace();
         }
     }
-
     /**
      * Loads and displays the profile details of a specified user
      * in the profile display area. Fetches user data and profile image using the user DAO.
@@ -382,9 +380,12 @@ public class FriendsController {
             }
         }
     }
-
-
-
+    /**
+     * Handles the action for the Remove Friend button.
+     * Removes the selected friend from the current user's friend list,
+     * clears the displayed profile information, and updates the UI.
+     * Displays a confirmation or error alert based on selection.
+     */
     @FXML
     private void handleRemoveFriend() {
         String selectedFriend = friendSelector.getSelectionModel().getSelectedItem();
@@ -404,7 +405,6 @@ public class FriendsController {
             showAlert("No Selection", "Please select a friend to remove.");
         }
     }
-
     /**
      * Handles the action for the Send Request button.
      * Sends a friend request to the user selected.
@@ -434,7 +434,6 @@ public class FriendsController {
         searchUserField.clear();
         searchResultsList.setItems(FXCollections.observableArrayList());
     }
-
     /**
      * Handles the action for the  Accept Request button.
      * Accepts the selected incoming friend request.
@@ -475,7 +474,6 @@ public class FriendsController {
             showAlert("Error","Could not decline. Try again.");
         }
     }
-
     /**
      * Handles the action for the Delete Request button.
      * Deletes the selected outgoing friend request from the database.
@@ -503,7 +501,11 @@ public class FriendsController {
         }
     }
 
-
+    /**
+     * Navigates to the calendar view (home).
+     * Loads the calendar-view FXML and closes the current Friends view.
+     * @throws RuntimeException if the FXML file fails to load.
+     */
     @FXML private void goToHome() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
@@ -517,7 +519,10 @@ public class FriendsController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Opens the settings page and closes the current window.
+     * @throws Exception if the FXML file cannot be loaded or displayed.
+     */
     @FXML private void openSettingsPage() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/settings-view.fxml")));
@@ -531,6 +536,10 @@ public class FriendsController {
             e.printStackTrace();
         }
     }
+    /**
+     * Opens the user profile page and closes the current view.
+     * @throws Exception if the FXML file cannot be loaded.
+     */
     @FXML private void openProfilePage() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
@@ -544,7 +553,6 @@ public class FriendsController {
             e.printStackTrace();
         }
     }
-
     /**
      * Handles the event triggered by the Ollama prompt field (e.g., hitting Enter or clicking a send button).
      * Retrieves the user's prompt, builds a detailed prompt including user/friend schedule data,
@@ -992,6 +1000,11 @@ public class FriendsController {
     }
 
     // ─── Mini Day View ────────────────────────────────────────────────
+    /**
+     * Renders a mini sidebar view showing hourly slots for the current day.
+     * Displays 24 rows from 00:00 to 23:00 with time labels and empty event labels.
+     * This is used to give a quick glance at the day's structure.
+     */
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();

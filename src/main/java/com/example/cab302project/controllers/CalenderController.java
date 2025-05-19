@@ -31,9 +31,12 @@ import com.example.cab302project.models.Event;
 import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
 
-
+/**
+ * Controller class for managing the main calendar view in the application.
+ * Handles calendar rendering for day, week, month, and year views,
+ * user interface interaction, and navigation between pages.
+ */
 public class CalenderController {
-
     // === FXML UI Elements ===
     @FXML private Label monthLabel;
     @FXML private GridPane calendarGrid;
@@ -77,6 +80,11 @@ public class CalenderController {
     private LocalDate currentDate = LocalDate.now();
 
     // === Initialization ===
+    /**
+     * Initializes the calendar view, UI elements, and sets default values.
+     * Also binds event listeners and loads session user.
+     * @throws NullPointerException of session user is null
+     */
     @FXML
     public void initialize() {
         User sessionUser = Session.getLoggedInUser();
@@ -171,6 +179,10 @@ public class CalenderController {
     }
 
     // === Navigation Buttons ===
+    /**
+     * Handles updates when the month or year is changed via ComboBoxes.
+     * Updates the current date and re-renders the calendar.
+     */
     @FXML
     private void onMonthYearSelected() {
         String selectedMonth = monthComboBox.getValue();
@@ -206,8 +218,10 @@ public class CalenderController {
         }
     }
 
-
     // === View Handlers ===
+    /**
+     * Sets the view to the Year layout and updates visibility accordingly.
+     */
     @FXML
     private void onYearView() {
         yearView.setVisible(true);
@@ -224,7 +238,9 @@ public class CalenderController {
 
         yearRadio.setSelected(true); // Ensure the Year button stays selected.
     }
-
+    /**
+     * Sets the view to the Month layout and updates visibility accordingly.
+     */
     @FXML
     private void onMonthView() {
         monthView.setVisible(true);
@@ -241,7 +257,9 @@ public class CalenderController {
 
         monthRadio.setSelected(true);
     }
-
+    /**
+     * Sets the view to the Week layout and updates visibility accordingly.
+     */
     @FXML
     private void onWeekView() {
         weekView.setVisible(true);
@@ -258,7 +276,10 @@ public class CalenderController {
 
         weekRadio.setSelected(true); // Ensure the Week button stays selected.
     }
-
+    /**
+     * Sets the view to the Day layout and updates visibility accordingly.
+     * Also updates the current date.
+     */
     @FXML
     private void onDayView() {
         dayView.setVisible(true);
@@ -280,46 +301,26 @@ public class CalenderController {
         currentDate = LocalDate.of(currentDate.getYear(), currentDate.getMonth(), selectedDay);
         updateCalendar();
     }
-
+    /**
+     * Enlarges the logo on mouse hover.
+     */
     @FXML
     private void onLogoHover() {
         logoImage.setScaleX(1.2);
         logoImage.setScaleY(1.2);
     }
-
+    /**
+     * Resets logo scale on mouse exit.
+     */
     @FXML
     private void onLogoExit() {
         logoImage.setScaleX(1.0);
         logoImage.setScaleY(1.0);
     }
-
-    // AI response
-    //@FXML
-    //private void onSendButtonClick() {
-      //  String userInput = userInputArea.getText().trim();
-       // if (!userInput.isEmpty()) {
-         //   Label responseLabel = new Label("AI says: " + generateResponse(userInput));
-     //       responseLabel.setWrapText(true);
-     //       responseLabel.setStyle("-fx-background-color: #D8B9FF; -fx-padding: 10; -fx-background-radius: 10; -fx-text-fill: #1A1A1A;");
-//
-   //          // Add the label to the response area
-     //       responseArea.getChildren().add(responseLabel);
-//
-   //          // Check if there are more than 3 responses
-     //       if (responseArea.getChildren().size() > 3) {
-       //         // Remove the oldest (first) response
-         //       responseArea.getChildren().remove(0);
-           // }
-//
-            // Show AI Response with animated typing
-  //          String fullText = "AI says: " + generateResponse(userInput);
-    //        playTypingAnimation(responseLabel, fullText);
-//
-            // Clear the user input
-      //      userInputArea.clear();
-    //    }
-  //  }
-
+    /**
+     * Opens the settings page and closes the current window.
+     * @throws Exception if the FXML file cannot be loaded or displayed.
+     */
     @FXML
     private void openSettingsPage() {
         try {
@@ -344,7 +345,10 @@ public class CalenderController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Opens the friends page and closes the current calendar window.
+     * @throws Exception if the FXML file cannot be loaded or displayed.
+     */
     @FXML
     private void openFriendsPage() {
         try {
@@ -369,7 +373,10 @@ public class CalenderController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Opens the user profile page and closes the current calendar view.
+     * @throws Exception if the FXML file cannot be loaded.
+     */
     @FXML private void openProfilePage() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
@@ -384,31 +391,10 @@ public class CalenderController {
         }
     }
 
-    // Example simple AI response ****NEED TO BE REPLACED WHEN AI SET UP*******
-    //private String generateResponse(String userInput) {
-     //   return "You said \" + userInput;
-    //}
-
-    // Just a fun animation effect which shows AI typing while it generates a response
-    //private void playTypingAnimation(Label label, String fullText) {
-    //    final int[] charIndex = {0};
-
-      //  javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-        //        new javafx.animation.KeyFrame(
-          //              javafx.util.Duration.millis(40), // Speed of typing
-            //            event -> {
-              //              if (charIndex[0] < fullText.length()) {
-                //                label.setText(fullText.substring(0, charIndex[0] + 1));
-                  //              charIndex[0]++;
-                    //        }
-                      //  }
-                //)
-        //);
-        //timeline.setCycleCount(fullText.length());
-        //timeline.play();
-    //}
-
-    // === Calendar Rendering hi harpi===
+    // === Calendar Rendering ===
+    /**
+     * Updates the calendar based on the currently selected view (Day/Week/Month/Year).
+     */
     private void updateCalendar() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         monthLabel.setText(currentDate.format(formatter));
@@ -463,7 +449,9 @@ public class CalenderController {
                 break;
         }
     }
-
+    /**
+     * Renders the month view in the calendar UI.
+     */
     private void renderMonthView() {
         // Clear the grid first
         monthGrid.getChildren().clear();
@@ -536,7 +524,9 @@ public class CalenderController {
             }
         }
     }
-
+    /**
+     * Renders the week view in the calendar UI.
+     */
     private void renderWeekView() {
         weekGrid.getChildren().clear(); // Clear previous content
 
@@ -641,7 +631,9 @@ public class CalenderController {
             }
         }
     }
-
+    /**
+     * Renders the day view in the calendar UI.
+     */
     private void renderDayView() {
         dayGrid.getChildren().clear();
         dayGrid.getRowConstraints().clear(); // Clear previous row constraints
@@ -690,7 +682,9 @@ public class CalenderController {
             GridPane.setHgrow(eventSlot, Priority.ALWAYS);
         }
     }
-
+    /**
+     * Renders a full year view using multiple mini-month grids.
+     */
     private void renderYearView() {
         yearGrid.getChildren().clear();
         yearGrid.getColumnConstraints().clear();
@@ -799,7 +793,11 @@ public class CalenderController {
             }
         }
     }
-
+    /**
+     * Renders a mini sidebar view showing hourly slots for the current day.
+     * Displays 24 rows from 00:00 to 23:00 with time labels and empty event labels.
+     * This is used to give a quick glance at the day's structure.
+     */
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
@@ -837,7 +835,9 @@ public class CalenderController {
             GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
-
+    /**
+     * Updates the dayComboBox based on selected month and year.
+     */
     private void updateDayComboBox() {
         Integer year = yearComboBox.getValue();
         String monthStr = monthComboBox.getValue();
@@ -850,6 +850,4 @@ public class CalenderController {
             dayComboBox.setValue(Math.min(today, daysInMonth));
         }
     }
-
-
 }
