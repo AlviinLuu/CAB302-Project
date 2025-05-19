@@ -91,10 +91,16 @@ public class SettingsController {
         }
 
         User sessionUser = Session.getLoggedInUser();
-        if (sessionUser != null) {
-            profileButton.setText(sessionUser.getUsername());
-        } else {
+        try {
+            if (sessionUser != null && sessionUser.getUsername() != null) {
+                profileButton.setText(sessionUser.getUsername());
+            } else {
+                profileButton.setText("Profile");
+                System.err.println("Warning: sessionUser or username is null.");
+            }
+        } catch (Exception e) {
             profileButton.setText("Profile");
+            e.printStackTrace(); //
         }
 
     }

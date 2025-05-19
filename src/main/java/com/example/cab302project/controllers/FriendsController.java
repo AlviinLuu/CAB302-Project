@@ -260,8 +260,18 @@ public class FriendsController {
             }
         });
 
-        // 7) Show username on the profile button
-        profileButton.setText(sessionUser.getUsername());
+        // Show username on the profile button
+        try {
+            if (sessionUser != null && sessionUser.getUsername() != null) {
+                profileButton.setText(sessionUser.getUsername());
+            } else {
+                profileButton.setText("Profile");
+                System.err.println("Warning: sessionUser or username is null.");
+            }
+        } catch (Exception e) {
+            profileButton.setText("Profile");
+            e.printStackTrace(); //
+        }
 
         renderMiniDayView();
     }
