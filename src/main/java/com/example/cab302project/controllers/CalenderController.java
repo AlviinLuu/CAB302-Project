@@ -15,13 +15,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,6 +35,7 @@ import com.example.cab302project.util.Session;
  * user interface interaction, and navigation between pages.
  */
 public class CalenderController {
+
     // === FXML UI Elements ===
     @FXML private Label monthLabel;
     @FXML private GridPane calendarGrid;
@@ -154,17 +153,7 @@ public class CalenderController {
         });
         updateCalendar();
 
-        calendarDAO = new CalendarDAO();
-
-//        // Show username on the profile button
-//        try {
-//            //FIXME: username is null
-//            profileButton.setText(sessionUser.getUsername());
-//        } catch (Exception e){
-//            System.out.println("Error:"+e);
-//        }
-
-//        // 7) Show username on the profile button
+        // Show username on the profile button
         try {
             if (sessionUser != null && sessionUser.getUsername() != null) {
                 profileButton.setText(sessionUser.getUsername());
@@ -532,6 +521,8 @@ public class CalenderController {
 
         LocalDate startOfWeek = currentDate.with(DayOfWeek.MONDAY);
 
+        var eventCalendar = new CalendarDAO(startOfWeek, Period.of(0,0,7), TimeUnit.HOURS);
+
         // Add day headers (Monday, Tuesday, etc.)
         for (int col = 1; col <= 7; col++) {
             LocalDate day = startOfWeek.plusDays(col - 1);
@@ -601,24 +592,14 @@ public class CalenderController {
                             );
                         }, weekGrid.widthProperty()) // Using weekGrid width for size binding
                 );
+                String labelText = "";
+                //FIXME:error here
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
                 LocalTime time = LocalTime.of((row-1),0,0);
-
-                var events = calendarDAO.getEventsByDate(day,time);
-                System.out.println(events);
-                String labelText;
-                if (events.isEmpty()){
-                    labelText = "";
-                }else{
-                    //TODO: display multiple events on a single day with iteration
-                    var currentEvent = events.getFirst();
-                    labelText = events.getFirst().getName();
-                    if (CalendarDAO.IsEventInProgress(
-                            currentEvent.getStart_Time_LocalDateTime(),currentEvent.getEnd_Time_LocalDateTime(),
-                            day,time)){
-
-                    }
+                Event cEvent = eventCalendar.getFirstEventForInterval(day.atTime(time),TimeUnit.HOURS);
+                if (cEvent != null){
+                    labelText = cEvent.getName();
                 }
                 cell.setText(labelText);
 
@@ -655,6 +636,8 @@ public class CalenderController {
         GridPane.setColumnSpan(dateLabel, 2); // Span across both columns (time and event columns)
         dayGrid.add(dateLabel, 0, 0); // Place it in the first row (row 0)
 
+        var eventCalendar = new CalendarDAO(currentDate,Period.of(0,0,1),TimeUnit.HOURS);
+
         // Create the hourly labels and event slots
         for (int hour = 0; hour < 24; hour++) {
             // Create the time label (left side)
@@ -671,6 +654,10 @@ public class CalenderController {
             eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;"); // Bottom line only
             eventSlot.setAlignment(Pos.CENTER_LEFT);
 
+            var fEvent = eventCalendar.getFirstEventForInterval(currentDate,hour,TimeUnit.HOURS);
+            if (fEvent != null){eventSlot.setText(fEvent.getName());}
+
+            //TODO: shade continuing event
 
             // Add both to the grid
             dayGrid.add(timeLabel, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
@@ -802,6 +789,8 @@ public class CalenderController {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
+        var dayCalendar = new CalendarDAO(currentDate,Period.of(0,0,1),TimeUnit.HOURS);
+
         // Top date header
         Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
         header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
@@ -829,6 +818,10 @@ public class CalenderController {
 
             //TODO: add text of current event to label
 
+            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
+            if (fEvent != null){event.setText(fEvent.getName());}
+
+            //TODO: shade continuing event
 
             miniDayView.add(time, 0, hour + 1);
             miniDayView.add(event, 1, hour + 1);
@@ -850,4 +843,6 @@ public class CalenderController {
             dayComboBox.setValue(Math.min(today, daysInMonth));
         }
     }
+
+
 }
