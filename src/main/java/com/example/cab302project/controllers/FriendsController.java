@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -386,6 +387,34 @@ public class FriendsController {
      * clears the displayed profile information, and updates the UI.
      * Displays a confirmation or error alert based on selection.
      */
+    @FXML
+    private void handleLogOut() {
+        Session.clear();
+        System.out.println("Logging out...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Smart Schedule Assistant");
+
+            // Match initial launch size exactly
+            Scene scene = new Scene(loginRoot, 450, 600);
+            loginStage.setScene(scene);
+            loginStage.setResizable(true); // Match startup behavior
+            loginStage.centerOnScreen();   // for polish
+
+            loginStage.show();
+
+            // Close the settings window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     private void handleRemoveFriend() {
         String selectedFriend = friendSelector.getSelectionModel().getSelectedItem();
