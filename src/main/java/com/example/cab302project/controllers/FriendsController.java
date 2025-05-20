@@ -398,19 +398,22 @@ public class FriendsController {
             Stage loginStage = new Stage();
             loginStage.setTitle("Smart Schedule Assistant");
 
-            Scene scene = new Scene(loginRoot, 380, 500);
+            // Match initial launch size exactly
+            Scene scene = new Scene(loginRoot, 450, 600);
             loginStage.setScene(scene);
+            loginStage.setResizable(true); // Match startup behavior
+            loginStage.centerOnScreen();   // for polish
 
             loginStage.show();
 
-            // Close the current Settings page
+            // Close the settings window
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
             currentStage.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void handleRemoveFriend() {

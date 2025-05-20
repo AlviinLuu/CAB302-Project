@@ -65,7 +65,9 @@ public class ProfileController {
             bioTextArea.setText("No user logged in.");
             setDefaultProfileImage();
         }
-
+        // Load logo image
+        Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
+        logoImage.setImage(logo);
         bioTextArea.setEditable(false);
         bioTextArea.setFocusTraversable(false);
         bioTextArea.setStyle("-fx-opacity: 1; -fx-background-color: #ECECFF; -fx-text-fill: black;");
@@ -156,21 +158,30 @@ public class ProfileController {
     @FXML
     private void handleLogOut() {
         Session.clear();
+        System.out.println("Logging out...");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
             Parent loginRoot = loader.load();
+
             Stage loginStage = new Stage();
-            loginStage.setScene(new Scene(loginRoot, 380, 500));
             loginStage.setTitle("Smart Schedule Assistant");
-            loginStage.centerOnScreen();
+
+            // Match initial launch size exactly
+            Scene scene = new Scene(loginRoot, 450, 600);
+            loginStage.setScene(scene);
+            loginStage.setResizable(true); // Match startup behavior
+            loginStage.centerOnScreen();   // for polish
+
             loginStage.show();
 
-            Stage current = (Stage) mainContent.getScene().getWindow();
-            current.close();
+            // Close the settings window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private void openPage(String fxmlPath, String title) {
         try {
