@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -377,6 +378,31 @@ public class CalenderController {
      * Opens the user profile page and closes the current calendar view.
      * @throws Exception if the FXML file cannot be loaded.
      */
+    @FXML
+    private void handleLogOut() {
+        Session.clear();
+        System.out.println("Logging out...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Smart Schedule Assistant");
+
+            Scene scene = new Scene(loginRoot, 380, 500);
+            loginStage.setScene(scene);
+
+            loginStage.show();
+
+            // Close the current Settings page
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML private void openProfilePage() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
