@@ -85,8 +85,11 @@
                 </VBox>
                 </HBox>
 
-                <!-- Profile Picture (Shrunken) -->
-                <VBox spacing="10" style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
+                <!-- Profile Picture -->
+                <HBox spacing="24" alignment="TOP_CENTER">
+
+                <VBox spacing="10" prefWidth="400" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Profile Picture" />
                     <ImageView fx:id="profileImage" fitHeight="90" preserveRatio="true" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
                     <HBox alignment="CENTER_RIGHT">
@@ -98,14 +101,17 @@
                                 text="Upload Image" />
                     </HBox>
                 </VBox>
-                <VBox spacing="12" style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
+
+                <!-- Bio -->
+                <VBox spacing="12" prefWidth="770" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <children>
                         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Bio" />
                         <TextArea fx:id="bioTextArea"
                                   maxWidth="-Infinity"
                                   prefWidth="1070"
                                   maxHeight="-Infinity"
-                                  prefHeight="100"
+                                  prefHeight="200"
                                   wrapText="true"/>
                         <HBox alignment="CENTER_RIGHT">
                             <Button fx:id="editBioButton" onAction="#handleEditBio"
@@ -117,6 +123,7 @@
                         </HBox>
                     </children>
                 </VBox>
+                </HBox>
             </VBox>
         </ScrollPane>
     </VBox>
