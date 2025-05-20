@@ -47,6 +47,8 @@ public class SettingsController {
     private VBox mainContent;
     @FXML private Button editBioButton;
     @FXML private TextArea bioTextArea;
+    @FXML private Label calendarSyncStatusLabel;
+
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
     private final IUserDAO userDAO = new SqliteUserDAO();
@@ -171,18 +173,18 @@ public class SettingsController {
     private void handleUploadGoogleCalendar() {
         System.out.println("📂 Upload button clicked.");
 
-        // ✅ Get the logged-in user
+        // Get the logged-in user
         User user = Session.getLoggedInUser();
 
         if (user != null) {
             String userEmail = user.getEmail(); // or however you store it
 
-            // 🔴 Clear only that user's events
+            // Clear only that user's events
             SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
             sqliteUserDAO.clearEventsByEmail(userEmail);
             System.out.println("🧹 Events for user " + userEmail + " cleared.");
 
-            // 🟢 Proceed with file selection
+            // Proceed with file selection
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Upload Google Calendar (.ics)");
             fileChooser.getExtensionFilters().add(
@@ -194,8 +196,13 @@ public class SettingsController {
                 try {
                     System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
 
-                    // ✅ Parse the file for this user
+                    // Parse the file for this user
                     CalendarImportView.importCalendarFile(selectedFile, user.getId());
+
+                    // Show status and alert on the settings page
+                    calendarSyncStatusLabel.setText("Google Calendar synced ✔");
+                    calendarSyncStatusLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;");
+                    showAlert(Alert.AlertType.INFORMATION, "Calendar Synced", "Google Calendar has been successfully synced!");
 
                 } catch (Exception e) {
                     e.printStackTrace();
