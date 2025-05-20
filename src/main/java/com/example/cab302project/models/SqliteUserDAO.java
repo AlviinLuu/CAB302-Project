@@ -536,34 +536,6 @@ public class SqliteUserDAO implements IUserDAO {
     }
 
     /**
-     * Executes given Query
-     * @param email
-     * @param query
-     * @return
-     */
-    public List<Event> executeEventQuery(String email, String query) {
-        List<Event> events = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            ResultSet resultSet = stmt.executeQuery();
-
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String startTime = resultSet.getString("start_time");
-                String endTime = resultSet.getString("end_time");
-                String username = resultSet.getString("username");
-
-                Event event = new Event(name, startTime, endTime, username);
-                events.add(event);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error retrieving events by email and date: " + e.getMessage());
-        }
-
-        return events;
-    }
-
-    /**
      * Retrieves list of events for a specific user on given data
      * @param email email of the specific user whose events are being grabbed
      * @param date The LocalDate to retrieve events.
@@ -599,72 +571,5 @@ public class SqliteUserDAO implements IUserDAO {
         return events;
     }
 
-    /**
-     * Grabs the list of events for a specific user that match a specific data and time
-     * @param email Email of user whose events being retrieved
-     * @param date Specified date of event in LocalTime
-     * @param time Specified time of the event in LocalTime
-     * @return A list of objects for the given date and time from the specified user. Returned empty if no events of if an error occurs
-     */
-    public List<Event> getUserEventsByEmailAndDateAndTime(String email, LocalDate date, LocalTime time) {
-        List<Event> events = new ArrayList<>();
-
-        LocalDateTime newDateTime = date.atTime(time);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-        String dateString = newDateTime.format(formatter);
-
-        String query = "SELECT e.name, e.start_time, e.end_time, u.username " +
-                "FROM events e JOIN users u ON e.user_email = u.email " +
-                "WHERE e.user_email = ? AND e.start_time = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, email);
-            stmt.setString(2, dateString);
-            ResultSet resultSet = stmt.executeQuery();
-
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String startTime = resultSet.getString("start_time");
-                String endTime = resultSet.getString("end_time");
-                String username = resultSet.getString("username");
-
-                Event event = new Event(name, startTime, endTime, username);
-                events.add(event);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error retrieving events by email and date: " + e.getMessage());
-        }
-
-        return events;
-    }
-
-    /**
-     * @return List of all events from database, regardless of the email
-     */
-    public List<Event> getAllEvents() {
-        List<Event> events = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-
-        String query = "SELECT * " +
-                "FROM events";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            ResultSet resultSet = stmt.executeQuery();
-
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String startTime = resultSet.getString("start_time");
-                String endTime = resultSet.getString("end_time");
-
-                Event event = new Event(name, startTime, endTime, "username");
-                events.add(event);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error retrieving all events: " + e.getMessage());
-        }
-
-        return events;
-    }
 }
 
