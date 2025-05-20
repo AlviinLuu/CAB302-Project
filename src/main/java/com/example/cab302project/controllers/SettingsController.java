@@ -69,9 +69,16 @@ public class SettingsController {
         //Sidebar fully expanded on load
         splitPane.setDividerPositions(0.75);
 
-        //Dummy data for visual feedback
-        emailField.setText("example@domain.com");
-        passwordField.setText("********");
+        // Display current user password and email
+        User currentUser = Session.getLoggedInUser();
+        if (currentUser != null) {
+            emailField.setText(currentUser.getEmail());
+            passwordField.setText(currentUser.getPassword()); // ⚠️ Only if passwords are stored in plain text (not recommended)
+        } else {
+            emailField.setText("");
+            passwordField.setText("");
+        }
+
 
         //Apply sidebar styling and calendar info
         //applySidebarButtonStyle();
@@ -79,7 +86,7 @@ public class SettingsController {
         renderMiniDayView();
 
         bioTextArea.setDisable(false); // Always allow editing
-        User currentUser = Session.getLoggedInUser();
+//        User currentUser = Session.getLoggedInUser();
         if (currentUser != null) {
             bioTextArea.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
 
