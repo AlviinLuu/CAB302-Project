@@ -108,6 +108,7 @@
                     <children>
                         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Bio" />
                         <TextArea fx:id="bioTextArea"
+                                  style="-fx-font-size: 16px"
                                   maxWidth="-Infinity"
                                   prefWidth="1070"
                                   maxHeight="-Infinity"

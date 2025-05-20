@@ -451,6 +451,13 @@ public class SettingsController {
         User currentUser = Session.getLoggedInUser();
 
         if (currentUser != null && newBio != null) {
+            int wordCount = newBio.trim().isEmpty() ? 0 : newBio.trim().split("\\s+").length;
+
+            if (wordCount > 100) {
+                showAlert(Alert.AlertType.WARNING, "Word Limit Exceeded", "Your bio must be 100 words or less.");
+                return;
+            }
+
             currentUser.setBio(newBio);
             boolean success = userDAO.updateBio(currentUser.getEmail(), newBio);
 
