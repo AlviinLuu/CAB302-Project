@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
@@ -28,6 +30,12 @@ public class Event {
      * The username of the user associated with this event.
      */
     private String username;
+
+    /**
+     * Date format for use by parsers
+     */
+    final private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
 
     /**
      * Constructs a new Event object.
@@ -96,6 +104,15 @@ public class Event {
     }
 
     /**
+     * Parses date, as a string, to <Code>LocalDateTime</Code>, using pattern defined in this class.
+     * @param dateString    String containing date and time
+     * @return              LocalDateTime value of input
+     */
+    private LocalDateTime parseToLocalDateTime(String dateString){
+        return LocalDateTime.parse(dateString,dateFormat);
+    }
+
+    /**
      * Gets the start time of the event, parsed and formatted into "MM/dd/yyyy HH:mm:ss".
      * by using the parseICSdate method
      * @return The formatted start time string, or an error string if parsing fails.
@@ -118,17 +135,15 @@ public class Event {
      * @return Start Time of Event
      */
     public LocalDateTime getStart_Time_LocalDateTime(){
-        return LocalDateTime.parse(start_time);
+        return parseToLocalDateTime(start_time);
     }
 
-
-    //TODO: write test cases for these functions to make sure they work
     /**
      * Gets the end time of event, with LocalDateTime Type
      * @return End Time of Event
      */
     public LocalDateTime getEnd_Time_LocalDateTime(){
-        return LocalDateTime.parse(end_time);
+        return parseToLocalDateTime(end_time);
     }
 
     /**
@@ -137,5 +152,14 @@ public class Event {
      */
     public String getUsername() {
         return username;
+    }
+
+    /**
+     *
+     * @param currentTime Time to compare to event
+     * @return            true if currentTime is between the startTime and endTime
+     */
+    public boolean IsEventInProgress(LocalDateTime currentTime){
+        return  currentTime.isAfter(getStart_Time_LocalDateTime()) && currentTime.isBefore(getEnd_Time_LocalDateTime());
     }
 }
