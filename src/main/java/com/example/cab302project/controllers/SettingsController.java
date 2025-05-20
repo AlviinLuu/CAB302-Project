@@ -48,6 +48,8 @@ public class SettingsController {
     @FXML private Button editBioButton;
     @FXML private TextArea bioTextArea;
     @FXML private Label calendarSyncStatusLabel;
+    @FXML private Label quoteLabel;
+
 
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
@@ -104,6 +106,9 @@ public class SettingsController {
             profileButton.setText("Profile");
             e.printStackTrace(); //
         }
+
+        // show random quote at the end of the settings page
+        setRandomQuote();
 
     }
 
@@ -310,6 +315,24 @@ public class SettingsController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private final String[] appQuotes = {
+            "Great plans start with great friends.",
+            "Find time for what matters — together.",
+            "Sync lives, not just calendars.",
+            "When you’re free, and so are they.",
+            "Friendships thrive when time aligns.",
+            "Life’s better when you're on the same schedule.",
+            "Making memories, one synced slot at a time.",
+            "Time isn’t the problem. Syncing is.",
+            "Planning made social.",
+            "We help you find time for friends — literally."
+    };
+
+    private void setRandomQuote() {
+        int index = (int) (Math.random() * appQuotes.length);
+        quoteLabel.setText('"' + appQuotes[index] + '"');
     }
 
     @FXML

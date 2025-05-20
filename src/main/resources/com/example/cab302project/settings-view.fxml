@@ -46,7 +46,7 @@
                            style="-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;" />
                     <HBox alignment="CENTER">
                         <Button fx:id="UploadingGoogleCalendar" onAction="#handleUploadGoogleCalendar"
-                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                prefWidth="320" prefHeight="40" maxWidth="320"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
                                    -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                    -fx-background-radius: 12;"
@@ -61,7 +61,7 @@
                     <TextField fx:id="emailField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
                     <HBox alignment="CENTER">
                         <Button fx:id="changeEmailButton" onAction="#handleChangeEmail"
-                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                prefWidth="320" prefHeight="40" maxWidth="320"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
                                    -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                    -fx-background-radius: 12;"
@@ -76,7 +76,7 @@
                     <PasswordField fx:id="passwordField" style="-fx-font-size: 16px; -fx-background-radius: 8;" />
                     <HBox alignment="CENTER">
                         <Button fx:id="changePasswordButton" onAction="#handleChangePassword"
-                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                prefWidth="320" prefHeight="40" maxWidth="320"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
                                    -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                    -fx-background-radius: 12;"
@@ -91,10 +91,10 @@
                 <VBox spacing="10" prefWidth="400" HBox.hgrow="ALWAYS"
                       style="-fx-background-color: #ECECFF; -fx-padding: 16; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Profile Picture" />
-                    <ImageView fx:id="profileImage" fitHeight="90" preserveRatio="true" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
+                    <ImageView fx:id="profileImage" fitHeight="300" fitWidth="320" style="-fx-border-color: #bbb; -fx-border-radius: 10; -fx-padding: 4;" />
                     <HBox alignment="CENTER_RIGHT">
                         <Button fx:id="uploadImageButton" onAction="#handleUploadImage"
-                                prefWidth="240" prefHeight="40" maxWidth="240"
+                                prefWidth="320" prefHeight="40" maxWidth="320" alignment="CENTER"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
                                    -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                    -fx-background-radius: 12;"
@@ -111,11 +111,11 @@
                                   maxWidth="-Infinity"
                                   prefWidth="1070"
                                   maxHeight="-Infinity"
-                                  prefHeight="200"
+                                  prefHeight="290"
                                   wrapText="true"/>
-                        <HBox alignment="CENTER_RIGHT">
+                        <HBox alignment="BOTTOM_RIGHT">
                             <Button fx:id="editBioButton" onAction="#handleEditBio"
-                                    prefWidth="240" prefHeight="40" maxWidth="240"
+                                    prefWidth="320" prefHeight="40" maxWidth="320"
                                     style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);
                                    -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                    -fx-background-radius: 12;"
@@ -124,6 +124,24 @@
                     </children>
                 </VBox>
                 </HBox>
+                <VBox fx:id="quoteContainer"
+                      alignment="CENTER"
+                      HBox.hgrow="ALWAYS"
+                      VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: #ECECFF; -fx-background-radius: 14; -fx-padding: 40;">
+
+                    <Label fx:id="quoteLabel"
+                           wrapText="true"
+                           maxWidth="Infinity"
+                           maxHeight="Infinity"
+                           alignment="CENTER"
+                           style="-fx-text-fill: #4B0082;
+                                  -fx-font-size: 42px;
+                                  -fx-font-family: 'Lucida Handwriting';
+                                  -fx-font-weight: bold;
+                                  -fx-text-alignment: center;
+                                  -fx-alignment: center;" />
+                </VBox>
             </VBox>
         </ScrollPane>
     </VBox>
