@@ -23,15 +23,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Controller class for the User Profile view.
- * Displays the logged-in user's profile information, including username, bio, and profile picture.
- * Provides navigation to other parts of the application (Settings, Home, Friends, Logout).
- */
 public class ProfileController {
 
     @FXML private Label profileNameLabel;
-    @FXML private TextArea bioTextArea;
+    @FXML private Label bioLabel; // Updated to Label
     @FXML private ImageView profileImageView;
     @FXML private GridPane miniDayView;
     @FXML private VBox mainContent;
@@ -41,19 +36,13 @@ public class ProfileController {
     private final LocalDate currentDate = LocalDate.now();
     private final SqliteUserDAO userDAO = new SqliteUserDAO();
 
-    /**
-     * Initializes the controller after the FXML file has been loaded.
-     * Loads the logged-in user's data (username, bio, profile image) from the session/database,
-     * sets up the UI elements, and renders the mini-day view.
-     */
     @FXML
     private void initialize() {
         User user = Session.getLoggedInUser();
 
         if (user != null) {
             profileNameLabel.setText(user.getUsername() != null ? user.getUsername() : "User");
-            bioTextArea.setText(user.getBio() != null ? user.getBio() : "No bio provided.");
-
+            bioLabel.setText(user.getBio() != null ? user.getBio() : "No bio provided."); // Set bio text
             byte[] imgData = userDAO.getProfileImage(user.getEmail());
             if (imgData != null && imgData.length > 0) {
                 profileImageView.setImage(new Image(new ByteArrayInputStream(imgData)));
@@ -62,15 +51,13 @@ public class ProfileController {
             }
         } else {
             profileNameLabel.setText("User");
-            bioTextArea.setText("No user logged in.");
+            bioLabel.setText("No user logged in.");
             setDefaultProfileImage();
         }
+
         // Load logo image
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
-        bioTextArea.setEditable(false);
-        bioTextArea.setFocusTraversable(false);
-        bioTextArea.setStyle("-fx-opacity: 1; -fx-background-color: #ECECFF; -fx-text-fill: black;");
 
         renderMiniDayView();
 
@@ -84,9 +71,8 @@ public class ProfileController {
             }
         } catch (Exception e) {
             profileButton.setText("Profile");
-            e.printStackTrace(); //
+            e.printStackTrace();
         }
-
     }
 
     private void setDefaultProfileImage() {
@@ -181,7 +167,6 @@ public class ProfileController {
             e.printStackTrace();
         }
     }
-
 
     private void openPage(String fxmlPath, String title) {
         try {
