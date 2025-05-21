@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.time.*;
@@ -75,6 +76,8 @@ public class CalenderController {
 
     private List<com.example.cab302project.models.Event> testEvents = new ArrayList<Event>();
     private Event newEvent = new Event("Lunch", "20250314T032000Z","20250314T033000Z","test@test.com");
+
+    private final String fillColour = "-fx-background-color: black ;";
 
 
     private CalendarDAO calendarDAO;
@@ -169,7 +172,10 @@ public class CalenderController {
             profileButton.setText("Profile");
             e.printStackTrace(); //
         }
+
+
     }
+
 
     // === Navigation Buttons ===
     /**
@@ -476,6 +482,7 @@ public class CalenderController {
     private void renderMonthView() {
         // Clear the grid first
         monthGrid.getChildren().clear();
+        var eventCalendar = new CalendarDAO(currentDate,Period.of(0,1,0),TimeUnit.DAYS);
 
         // Get system-localized weekday names
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
@@ -537,7 +544,6 @@ public class CalenderController {
             GridPane.setHgrow(label, Priority.ALWAYS);
             GridPane.setVgrow(label, Priority.ALWAYS);
             monthGrid.add(label, col, row);
-
             col++;
             if (col > 6) {
                 col = 0;
@@ -611,32 +617,39 @@ public class CalenderController {
                 cell.setWrapText(true);
                 cell.setAlignment(Pos.CENTER);
                 //All days of the week are an even size, a 7th of the total width
-                //TODO: wrap text and extend vertical height of cell to fit full text
                 cell.setMaxSize(weekGrid.getWidth()/7, Double.MAX_VALUE);
-                // Bind font size to the width of the grid
-                cell.styleProperty().bind(
-                        Bindings.createStringBinding(() -> {
-                            //double size = weekGrid.getWidth() / 40; // Using weekGrid here
-                            double size = 20;
-                            return String.format(
-                                    "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;",
-                                    size
-                            );
-                        }, weekGrid.widthProperty()) // Using weekGrid width for size binding
-                );
+
                 String labelText = "";
-                //FIXME:error here
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
                 LocalTime time = LocalTime.of((row-1),0,0);
+                LocalDateTime currentTime = day.atTime(time);
                 Event cEvent = eventCalendar.getFirstEventForInterval(day.atTime(time),TimeUnit.HOURS);
                 if (cEvent != null){
                     labelText = cEvent.getName();
                 }
                 cell.setText(labelText);
 
-                //TODO: Shade cell if event is currently happening
+                final String fillString;
 
+                if (eventCalendar.IsAnyEventInProgress(currentTime)){
+                    fillString = fillColour;
+                } else {
+                    fillString = "";
+                }
+
+                // Bind font size to the width of the grid
+                cell.styleProperty().bind(
+                        Bindings.createStringBinding(() -> {
+                            //double size = weekGrid.getWidth() / 40; // Using weekGrid here
+                            double size = 20;
+
+                            return String.format(
+                                    "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;  %s",
+                                    size,fillString
+                            );
+                        }, weekGrid.widthProperty()) // Using weekGrid width for size binding
+                );
 
                 GridPane.setHgrow(cell, Priority.ALWAYS);
                 GridPane.setVgrow(cell, Priority.ALWAYS);
@@ -689,13 +702,14 @@ public class CalenderController {
             var fEvent = eventCalendar.getFirstEventForInterval(currentDate,hour,TimeUnit.HOURS);
             if (fEvent != null){eventSlot.setText(fEvent.getName());}
 
-            //TODO: shade continuing event
+            if (eventCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
+                eventSlot.setStyle(fillColour);
+            }
 
             // Add both to the grid
             dayGrid.add(timeLabel, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
             dayGrid.add(eventSlot, 1, hour + 1); // Column 1 = Event (shifted by 1 row)
 
-            //TODO: populate event labels with current events
 
             // Optional: GridPane.setHgrow(timeLabel, Priority.ALWAYS);
             GridPane.setHgrow(eventSlot, Priority.ALWAYS);
@@ -848,12 +862,12 @@ public class CalenderController {
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
 
-            //TODO: add text of current event to label
 
             var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
             if (fEvent != null){event.setText(fEvent.getName());}
-
-            //TODO: shade continuing event
+            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
+                event.setStyle(fillColour);
+            }
 
             miniDayView.add(time, 0, hour + 1);
             miniDayView.add(event, 1, hour + 1);

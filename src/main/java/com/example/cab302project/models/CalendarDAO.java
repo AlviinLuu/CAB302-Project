@@ -13,12 +13,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Mostly a convenience class that automatically uses the username of the currently logged-in user for requests to the
- * SqliteUserDAO
+ * DAO to interact with the database, mostly for retrieving events.
  */
 public class CalendarDAO {
     private final Connection connection;
-    private final SqliteUserDAO userDAO;
     private final String userEmail;
     private List<Event> events;
     private final LocalDateTime startDateTime;
@@ -36,10 +34,7 @@ public class CalendarDAO {
      * @param interval      Level of detail in time increment
      */
     public CalendarDAO(LocalDate startDate, Period timePeriod, TimeUnit interval) {
-
         connection = SqliteConnection.getInstance();
-        //TODO: consider getting rid of this
-        userDAO = new SqliteUserDAO();
         User currentUser = Session.getLoggedInUser();
         userEmail = currentUser.getEmail();
 
@@ -49,7 +44,6 @@ public class CalendarDAO {
         events = getAllUserEvents();
         events = filterToTimePeriod();
     }
-
 
     /**
      * Iterates list of events, looking for the first event during the date
@@ -77,9 +71,24 @@ public class CalendarDAO {
         return getFirstEventForInterval(date.atTime(LocalTime.of((timeHour),0,0)), interval);
     }
 
+    public boolean IsAnyEventInProgress(LocalDateTime currentTime){
+        return !getCurrentEvents(currentTime).isEmpty();
+    }
+
+    public List<Event> getCurrentEvents(LocalDateTime currentTime){
+        List<Event> cEvents = new ArrayList<>();
+        for (Event e : events){
+
+           if (e.IsEventInProgress(currentTime)){
+               cEvents.add(e);
+           }
+        }
+        return cEvents;
+    }
+
     /**
      * Filters {@code event} class field list based on parameters set in constructor
-     * @return a {@code List<Event>} of events between start and end dates
+     * @return a {@code List<Event>} of {@code Event} objects between start and end dates
      */
     private List<Event> filterToTimePeriod(){
         List<Event> eventsFiltered = new ArrayList<>();
@@ -96,7 +105,6 @@ public class CalendarDAO {
         return eventsFiltered;
     }
 
-
     /**
      * Combines a {@code LocalDate} and {@code LocalTime} to create a {@code LocalDateTime} value.
      * @param date  {@code LocalDate} value containing date
@@ -106,7 +114,6 @@ public class CalendarDAO {
     public static LocalDateTime zipDateAndTime(LocalDate date, LocalTime time){
         return date.atTime(time);
     }
-
 
     /**
      * @return a {@code List<Event>} for the currently logged-in user
@@ -144,7 +151,6 @@ public class CalendarDAO {
      */
     private List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         String query = "SELECT * FROM events";
 
@@ -162,7 +168,6 @@ public class CalendarDAO {
         } catch (SQLException e) {
             System.err.println("Error retrieving all events: " + e.getMessage());
         }
-
         return events;
     }
 
@@ -170,6 +175,11 @@ public class CalendarDAO {
      * Deletes <b>ALL</b> events in database. Here for debugging purposes and should not be used in normal code
      */
     private void ClearEvents() {
-        userDAO.executeQuery("DELETE * from events");
+        String query = "DELETE * FROM events";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error retrieving all events: " + e.getMessage());
+        }
     }
 }

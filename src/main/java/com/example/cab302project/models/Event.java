@@ -160,6 +160,7 @@ public class Event {
      * @return            true if currentTime is between the startTime and endTime
      */
     public boolean IsEventInProgress(LocalDateTime currentTime){
-        return  currentTime.isAfter(getStart_Time_LocalDateTime()) && currentTime.isBefore(getEnd_Time_LocalDateTime());
+        return  currentTime.isAfter(getStart_Time_LocalDateTime())
+                && currentTime.isBefore(getEnd_Time_LocalDateTime()) || currentTime.isEqual(getEnd_Time_LocalDateTime());
     }
 }
