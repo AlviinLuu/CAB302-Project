@@ -30,7 +30,7 @@
 
                 <!-- FRIENDS LIST PANEL -->
                 <VBox spacing="15" VBox.vgrow="ALWAYS" HBox.hgrow="NEVER" maxWidth="250"
-                      style="-fx-background-color: #CCCCFF; -fx-padding: 20; -fx-background-radius: 12;">
+                      style="-fx-background-color: #ECECFF; -fx-padding: 20; -fx-background-radius: 12;">
 
                     <!-- Panel Header -->
                     <Label text="FRIENDS LIST" prefWidth="240"
@@ -106,7 +106,7 @@
 
                 <!-- Friend Profile and AI Area -->
                 <VBox spacing="15" VBox.vgrow="NEVER" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #CCCCFF; -fx-padding: 20; -fx-background-radius: 12;">
+                      style="-fx-background-color: #ECECFF; -fx-padding: 20; -fx-background-radius: 12;">
                     <Label fx:id="profileHeaderLabel" text="Friend profile"
                            style="-fx-background-color: #D8B9FF; -fx-text-fill: #1A1A1A; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10;"/>
 
@@ -125,7 +125,7 @@
                     <!-- AI Prompt Input -->
                     <VBox spacing="10" VBox.vgrow="ALWAYS"> <TextArea fx:id="aiPromptField" promptText="enter AI prompt in this textbox"
                                                                       wrapText="true" prefRowCount="3" prefHeight="150"
-                                                                      style="-fx-background-color: white; -fx-border-color: #CCCCFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
+                                                                      style="-fx-background-color: white; -fx-border-color: #ECECFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
                         <HBox alignment="CENTER_RIGHT">
                         <Button text="Ask" onAction="#handleAIPrompt"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%);-fx-text-fill: white; -fx-font-size: 16px; -fx-background-radius: 12px; -fx-font-weight: bold;"
@@ -135,7 +135,7 @@
                         <StackPane maxWidth="Infinity" VBox.vgrow="ALWAYS">
                             <TextArea fx:id="aiResponseLabel"
                                       editable="false"
-                                      style="-fx-control-inner-background: #CCCCFF; -fx-border-color: #CCCCFF;"/>
+                                      style="-fx-control-inner-background: #ECECFF; -fx-border-color: #ECECFF;"/>
                         </StackPane>
                     </VBox>
                 </VBox>
@@ -177,6 +177,13 @@
                 onAction="#openProfilePage"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#handleLogOut" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="LOG OUT" />
+        <VBox.margin>
+            <Insets top="10" />
+        </VBox.margin>
+        <VBox.margin>
+            <Insets top="10" />
+        </VBox.margin>
     </VBox>
 
 </SplitPane>

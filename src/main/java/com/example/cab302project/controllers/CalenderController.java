@@ -16,6 +16,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.time.*;
+import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -35,7 +40,6 @@ import com.example.cab302project.util.Session;
  * user interface interaction, and navigation between pages.
  */
 public class CalenderController {
-
     // === FXML UI Elements ===
     @FXML private Label monthLabel;
     @FXML private GridPane calendarGrid;
@@ -366,6 +370,34 @@ public class CalenderController {
      * Opens the user profile page and closes the current calendar view.
      * @throws Exception if the FXML file cannot be loaded.
      */
+    @FXML
+    private void handleLogOut() {
+        Session.clear();
+        System.out.println("Logging out...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/login-view.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Smart Schedule Assistant");
+
+            // Match initial launch size exactly
+            Scene scene = new Scene(loginRoot, 450, 600);
+            loginStage.setScene(scene);
+            loginStage.setResizable(true); // Match startup behavior
+            loginStage.centerOnScreen();   // for polish
+
+            loginStage.show();
+
+            // Close the settings window
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML private void openProfilePage() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
@@ -843,6 +875,4 @@ public class CalenderController {
             dayComboBox.setValue(Math.min(today, daysInMonth));
         }
     }
-
-
 }

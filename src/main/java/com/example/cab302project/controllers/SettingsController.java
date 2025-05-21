@@ -47,6 +47,10 @@ public class SettingsController {
     private VBox mainContent;
     @FXML private Button editBioButton;
     @FXML private TextArea bioTextArea;
+    @FXML private Label calendarSyncStatusLabel;
+    @FXML private Label quoteLabel;
+
+
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
     private final IUserDAO userDAO = new SqliteUserDAO();
@@ -65,9 +69,16 @@ public class SettingsController {
         //Sidebar fully expanded on load
         splitPane.setDividerPositions(0.75);
 
-        //Dummy data for visual feedback
-        emailField.setText("example@domain.com");
-        passwordField.setText("********");
+        // Display current user password and email
+        User currentUser = Session.getLoggedInUser();
+        if (currentUser != null) {
+            emailField.setText(currentUser.getEmail());
+            passwordField.setText(currentUser.getPassword()); // ⚠️ Only if passwords are stored in plain text (not recommended)
+        } else {
+            emailField.setText("");
+            passwordField.setText("");
+        }
+
 
         //Apply sidebar styling and calendar info
         //applySidebarButtonStyle();
@@ -75,7 +86,7 @@ public class SettingsController {
         renderMiniDayView();
 
         bioTextArea.setDisable(false); // Always allow editing
-        User currentUser = Session.getLoggedInUser();
+//        User currentUser = Session.getLoggedInUser();
         if (currentUser != null) {
             bioTextArea.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
 
@@ -102,6 +113,9 @@ public class SettingsController {
             profileButton.setText("Profile");
             e.printStackTrace(); //
         }
+
+        // show random quote at the end of the settings page
+        setRandomQuote();
 
     }
 
@@ -171,18 +185,18 @@ public class SettingsController {
     private void handleUploadGoogleCalendar() {
         System.out.println("📂 Upload button clicked.");
 
-        // ✅ Get the logged-in user
+        // Get the logged-in user
         User user = Session.getLoggedInUser();
 
         if (user != null) {
             String userEmail = user.getEmail(); // or however you store it
 
-            // 🔴 Clear only that user's events
+            // Clear only that user's events
             SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
             sqliteUserDAO.clearEventsByEmail(userEmail);
             System.out.println("🧹 Events for user " + userEmail + " cleared.");
 
-            // 🟢 Proceed with file selection
+            // Proceed with file selection
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Upload Google Calendar (.ics)");
             fileChooser.getExtensionFilters().add(
@@ -194,8 +208,13 @@ public class SettingsController {
                 try {
                     System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
 
-                    // ✅ Parse the file for this user
+                    // Parse the file for this user
                     CalendarImportView.importCalendarFile(selectedFile, user.getId());
+
+                    // Show status and alert on the settings page
+                    calendarSyncStatusLabel.setText("Google Calendar synced ✔");
+                    calendarSyncStatusLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;");
+                    showAlert(Alert.AlertType.INFORMATION, "Calendar Synced", "Google Calendar has been successfully synced!");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -305,6 +324,24 @@ public class SettingsController {
         alert.showAndWait();
     }
 
+    private final String[] appQuotes = {
+            "Great plans start with great friends.",
+            "Find time for what matters — together.",
+            "Sync lives, not just calendars.",
+            "When you’re free, and so are they.",
+            "Friendships thrive when time aligns.",
+            "Life’s better when you're on the same schedule.",
+            "Making memories, one synced slot at a time.",
+            "Time isn’t the problem. Syncing is.",
+            "Planning made social.",
+            "We help you find time for friends — literally."
+    };
+
+    private void setRandomQuote() {
+        int index = (int) (Math.random() * appQuotes.length);
+        quoteLabel.setText('"' + appQuotes[index] + '"');
+    }
+
     @FXML
     private void goToHome() {
         try {
@@ -341,19 +378,22 @@ public class SettingsController {
             Stage loginStage = new Stage();
             loginStage.setTitle("Smart Schedule Assistant");
 
-            Scene scene = new Scene(loginRoot, 380, 500);
+            // Match initial launch size exactly
+            Scene scene = new Scene(loginRoot, 450, 600);
             loginStage.setScene(scene);
+            loginStage.setResizable(true); // Match startup behavior
+            loginStage.centerOnScreen();   // for polish
 
             loginStage.show();
 
-            // Close the current Settings page
+            // Close the settings window
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
             currentStage.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
     //    @FXML
@@ -411,6 +451,13 @@ public class SettingsController {
         User currentUser = Session.getLoggedInUser();
 
         if (currentUser != null && newBio != null) {
+            int wordCount = newBio.trim().isEmpty() ? 0 : newBio.trim().split("\\s+").length;
+
+            if (wordCount > 100) {
+                showAlert(Alert.AlertType.WARNING, "Word Limit Exceeded", "Your bio must be 100 words or less.");
+                return;
+            }
+
             currentUser.setBio(newBio);
             boolean success = userDAO.updateBio(currentUser.getEmail(), newBio);
 
