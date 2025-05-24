@@ -128,24 +128,6 @@ public class ProfileController {
             GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
-    @FXML
-    private void handleUploadImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Profile Picture");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-        File selectedFile = fileChooser.showOpenDialog(profileImageView.getScene().getWindow());
-
-        if (selectedFile != null) {
-            String imagePath = selectedFile.toURI().toString();
-            profileImageView.setImage(new Image(imagePath));
-            User user = Session.getLoggedInUser();
-            if (user != null) {
-                user.setProfileImage(imagePath);
-            }
-        }
-    }
 
     @FXML
     private void openSettingsPage() {
