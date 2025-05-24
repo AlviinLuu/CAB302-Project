@@ -1,10 +1,12 @@
 package com.example.cab302project.controllers;
+
 import com.example.cab302project.models.IUserDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.services.CalendarImportView;
 import com.example.cab302project.util.Session;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -13,23 +15,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
-/**
- * Controller class for the Settings view of the application.
- * Handles user interactions on the settings page, including updating user information,
- * managing the profile image, importing calendar data, and navigating to other views.
- */
 public class SettingsController {
 
     @FXML private TextField emailField;
@@ -38,28 +35,55 @@ public class SettingsController {
     @FXML private ImageView profileImage;
     @FXML private ImageView logoImage;
     @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton, UploadingGoogleCalendar;
-    //@FXML private Button homeButton, settingsButton, friendsButton, signOutButton;
     @FXML private Label dateLabel;
     @FXML private VBox aiSidebar;
     @FXML private GridPane miniDayView;
     @FXML private SplitPane splitPane;
-    @FXML
-    private VBox mainContent;
+    @FXML private VBox mainContent;
     @FXML private Button editBioButton;
     @FXML private TextArea bioTextArea;
     @FXML private Label calendarSyncStatusLabel;
     @FXML private Label quoteLabel;
-
 
     // === Local State ===
     private final LocalDate currentDate = LocalDate.now();
     private final IUserDAO userDAO = new SqliteUserDAO();
 
     /**
-     * Initializes the controller after the FXML file has been loaded.
-     * Sets up UI elements by loading user data (bio, profile image) from the session/database,
-     * and configures the sidebar and mini-calendar view.
+     * Center-crop and resize an image to the target size.
      */
+    private Image cropAndResizeImage(Image input, int width, int height) {
+        double origWidth = input.getWidth();
+        double origHeight = input.getHeight();
+        double size = Math.min(origWidth, origHeight);
+
+        // Crop: calculate coordinates for a square
+        double x = (origWidth - size) / 2.0;
+        double y = (origHeight - size) / 2.0;
+
+        PixelReader reader = input.getPixelReader();
+        WritableImage cropped = new WritableImage(reader, (int)x, (int)y, (int)size, (int)size);
+
+        // Convert cropped WritableImage to BufferedImage
+        BufferedImage bImage = SwingFXUtils.fromFXImage(cropped, null);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        java.awt.Graphics2D g = resized.createGraphics();
+        g.drawImage(bImage, 0, 0, width, height, null);
+        g.dispose();
+
+        return SwingFXUtils.toFXImage(resized, null);
+    }
+
+    /**
+     * Convert JavaFX Image to byte array (PNG format).
+     */
+    private byte[] imageToByteArray(Image image) throws IOException {
+        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", out);
+        return out.toByteArray();
+    }
+
     @FXML
     private void initialize() {
         //Loads logo
@@ -79,22 +103,22 @@ public class SettingsController {
             passwordField.setText("");
         }
 
-
         //Apply sidebar styling and calendar info
-        //applySidebarButtonStyle();
         updateDateLabel();
         renderMiniDayView();
 
         bioTextArea.setDisable(false); // Always allow editing
-//        User currentUser = Session.getLoggedInUser();
+
         if (currentUser != null) {
             bioTextArea.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
 
-            // Load profile image from DB
+            // Load profile image from DB and ensure it displays as 400x400
             byte[] imageData = userDAO.getProfileImage(currentUser.getEmail());
             if (imageData != null) {
                 InputStream is = new ByteArrayInputStream(imageData);
-                profileImage.setImage(new Image(is));
+                Image loaded = new Image(is);
+                Image processed = cropAndResizeImage(loaded, 400, 400);
+                profileImage.setImage(processed);
             }
 
         } else {
@@ -111,22 +135,11 @@ public class SettingsController {
             }
         } catch (Exception e) {
             profileButton.setText("Profile");
-            e.printStackTrace(); //
+            e.printStackTrace();
         }
 
-        // show random quote at the end of the settings page
         setRandomQuote();
-
     }
-
-    //private void applySidebarButtonStyle() {
-    //   homeButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-    //          "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-    // settingsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; " +
-    //         "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-    // friendsButton.setStyle("-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; " +
-    //        "-fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;");
-    // }
 
     private void updateDateLabel() {
         if (dateLabel != null) {
@@ -189,14 +202,13 @@ public class SettingsController {
         User user = Session.getLoggedInUser();
 
         if (user != null) {
-            String userEmail = user.getEmail(); // or however you store it
+            String userEmail = user.getEmail();
 
             // Clear only that user's events
             SqliteUserDAO sqliteUserDAO = new SqliteUserDAO();
             sqliteUserDAO.clearEventsByEmail(userEmail);
             System.out.println("🧹 Events for user " + userEmail + " cleared.");
 
-            // Proceed with file selection
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Upload Google Calendar (.ics)");
             fileChooser.getExtensionFilters().add(
@@ -208,10 +220,8 @@ public class SettingsController {
                 try {
                     System.out.println("📄 Selected file: " + selectedFile.getAbsolutePath());
 
-                    // Parse the file for this user
                     CalendarImportView.importCalendarFile(selectedFile, user.getId());
 
-                    // Show status and alert on the settings page
                     calendarSyncStatusLabel.setText("Google Calendar synced ✔");
                     calendarSyncStatusLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;");
                     showAlert(Alert.AlertType.INFORMATION, "Calendar Synced", "Google Calendar has been successfully synced!");
@@ -231,8 +241,7 @@ public class SettingsController {
     /**
      * Handles the action of the Upload Image button.
      * Opens a file chooser for image files, loads the selected image,
-     * converts it to a byte array, and updates the user's profile image in the database.
-     * Then Displays alerts for success or failure.
+     * crops/resizes to 400x400, saves to DB and shows in UI.
      */
     @FXML
     private void handleUploadImage() {
@@ -244,13 +253,19 @@ public class SettingsController {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             try {
-                // Load image into JavaFX ImageView
-                Image image = new Image(selectedFile.toURI().toString());
-                profileImage.setImage(image);
+                // Load original image from file
+                Image originalImage = new Image(selectedFile.toURI().toString());
 
-                // Convert to byte array
-                byte[] imageData = java.nio.file.Files.readAllBytes(selectedFile.toPath());
+                // Crop and resize to 300x300
+                Image processedImage = cropAndResizeImage(originalImage, 300, 300);
 
+                // Display 300x300 image in UI
+                profileImage.setImage(processedImage);
+
+                // Convert the cropped/resized image to byte array for database storage
+                byte[] imageData = imageToByteArray(processedImage);
+
+                // Save to DB
                 User currentUser = Session.getLoggedInUser();
                 if (currentUser != null) {
                     boolean success = userDAO.updateProfileImage(currentUser.getEmail(), imageData);
@@ -267,12 +282,6 @@ public class SettingsController {
         }
     }
 
-    /**
-     * Handles the action of the Change Email button.
-     * Retrieves the new email from the email field and validates it,
-     * It then updates the user's email address in the database and session.
-     * Displays alerts for success or failure.
-     */
     @FXML
     private void handleChangeEmail() {
         String newEmail = emailField.getText();
@@ -292,12 +301,6 @@ public class SettingsController {
         }
     }
 
-    /**
-     * Handles the action for the Change Password button.
-     * Retrieves the new password from the password field, validates its length,
-     * and updates the user's password in the database and session.
-     * Displays alerts for success or failure.
-     */
     @FXML
     private void handleChangePassword() {
         String newPassword = passwordField.getText();
@@ -383,12 +386,6 @@ public class SettingsController {
         }
     }
 
-
-
-    //    @FXML
-//    private void goToFriends() {
-//        System.out.println("Navigating to Friends Page (to be implemented).");
-//    }
     @FXML
     private void openFriendsPage() {
         try {
@@ -417,12 +414,6 @@ public class SettingsController {
         }
     }
 
-    /**
-     * Handles the action for the Edit Bio and Save Bio buttons.
-     * Retrieves the text from the bio text area, updates the user object in the session,
-     * then saves the updated bio to the database.
-     * Displays alerts for success or failure.
-     */
     @FXML
     private void handleEditBio() {
         // Always editable, just save the current text to DB
@@ -448,19 +439,4 @@ public class SettingsController {
             }
         }
     }
-
-    // @FXML
-    // private void handleSignOut() {
-    //    System.out.println("Signing out...");
-    //    try {
-    //       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/calendarpage/login-view.fxml"));
-    //       Parent loginRoot = loader.load();
-    //        Stage stage = (Stage) signOutButton.getScene().getWindow();
-    //        stage.setScene(new Scene(loginRoot));
-    //         stage.setTitle("Login");
-    //         stage.setMaximized(true);
-    //    } catch (IOException e) {
-    //        e.printStackTrace();
-    //     }
-    // }
 }

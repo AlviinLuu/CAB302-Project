@@ -1,5 +1,6 @@
 package com.example.cab302project.controllers;
 
+import com.example.cab302project.models.CalendarDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import com.example.cab302project.models.User;
 import com.example.cab302project.util.Session;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -21,7 +23,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 public class ProfileController {
 
@@ -35,7 +40,7 @@ public class ProfileController {
 
     private final LocalDate currentDate = LocalDate.now();
     private final SqliteUserDAO userDAO = new SqliteUserDAO();
-
+    private final String fillColour = "-fx-background-color: black ;";
     @FXML
     private void initialize() {
         User user = Session.getLoggedInUser();
@@ -84,13 +89,23 @@ public class ProfileController {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
+        var dayCalendar = new CalendarDAO(currentDate, Period.of(0,0,1), TimeUnit.HOURS);
+
+        // Top date header
         Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
         header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
         header.setMaxWidth(Double.MAX_VALUE);
         header.setAlignment(Pos.TOP_LEFT);
         miniDayView.add(header, 0, 0, 2, 1);
 
+        // Spacer
+        RowConstraints spacer = new RowConstraints(30);
+        miniDayView.getRowConstraints().add(spacer);
+
+        // Hour slots
         for (int hour = 0; hour < 24; hour++) {
+            miniDayView.getRowConstraints().add(new RowConstraints(30));
+
             Label time = new Label(String.format("%02d:00", hour));
             time.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
             time.setMaxWidth(Double.MAX_VALUE);
@@ -101,12 +116,18 @@ public class ProfileController {
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
 
+
+            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
+            if (fEvent != null){event.setText(fEvent.getName());}
+            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
+                event.setStyle(fillColour);
+            }
+
             miniDayView.add(time, 0, hour + 1);
             miniDayView.add(event, 1, hour + 1);
             GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
-
     @FXML
     private void handleUploadImage() {
         FileChooser fileChooser = new FileChooser();

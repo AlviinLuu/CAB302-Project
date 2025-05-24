@@ -87,8 +87,8 @@
 
     </VBox>
 
-    <!-- Right section of the SplitPane (AI Sidebar) -->
-    <VBox fx:id="aiSidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
+    <!-- Right section of the SplitPane -->
+    <VBox fx:id="Sidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
         <Button text="HOME"
                 style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
                 maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
