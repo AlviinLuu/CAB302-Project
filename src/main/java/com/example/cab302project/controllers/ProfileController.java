@@ -128,18 +128,47 @@ public class ProfileController {
 
     @FXML
     private void openSettingsPage() {
-        openPage("/com/example/cab302project/settings-view.fxml", "Settings");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
+            Parent settingsRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(settingsRoot);
+            currentStage.setTitle("Settings"); // Optional: Update window title
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     private void goToHome() {
-        openPage("/com/example/cab302project/calendar-view.fxml", "Calendar");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
+            Parent homeRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(homeRoot);
+            currentStage.setTitle("Smart Schedule Assistant");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void openFriendsPage() {
-        openPage("/com/example/cab302project/friends-view.fxml", "Friends");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/friends-view.fxml"));
+            Parent friendsRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(friendsRoot);
+            currentStage.setTitle("Friends"); // Optional: Update window title
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     private void handleLogOut() {

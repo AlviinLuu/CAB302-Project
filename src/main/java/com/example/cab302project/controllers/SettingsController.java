@@ -347,26 +347,15 @@ public class SettingsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
             Parent homeRoot = loader.load();
-
-            Stage homeStage = new Stage();
-            homeStage.setTitle("Smart Schedule Assistant");
-
-            Scene scene = new Scene(homeRoot);
-            homeStage.setScene(scene);
-
-            //  Set it to full screen
-            homeStage.setMaximized(true); // Maximize the window
-
-            homeStage.show();
-
-            //  Close the current Settings page
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
-            currentStage.close();
-
+            Scene scene = currentStage.getScene();
+            scene.setRoot(homeRoot);
+            currentStage.setTitle("Smart Schedule Assistant");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleLogOut() {
         Session.clear();
@@ -405,34 +394,24 @@ public class SettingsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/friends-view.fxml"));
             Parent friendsRoot = loader.load();
-
-            Stage friendsStage = new Stage();
-            friendsStage.setTitle("Friends");
-
-            Scene scene = new Scene(friendsRoot);
-            friendsStage.setScene(scene);
-
-            // Set it to full screen
-            friendsStage.setMaximized(true);
-
-            // Close the current Calendar window
-            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
-            currentStage.close();
-
-            friendsStage.show();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(friendsRoot);
+            currentStage.setTitle("Friends");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    @FXML private void openProfilePage() {
+
+    @FXML
+    private void openProfilePage() {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/profile-view.fxml"));
+            Parent profileRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(profileRoot);
+            currentStage.setTitle("Profile");
         } catch (Exception e) {
             e.printStackTrace();
         }

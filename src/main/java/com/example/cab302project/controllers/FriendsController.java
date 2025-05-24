@@ -535,53 +535,56 @@ public class FriendsController {
      * Loads the calendar-view FXML and closes the current Friends view.
      * @throws RuntimeException if the FXML file fails to load.
      */
-    @FXML private void goToHome() {
+    @FXML
+    private void goToHome() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/calendar-view.fxml"));
+            Parent homeRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(homeRoot);
+            currentStage.setTitle("Smart Schedule Assistant");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens the settings page and closes the current window.
      * @throws Exception if the FXML file cannot be loaded or displayed.
      */
-    @FXML private void openSettingsPage() {
+    @FXML
+    private void openSettingsPage() {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/settings-view.fxml")));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
+            Parent settingsRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(settingsRoot);
+            currentStage.setTitle("Settings");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens the user profile page and closes the current view.
      * @throws Exception if the FXML file cannot be loaded.
      */
-    @FXML private void openProfilePage() {
+    @FXML
+    private void openProfilePage() {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/profile-view.fxml"));
+            Parent profileRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(profileRoot);
+            currentStage.setTitle("Profile");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Handles the event triggered by the Ollama prompt field (e.g., hitting Enter or clicking a send button).
      * Retrieves the user's prompt, builds a detailed prompt including user/friend schedule data,

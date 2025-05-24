@@ -325,25 +325,15 @@ public class CalenderController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/settings-view.fxml"));
             Parent settingsRoot = loader.load();
-
-            Stage settingsStage = new Stage();
-            settingsStage.setTitle("Settings");
-
-            Scene scene = new Scene(settingsRoot);
-            settingsStage.setScene(scene);
-
-            // Set it to full screen
-            settingsStage.setMaximized(true);
-
-            // Close the current Calendar window
-            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
-            currentStage.close();
-
-            settingsStage.show();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(settingsRoot);
+            currentStage.setTitle("Settings"); // Optional: Update window title
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens the friends page and closes the current calendar window.
      * @throws Exception if the FXML file cannot be loaded or displayed.
@@ -353,25 +343,15 @@ public class CalenderController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/friends-view.fxml"));
             Parent friendsRoot = loader.load();
-
-            Stage friendsStage = new Stage();
-            friendsStage.setTitle("Friends");
-
-            Scene scene = new Scene(friendsRoot);
-            friendsStage.setScene(scene);
-
-            // Set it to full screen
-            friendsStage.setMaximized(true);
-
-            // Close the current Calendar window
-            Stage currentStage = (Stage) mainContent.getScene().getWindow();  // mainContent is your root VBox
-            currentStage.close();
-
-            friendsStage.show();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(friendsRoot);
+            currentStage.setTitle("Friends"); // Optional: Update window title
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Opens the user profile page and closes the current calendar view.
      * @throws Exception if the FXML file cannot be loaded.
@@ -404,19 +384,20 @@ public class CalenderController {
     }
 
 
-    @FXML private void openProfilePage() {
+    @FXML
+    private void openProfilePage() {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cab302project/profile-view.fxml")));
-            Stage stage = (Stage)mainContent.getScene().getWindow();
-            stage.close();
-            Stage newStage = new Stage();
-            newStage.setScene(new Scene(root));
-            newStage.setMaximized(true);
-            newStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cab302project/profile-view.fxml"));
+            Parent profileRoot = loader.load();
+            Stage currentStage = (Stage) mainContent.getScene().getWindow();
+            Scene scene = currentStage.getScene();
+            scene.setRoot(profileRoot);
+            currentStage.setTitle("Profile");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     // === Calendar Rendering ===
     /**
