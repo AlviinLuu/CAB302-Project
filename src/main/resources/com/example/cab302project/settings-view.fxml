@@ -147,19 +147,30 @@
         </ScrollPane>
     </VBox>
 
-    <!-- Right Sidebar (Expanded by Default) -->
-    <VBox fx:id="aiSidebar" maxWidth="350" minWidth="350" spacing="10" style="-fx-background-color: #E6E6FA; -fx-padding: 20;">
-        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#goToHome" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="HOME" />
-        <Button alignment="CENTER_LEFT" maxWidth="350" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="SETTINGS" />
-        <Button alignment="CENTER_LEFT" maxWidth="350" onAction="#openFriendsPage" prefHeight="50" style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;" text="FRIENDS" />
+    <!-- Right section of the SplitPane -->
+    <VBox fx:id="Sidebar" style="-fx-background-color: #E6E6FA; -fx-padding: 20;" minWidth="0" maxWidth="350" spacing="10">
+        <Button text="HOME" onAction="#goToHome"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+        <Button text="SETTINGS"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #D8B9FF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+        <Button text="FRIENDS" onAction="#openFriendsPage"
+                style="-fx-text-fill: #1A1A1A; -fx-background-color: #CCCCFF; -fx-font-size: 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"
+                maxWidth="350" prefHeight="50" alignment="CENTER_LEFT"/>
 
         <!-- Mini Day View -->
-        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-            <GridPane fx:id="miniDayView" hgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" vgap="5">
-                <!-- Mini day view content filled dynamically -->
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="NEVER">
+            <GridPane fx:id="miniDayView" hgap="5" vgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" VBox.vgrow="NEVER">
+                <!-- The hourly slots will be populated dynamically here -->
             </GridPane>
         </ScrollPane>
-
         <Button fx:id="profileButton"
                 text="PROFILE"
                 onAction="#openProfilePage"
