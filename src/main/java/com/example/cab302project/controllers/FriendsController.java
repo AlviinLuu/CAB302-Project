@@ -529,7 +529,17 @@ public class FriendsController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onLogoHover() {
+        logoImage.setScaleX(1.2);
+        logoImage.setScaleY(1.2);
+    }
 
+    @FXML
+    private void onLogoExit() {
+        logoImage.setScaleX(1.0);
+        logoImage.setScaleY(1.0);
+    }
     /**
      * Navigates to the calendar view (home).
      * Loads the calendar-view FXML and closes the current Friends view.

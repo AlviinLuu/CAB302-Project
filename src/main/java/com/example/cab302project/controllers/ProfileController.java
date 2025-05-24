@@ -139,8 +139,17 @@ public class ProfileController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onLogoHover() {
+        logoImage.setScaleX(1.2);
+        logoImage.setScaleY(1.2);
+    }
 
-
+    @FXML
+    private void onLogoExit() {
+        logoImage.setScaleX(1.0);
+        logoImage.setScaleY(1.0);
+    }
     @FXML
     private void goToHome() {
         try {
