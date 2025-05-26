@@ -229,19 +229,19 @@ public class FriendsController {
         // 5) Wire UI list views
         friendSelector.setItems(friendList);
         // if nothing in list show message
-        Label placeholderLabel2 = new Label("Select a user");
+        Label placeholderLabel2 = new Label("Select A User");
         placeholderLabel2.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
         searchResultsList.setPlaceholder(placeholderLabel2);
 
         pendingRequestsList.setItems(pendingOutgoing);
         // if nothing in list show message
-        Label placeholderLabel = new Label("No pending requests");
+        Label placeholderLabel = new Label("No Pending Requests");
         placeholderLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
         pendingRequestsList.setPlaceholder(placeholderLabel);
 
         incomingRequestsList.setItems(incomingReqs);
         // if nothing in list show message
-        Label placeholderLabel1 = new Label("No incoming requests");
+        Label placeholderLabel1 = new Label("No Incoming Requests");
         placeholderLabel1.setStyle("-fx-text-fill: #6A4B8B; -fx-font-style: italic;");
         incomingRequestsList.setPlaceholder(placeholderLabel1);
 

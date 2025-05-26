@@ -38,11 +38,11 @@
                 <!-- Calendar Sync -->
                 <HBox spacing="24" alignment="TOP_CENTER" prefWidth="-Infinity">
                 <VBox spacing="12" HBox.hgrow="ALWAYS"
-                      style="-fx-background-color: #CCCCFF; -fx-padding: 24; -fx-background-radius: 14;">
+                      style="-fx-background-color: #ECECFF; -fx-padding: 24; -fx-background-radius: 14;">
                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Calendar Sync" />
                     <Label fx:id="calendarSyncStatusLabel"
                            prefHeight="33"
-                           text="Please Upload a calender ICS file"
+                           text="Please Upload a Calendar ICS file"
                            style="-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;" />
                     <HBox alignment="CENTER">
                         <Button fx:id="UploadingGoogleCalendar" onAction="#handleUploadGoogleCalendar"

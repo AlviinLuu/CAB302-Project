@@ -22,8 +22,8 @@
             </HBox>
         </VBox>
         <!-- Friends Page Content -->
-        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
-            <HBox spacing="20" alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background-color: #F0F8FF;">
+            <HBox spacing="20" alignment="TOP_CENTER" HBox.hgrow="ALWAYS" style="-fx-background-color: #F0F8FF;">
                 <padding>
                     <Insets top="20" right="20" bottom="20" left="20"/>
                 </padding>
@@ -38,7 +38,7 @@
 
                     <!-- Friend Dropdown -->
                     <VBox spacing="6" style="-fx-background-color: #E6E6FA; -fx-padding: 5; -fx-background-radius: 8; -fx-border-color: #999; -fx-border-radius: 8;">
-                        <Label text="Pick a friend below" style="-fx-font-weight: bold;" />
+                        <Label text="Pick A Friend Below" style="-fx-font-weight: bold;" />
                         <ComboBox fx:id="friendSelector" prefWidth="200"/>
                         <Button text="Remove Friend" onAction="#handleRemoveFriend"
                                 style="-fx-background-color: linear-gradient(to bottom, #2e014f 0%, #4B0082 50%, #6A4B8B 100%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"
@@ -50,7 +50,7 @@
                     <VBox spacing="6" style="-fx-background-color: #E6E6FA; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #999; -fx-border-radius: 8;">
                         <Label text="Search Users" style="-fx-font-weight: bold;" />
 
-                        <TextField fx:id="searchUserField" promptText="Enter username..." />
+                        <TextField fx:id="searchUserField" promptText="Enter Username..." />
 
                         <ListView fx:id="searchResultsList" prefHeight="100"
                                   style="-fx-control-inner-background: #F5F0FF;
@@ -123,7 +123,7 @@
 
 
                     <!-- AI Prompt Input -->
-                    <VBox spacing="10" VBox.vgrow="ALWAYS"> <TextArea fx:id="aiPromptField" promptText="enter AI prompt in this textbox"
+                    <VBox spacing="10" VBox.vgrow="ALWAYS"> <TextArea fx:id="aiPromptField" promptText="Enter AI Prompt In This Textbox"
                                                                       wrapText="true" prefRowCount="3" prefHeight="150"
                                                                       style="-fx-background-color: white; -fx-border-color: #ECECFF; -fx-background-radius: 10; -fx-border-radius: 10;"/>
                         <HBox alignment="CENTER_RIGHT">

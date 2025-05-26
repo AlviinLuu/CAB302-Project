@@ -222,7 +222,7 @@ public class SettingsController {
 
                     CalendarImportView.importCalendarFile(selectedFile, user.getId());
 
-                    calendarSyncStatusLabel.setText("Google Calendar synced ✔");
+                    calendarSyncStatusLabel.setText("Google Calendar Synced ✔");
                     calendarSyncStatusLabel.setStyle("-fx-text-fill: #6A4B8B; -fx-font-size: 14px; -fx-font-style: italic;");
                     showAlert(Alert.AlertType.INFORMATION, "Calendar Synced", "Google Calendar has been successfully synced!");
 

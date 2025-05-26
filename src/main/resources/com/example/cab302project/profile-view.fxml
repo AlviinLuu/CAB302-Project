@@ -44,12 +44,14 @@
                     <!-- Bio Section Card -->
                     <VBox spacing="12" alignment="CENTER"
                           style="-fx-background-color: #ECECFF; -fx-padding: 24 40 24 40; -fx-background-radius: 14;">
-                        <Label text="Bio" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1A1A1A;" />
+                        <Label text="Bio" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1A1A1A;" />
                         <Label fx:id="bioLabel"
                                maxWidth="600"
-                               minHeight="160"
+                               minHeight="130"
                                wrapText="true"
-                               style="-fx-background-color: #ECECFF; -fx-background-radius: 10; -fx-font-size: 14px; -fx-text-fill: #333;" />
+                               textAlignment="CENTER"
+                               alignment="CENTER"
+                               style="-fx-background-color: #ECECFF; -fx-background-radius: 10; -fx-font-size: 18px; -fx-text-fill: #333;" />
                     </VBox>
                 </children>
             </VBox>

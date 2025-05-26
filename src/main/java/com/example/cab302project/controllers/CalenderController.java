@@ -49,6 +49,7 @@ public class CalenderController {
     @FXML private GridPane yearGrid;
     @FXML private GridPane dayGrid;
     @FXML private ImageView logoImage;
+    @FXML private VBox todayButton;
     @FXML private VBox weekView;
     @FXML private VBox yearView;
     @FXML private VBox monthView;
@@ -507,7 +508,7 @@ public class CalenderController {
 
             label.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 40;
+                        double size = monthGrid.getWidth() / 30;
                         String style = String.format(
                                 "-fx-font-size: %.2fpx; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
                                 size
@@ -537,6 +538,34 @@ public class CalenderController {
      */
     private void renderWeekView() {
         weekGrid.getChildren().clear(); // Clear previous content
+        weekGrid.getColumnConstraints().clear();
+        weekGrid.getRowConstraints().clear();
+
+        // Set column constraints: first column for hour labels, then 7 columns for days
+        ColumnConstraints hourCol = new ColumnConstraints();
+        hourCol.setPercentWidth(10); // 10% width for hour labels column
+        hourCol.setHgrow(Priority.NEVER);
+        weekGrid.getColumnConstraints().add(hourCol);
+
+        for (int i = 0; i < 7; i++) {
+            ColumnConstraints dayCol = new ColumnConstraints();
+            dayCol.setPercentWidth(90.0 / 7); // Remaining 90% divided equally
+            dayCol.setHgrow(Priority.ALWAYS);
+            weekGrid.getColumnConstraints().add(dayCol);
+        }
+
+        // Set row constraints: one row for day headers, then 24 rows for hours
+        RowConstraints headerRow = new RowConstraints();
+        headerRow.setPercentHeight(5); // 5% for headers
+        headerRow.setVgrow(Priority.NEVER);
+        weekGrid.getRowConstraints().add(headerRow);
+
+        for (int i = 0; i < 24; i++) {
+            RowConstraints hourRow = new RowConstraints();
+            hourRow.setPercentHeight(95.0 / 24); // Remaining 95% divided evenly
+            hourRow.setVgrow(Priority.ALWAYS);
+            weekGrid.getRowConstraints().add(hourRow);
+        }
 
         LocalDate startOfWeek = currentDate.with(DayOfWeek.MONDAY);
 
@@ -551,7 +580,6 @@ public class CalenderController {
             dayLabel.setAlignment(Pos.CENTER);
             dayLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             dayLabel.setMinHeight(60);
-
 
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
@@ -577,7 +605,6 @@ public class CalenderController {
             GridPane.setHgrow(dayLabel, Priority.ALWAYS);
             GridPane.setVgrow(dayLabel, Priority.ALWAYS);
             weekGrid.add(dayLabel, col, 0); // Using weekGrid
-
         }
 
         // Add hour labels on the side (00:00 to 23:00)
@@ -597,23 +624,23 @@ public class CalenderController {
                 Label cell = new Label();
                 cell.setWrapText(true);
                 cell.setAlignment(Pos.CENTER);
-                //All days of the week are an even size, a 7th of the total width
-                cell.setMaxSize(weekGrid.getWidth()/7, Double.MAX_VALUE);
+                // All days of the week are an even size, a 7th of the total width
+                cell.setMaxSize(weekGrid.getWidth() / 7, Double.MAX_VALUE);
 
                 String labelText = "";
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
-                LocalTime time = LocalTime.of((row-1),0,0);
+                LocalTime time = LocalTime.of((row - 1), 0, 0);
                 LocalDateTime currentTime = day.atTime(time);
-                Event cEvent = eventCalendar.getFirstEventForInterval(day.atTime(time),TimeUnit.HOURS);
-                if (cEvent != null){
+                Event cEvent = eventCalendar.getFirstEventForInterval(day.atTime(time), TimeUnit.HOURS);
+                if (cEvent != null) {
                     labelText = cEvent.getName();
                 }
                 cell.setText(labelText);
 
                 final String fillString;
 
-                if (eventCalendar.IsAnyEventInProgress(currentTime)){
+                if (eventCalendar.IsAnyEventInProgress(currentTime)) {
                     fillString = fillColour;
                 } else {
                     fillString = "";
@@ -622,12 +649,12 @@ public class CalenderController {
                 // Bind font size to the width of the grid
                 cell.styleProperty().bind(
                         Bindings.createStringBinding(() -> {
-                            //double size = weekGrid.getWidth() / 40; // Using weekGrid here
+                            // double size = weekGrid.getWidth() / 40; // Using weekGrid here
                             double size = 20;
 
                             return String.format(
                                     "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;  %s",
-                                    size,fillString
+                                    size, fillString
                             );
                         }, weekGrid.widthProperty()) // Using weekGrid width for size binding
                 );
@@ -700,88 +727,99 @@ public class CalenderController {
      * Renders a full year view using multiple mini-month grids.
      */
     private void renderYearView() {
-        yearGrid.getChildren().clear();
-        yearGrid.getColumnConstraints().clear();
-        yearGrid.getRowConstraints().clear();
+        yearGrid.getChildren().clear(); // Clear any existing calendar views
+        yearGrid.getColumnConstraints().clear(); // Remove column constraints for fresh layout
+        yearGrid.getRowConstraints().clear(); // Remove row constraints for fresh layout
 
-        int monthsPerRow = 3;
-        int monthsPerCol = 4;
-        int month = 1;
+        int monthsPerRow = 3; // 3 months across each row
+        int monthsPerCol = 4; // 4 rows, total of 12 months
+        int month = 1; // Start from January
 
-        // Ensure the main year grid stretches across the entire available space
-        yearGrid.setHgap(10);
-        yearGrid.setVgap(10);
+        yearGrid.setHgap(10); // Horizontal space between mini month grids
+        yearGrid.setVgap(10); // Vertical space between mini month grids
 
-        // Create column and row constraints to ensure proper stretching
+        // Set layout constraints so all months fill grid evenly
         for (int col = 0; col < monthsPerRow; col++) {
             ColumnConstraints colConstraints = new ColumnConstraints();
+            colConstraints.setPercentWidth(100.0 / monthsPerRow); // Each column takes up 1/3 of width
             colConstraints.setHgrow(Priority.ALWAYS);
             yearGrid.getColumnConstraints().add(colConstraints);
         }
 
         for (int row = 0; row < monthsPerCol; row++) {
             RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setPercentHeight(100.0 / monthsPerCol); // Each row takes up 1/4 of height
             rowConstraints.setVgrow(Priority.ALWAYS);
             yearGrid.getRowConstraints().add(rowConstraints);
         }
 
-        // Create mini month grids for each month of the year
+        // Loop through each month and render its own mini calendar grid
         for (int row = 0; row < monthsPerCol; row++) {
             for (int col = 0; col < monthsPerRow; col++) {
-                if (month > 12) break;
+                if (month > 12) break; // Only 12 months total
 
-                // Mini month grid for each month
-                GridPane miniMonthGrid = new GridPane();
-                miniMonthGrid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Ensures grid stretches
-                miniMonthGrid.setPadding(new Insets(8)); // Padding inside each mini grid
+                GridPane miniMonthGrid = new GridPane(); // Small calendar for a single month
+                miniMonthGrid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                miniMonthGrid.setPadding(new Insets(8)); // Padding around each mini grid
 
-                // Month name label (like in month view)
-                Label monthLabel = new Label(YearMonth.of(currentDate.getYear(), month).getMonth().toString().substring(0, 3));
+                // Add 7 columns to represent days of the week
+                for (int i = 0; i < 7; i++) {
+                    ColumnConstraints colConst = new ColumnConstraints();
+                    colConst.setPercentWidth(100.0 / 7); // Each day takes up 1/7th of the width
+                    colConst.setHgrow(Priority.ALWAYS);
+                    miniMonthGrid.getColumnConstraints().add(colConst);
+                }
+
+                // Add 7 rows: 1 for month title, 6 for potential weeks
+                for (int i = 0; i < 7; i++) {
+                    RowConstraints rowConst = new RowConstraints();
+                    rowConst.setPercentHeight(100.0 / 7);
+                    rowConst.setVgrow(Priority.ALWAYS);
+                    miniMonthGrid.getRowConstraints().add(rowConst);
+                }
+
+                // Month header (e.g., Jan, Feb, etc.)
+                Label monthLabel = new Label(YearMonth.of(currentDate.getYear(), month).getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
                 monthLabel.setAlignment(Pos.CENTER);
                 monthLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                // Bind the font size for the month name
+                // Month header styling with binding
                 monthLabel.styleProperty().bind(
                         Bindings.createStringBinding(() -> {
-                            double size = miniMonthGrid.getWidth() / 6; // Adjust size based on mini grid
-                            return String.format(
-                                    "-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-background-color: #f2f2f2",
-                                    size
-                            );
-                        }, miniMonthGrid.widthProperty()) // Use miniMonthGrid width for font size binding
+                            return "-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black; "
+                                    + "-fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-background-color: #f2f2f2;";
+                        }, miniMonthGrid.widthProperty())
                 );
 
-                GridPane.setColumnSpan(monthLabel, 7);
-                miniMonthGrid.add(monthLabel, 0, 0);
+                GridPane.setColumnSpan(monthLabel, 7); // Span across all 7 columns
+                miniMonthGrid.add(monthLabel, 0, 0); // Add to top row
 
-                // Determine the first and last day of the month
+                // Generate all days for the current month
                 LocalDate firstDay = LocalDate.of(currentDate.getYear(), month, 1);
                 LocalDate lastDay = firstDay.withDayOfMonth(firstDay.lengthOfMonth());
 
-                int startCol = (firstDay.getDayOfWeek().getValue() + 6) % 7; // Monday = 0
+                // Determine starting column index based on the day of week of the 1st
+                int startCol = (firstDay.getDayOfWeek().getValue() + 6) % 7; // Make Sunday = 6
                 int rowIdx = 1;
                 int colIdx = startCol;
 
-                // Add the actual days to the mini month grid
+                // Fill mini month grid with day numbers
                 for (int day = 1; day <= lastDay.getDayOfMonth(); day++) {
                     final int currentDay = day;
-
                     Label dayLabel = new Label(String.valueOf(day));
                     dayLabel.setAlignment(Pos.CENTER);
                     dayLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                    // Bind the font size for the day label
+                    // Style the day cell and highlight today
                     dayLabel.styleProperty().bind(
                             Bindings.createStringBinding(() -> {
-                                double size = miniMonthGrid.getWidth() / 10; // Adjust size based on mini grid
-                                String style = String.format(
-                                        "-fx-font-size: 18px; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
-                                        size
-                                );
-
-                                LocalDate dateForLabel = firstDay.withDayOfMonth(currentDay); // Use currentDay now
+                                String style = "-fx-font-size: 16px; -fx-text-fill: black; "
+                                        + "-fx-border-color: #ccc; -fx-border-width: 0.5px;";
+                                LocalDate dateForLabel = firstDay.withDayOfMonth(currentDay);
                                 if (dateForLabel.isEqual(LocalDate.now())) {
-                                    style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: D8B9FF; -fx-border-width: 2px; -fx-border-radius: 18px; -fx-background-radius: 18px;";
+                                    style += "-fx-background-color: rgba(216, 185, 255, 0.4); "
+                                            + "-fx-border-color: D8B9FF; -fx-border-width: 2px; "
+                                            + "-fx-border-radius: 18px; -fx-background-radius: 18px;";
                                 }
                                 return style;
                             }, miniMonthGrid.widthProperty())
@@ -789,24 +827,26 @@ public class CalenderController {
 
                     GridPane.setHgrow(dayLabel, Priority.ALWAYS);
                     GridPane.setVgrow(dayLabel, Priority.ALWAYS);
+                    miniMonthGrid.add(dayLabel, colIdx, rowIdx); // Add day to its position
 
-                    // Add the day to the mini month grid
-                    miniMonthGrid.add(dayLabel, colIdx, rowIdx);
-
+                    // Move to next grid cell
                     colIdx++;
-                    if (colIdx > 6) {
+                    if (colIdx > 6) { // If it's end of the week, go to next row
                         colIdx = 0;
                         rowIdx++;
                     }
                 }
 
-                // Add the mini month grid to the year grid
+                // Add the mini month grid to the full year grid
                 yearGrid.add(miniMonthGrid, col, row);
+                GridPane.setHgrow(miniMonthGrid, Priority.ALWAYS);
+                GridPane.setVgrow(miniMonthGrid, Priority.ALWAYS);
 
-                month++;
+                month++; // Move to the next month
             }
         }
     }
+
     /**
      * Renders a mini sidebar view showing hourly slots for the current day.
      * Displays 24 rows from 00:00 to 23:00 with time labels and empty event labels.

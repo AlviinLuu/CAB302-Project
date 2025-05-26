@@ -137,7 +137,7 @@ public class LoginController {
                     alert.setContentText(
                             "To get started with our application, go to the Settings page on the right side and upload your calendar ICS file.\n\n" +
                                     "This will allow you to view your calendar events. Don't forget to add friends to make use of our AI feature!!\n\n" +
-                            "Press Ok and Login to get started."
+                            "Press OK and Login to get started."
                     );
                     alert.showAndWait();
 
