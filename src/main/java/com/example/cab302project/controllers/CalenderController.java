@@ -78,10 +78,7 @@ public class CalenderController {
     private List<com.example.cab302project.models.Event> testEvents = new ArrayList<Event>();
     private Event newEvent = new Event("Lunch", "20250314T032000Z","20250314T033000Z","test@test.com");
 
-    private final String fillColour = "-fx-background-color: black ;";
-
-
-    private CalendarDAO calendarDAO;
+    private final String fillColour = "-fx-background-color: rgb(115,49,196); -fx-text-fill: white";
 
     // === State ===
     private LocalDate currentDate = LocalDate.now();
@@ -499,6 +496,8 @@ public class CalenderController {
         int row = 1;
         int col = startCol;
 
+        //TODO: show events occurring on each day
+
         for (int day = 1; day <= lastDay.getDayOfMonth(); day++) {
             final int currentDay = day;
 
@@ -522,6 +521,8 @@ public class CalenderController {
                         return style;
                     }, monthGrid.widthProperty())
             );
+
+
 
             GridPane.setHgrow(label, Priority.ALWAYS);
             GridPane.setVgrow(label, Priority.ALWAYS);
@@ -626,6 +627,10 @@ public class CalenderController {
                 cell.setAlignment(Pos.CENTER);
                 // All days of the week are an even size, a 7th of the total width
                 cell.setMaxSize(weekGrid.getWidth() / 7, Double.MAX_VALUE);
+                int pTB = 1;
+                int pLR = 3;
+                cell.setPadding(new Insets(pTB,pLR,pTB,pLR));
+                cell.setAlignment(Pos.TOP_LEFT);
 
                 String labelText = "";
 
@@ -650,7 +655,7 @@ public class CalenderController {
                 cell.styleProperty().bind(
                         Bindings.createStringBinding(() -> {
                             // double size = weekGrid.getWidth() / 40; // Using weekGrid here
-                            double size = 20;
+                            double size = 12;
 
                             return String.format(
                                     "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;  %s",
@@ -706,6 +711,8 @@ public class CalenderController {
             eventSlot.setMaxWidth(Double.MAX_VALUE);
             eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;"); // Bottom line only
             eventSlot.setAlignment(Pos.CENTER_LEFT);
+            int pSides = 10;
+            eventSlot.setPadding(new Insets(0,pSides,0,pSides));
 
             var fEvent = eventCalendar.getFirstEventForInterval(currentDate,hour,TimeUnit.HOURS);
             if (fEvent != null){eventSlot.setText(fEvent.getName());}
@@ -882,7 +889,7 @@ public class CalenderController {
             event.setStyle("-fx-border-color: #bbb; -fx-border-width: 0 0 1px 0;");
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
-
+            event.setPadding(new Insets(0,3,0,3));
 
             var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
             if (fEvent != null){event.setText(fEvent.getName());}
