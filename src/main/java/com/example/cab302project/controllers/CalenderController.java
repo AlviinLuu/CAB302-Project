@@ -4,6 +4,7 @@ import com.example.cab302project.models.CalendarDAO;
 import com.example.cab302project.models.SqliteUserDAO;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -253,6 +254,8 @@ public class CalenderController {
         dayView.setManaged(false);
 
         monthRadio.setSelected(true);
+
+        updateCalendar();
     }
     /**
      * Sets the view to the Week layout and updates visibility accordingly.
@@ -272,6 +275,7 @@ public class CalenderController {
         dayView.setManaged(false);
 
         weekRadio.setSelected(true); // Ensure the Week button stays selected.
+        updateCalendar();
     }
     /**
      * Sets the view to the Day layout and updates visibility accordingly.
@@ -450,6 +454,9 @@ public class CalenderController {
             case "Year":
                 renderYearView();  // Call renderYearView when the Year view is selected
                 break;
+            case "Month":
+                renderMonthView();
+                break;
             default:
                 renderMonthView();  // Default to Month view if no specific view is selected
                 break;
@@ -461,7 +468,6 @@ public class CalenderController {
     private void renderMonthView() {
         // Clear the grid first
         monthGrid.getChildren().clear();
-        var eventCalendar = new CalendarDAO(currentDate,Period.of(0,1,0),TimeUnit.DAYS);
 
         // Get system-localized weekday names
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
@@ -496,7 +502,7 @@ public class CalenderController {
         int row = 1;
         int col = startCol;
 
-        //TODO: show events occurring on each day
+        CalendarDAO monthCalendar = new CalendarDAO(firstDay,Period.of(0,1,0),TimeUnit.DAYS);
 
         for (int day = 1; day <= lastDay.getDayOfMonth(); day++) {
             final int currentDay = day;
@@ -504,6 +510,7 @@ public class CalenderController {
             Label label = new Label(String.valueOf(day));
             label.setAlignment(Pos.CENTER);
             label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            LocalDate dateForLabel = currentDate.withDayOfMonth(currentDay);
 
             label.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
@@ -514,7 +521,41 @@ public class CalenderController {
                         );
 
                         // Check if this label represents today's date
-                        LocalDate dateForLabel = currentDate.withDayOfMonth(currentDay);
+
+                        if (dateForLabel.isEqual(LocalDate.now())) {
+                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
+                        }
+                        return style;
+                    }, monthGrid.widthProperty())
+            );
+
+            VBox daybox = new VBox();
+            Label dateLabel = new Label(Integer.toString(currentDay));
+            dateLabel.setAlignment(Pos.TOP_CENTER);
+            dateLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: black;");
+
+            daybox.setMinWidth(monthGrid.getWidth() / 7);
+            daybox.setAlignment(Pos.TOP_CENTER);
+            daybox.getChildren().add(dateLabel);
+
+            List<Event> eList = monthCalendar.getAllEventsOnDay(dateForLabel);
+            for (Event e :eList){
+                if (e != null){
+                    Label eventLabel = new Label(e.getName());
+                    eventLabel.setWrapText(true);
+                    daybox.getChildren().add(eventLabel);
+                }
+            }
+
+            daybox.styleProperty().bind(
+                    Bindings.createStringBinding(() -> {
+                        double size = monthGrid.getWidth() / 30;
+                        String style = String.format(
+                                "-fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
+                                size
+                        );
+
+                        // Check if this label represents today's date
                         if (dateForLabel.isEqual(LocalDate.now())) {
                             style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
                         }
@@ -523,10 +564,9 @@ public class CalenderController {
             );
 
 
-
-            GridPane.setHgrow(label, Priority.ALWAYS);
-            GridPane.setVgrow(label, Priority.ALWAYS);
-            monthGrid.add(label, col, row);
+            GridPane.setHgrow(daybox, Priority.ALWAYS);
+            GridPane.setVgrow(daybox, Priority.ALWAYS);
+            monthGrid.add(daybox, col, row);
             col++;
             if (col > 6) {
                 col = 0;

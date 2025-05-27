@@ -71,6 +71,16 @@ public class CalendarDAO {
         return getFirstEventForInterval(date.atTime(LocalTime.of((timeHour),0,0)), interval);
     }
 
+    public List<Event> getAllEventsOnDay(LocalDate date){
+        List<Event> eventsOnDay = new ArrayList<>();
+        for (final Event e:events){
+            if (e.getStart_Time_LocalDateTime().toLocalDate().toString().equals(date.toString())){
+                eventsOnDay.add(e);
+            }
+        }
+        return eventsOnDay;
+    }
+
     public boolean IsAnyEventInProgress(LocalDateTime currentTime){
         return !getCurrentEvents(currentTime).isEmpty();
     }
