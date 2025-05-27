@@ -468,8 +468,25 @@ public class CalenderController {
     private void renderMonthView() {
         // Clear the grid first
         monthGrid.getChildren().clear();
+        monthGrid.getColumnConstraints().clear();
+        monthGrid.getRowConstraints().clear();
 
-        // Get system-localized weekday names
+        // Set up uniform column constraints (7 columns, equal width)
+        for (int i = 0; i < 7; i++) {
+            ColumnConstraints colConstraints = new ColumnConstraints();
+            colConstraints.setPercentWidth(100.0 / 7);
+            colConstraints.setHgrow(Priority.ALWAYS);
+            monthGrid.getColumnConstraints().add(colConstraints);
+        }
+
+        // Optional: uniform row height (you can remove this if unnecessary)
+        for (int i = 0; i < 7; i++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setVgrow(Priority.ALWAYS);
+            monthGrid.getRowConstraints().add(rowConstraints);
+        }
+
+        // Get localized weekday headers
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
         for (int i = 0; i < daysOfWeek.length; i++) {
             String dayName = daysOfWeek[i].getDisplayName(TextStyle.SHORT, Locale.getDefault());
@@ -478,12 +495,12 @@ public class CalenderController {
             dayLabel.setAlignment(Pos.CENTER);
             dayLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-            // Bind the font size for header too
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 40; // Same scaling as days
+                        double size = monthGrid.getWidth() / 40;
                         return String.format(
-                                "-fx-font-size: %.2fpx; -fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-background-color: #eee",
+                                "-fx-font-size: %.2fpx; -fx-font-weight: bold; -fx-text-fill: black; " +
+                                        "-fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-background-color: #eee;",
                                 size
                         );
                     }, monthGrid.widthProperty())
@@ -494,79 +511,64 @@ public class CalenderController {
             monthGrid.add(dayLabel, i, 0);
         }
 
-        // Add the actual days of the month
+        // Prepare calendar data
         LocalDate firstDay = currentDate.withDayOfMonth(1);
         LocalDate lastDay = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
-
         int startCol = (firstDay.getDayOfWeek().getValue() + 6) % 7; // Monday = 0
+
         int row = 1;
         int col = startCol;
-
-        CalendarDAO monthCalendar = new CalendarDAO(firstDay,Period.of(0,1,0),TimeUnit.DAYS);
+        CalendarDAO monthCalendar = new CalendarDAO(firstDay, Period.of(0, 1, 0), TimeUnit.DAYS);
 
         for (int day = 1; day <= lastDay.getDayOfMonth(); day++) {
             final int currentDay = day;
-
-            Label label = new Label(String.valueOf(day));
-            label.setAlignment(Pos.CENTER);
-            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             LocalDate dateForLabel = currentDate.withDayOfMonth(currentDay);
 
-            label.styleProperty().bind(
-                    Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 30;
-                        String style = String.format(
-                                "-fx-font-size: %.2fpx; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
-                                size
-                        );
-
-                        // Check if this label represents today's date
-
-                        if (dateForLabel.isEqual(LocalDate.now())) {
-                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
-                        }
-                        return style;
-                    }, monthGrid.widthProperty())
-            );
-
-            VBox daybox = new VBox();
-            Label dateLabel = new Label(Integer.toString(currentDay));
-            dateLabel.setAlignment(Pos.TOP_CENTER);
-            dateLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: black;");
-
-            daybox.setMinWidth(monthGrid.getWidth() / 7);
+            VBox daybox = new VBox(2);
             daybox.setAlignment(Pos.TOP_CENTER);
+            daybox.setPadding(new Insets(4));
+            daybox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+            Label dateLabel = new Label(Integer.toString(currentDay));
+            dateLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
             daybox.getChildren().add(dateLabel);
 
+            // Add events as small purple rectangles
             List<Event> eList = monthCalendar.getAllEventsOnDay(dateForLabel);
-            for (Event e :eList){
-                if (e != null){
+            for (Event e : eList) {
+                if (e != null) {
                     Label eventLabel = new Label(e.getName());
+                    eventLabel.setMaxWidth(Double.MAX_VALUE);
+                    eventLabel.setStyle(
+                            "-fx-background-color: #9B59B6; " +
+                                    "-fx-text-fill: white; " +
+                                    "-fx-font-size: 10px; " +
+                                    "-fx-padding: 2px 4px; " +
+                                    "-fx-background-radius: 4px;"
+                    );
                     eventLabel.setWrapText(true);
+                    VBox.setVgrow(eventLabel, Priority.NEVER);
                     daybox.getChildren().add(eventLabel);
                 }
             }
 
+            // Highlight today
             daybox.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 30;
-                        String style = String.format(
-                                "-fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
-                                size
-                        );
-
-                        // Check if this label represents today's date
+                        String style = "-fx-border-color: #ccc; -fx-border-width: 0.5px;";
                         if (dateForLabel.isEqual(LocalDate.now())) {
-                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
+                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); " +
+                                    "-fx-border-color: #D8B9FF; -fx-border-width: 2px; " +
+                                    "-fx-border-radius: 10px; -fx-background-radius: 10px;";
                         }
                         return style;
                     }, monthGrid.widthProperty())
             );
 
-
             GridPane.setHgrow(daybox, Priority.ALWAYS);
             GridPane.setVgrow(daybox, Priority.ALWAYS);
             monthGrid.add(daybox, col, row);
+
             col++;
             if (col > 6) {
                 col = 0;
@@ -574,6 +576,7 @@ public class CalenderController {
             }
         }
     }
+
     /**
      * Renders the week view in the calendar UI.
      */
@@ -586,12 +589,14 @@ public class CalenderController {
         ColumnConstraints hourCol = new ColumnConstraints();
         hourCol.setPercentWidth(10); // 10% width for hour labels column
         hourCol.setHgrow(Priority.NEVER);
+        hourCol.setMinWidth(0);
         weekGrid.getColumnConstraints().add(hourCol);
 
         for (int i = 0; i < 7; i++) {
             ColumnConstraints dayCol = new ColumnConstraints();
             dayCol.setPercentWidth(90.0 / 7); // Remaining 90% divided equally
             dayCol.setHgrow(Priority.ALWAYS);
+            dayCol.setMinWidth(0);
             weekGrid.getColumnConstraints().add(dayCol);
         }
 
@@ -599,23 +604,24 @@ public class CalenderController {
         RowConstraints headerRow = new RowConstraints();
         headerRow.setPercentHeight(5); // 5% for headers
         headerRow.setVgrow(Priority.NEVER);
+        headerRow.setMinHeight(0);
         weekGrid.getRowConstraints().add(headerRow);
 
         for (int i = 0; i < 24; i++) {
             RowConstraints hourRow = new RowConstraints();
             hourRow.setPercentHeight(95.0 / 24); // Remaining 95% divided evenly
             hourRow.setVgrow(Priority.ALWAYS);
+            hourRow.setMinHeight(30); // Set a minimum height for each hour row
             weekGrid.getRowConstraints().add(hourRow);
         }
 
         LocalDate startOfWeek = currentDate.with(DayOfWeek.MONDAY);
-
-        var eventCalendar = new CalendarDAO(startOfWeek, Period.of(0,0,7), TimeUnit.HOURS);
+        var eventCalendar = new CalendarDAO(startOfWeek, Period.of(0, 0, 7), TimeUnit.HOURS);
 
         // Add day headers (Monday, Tuesday, etc.)
         for (int col = 1; col <= 7; col++) {
             LocalDate day = startOfWeek.plusDays(col - 1);
-            final LocalDate currentDay = day; // Make it final for lambda usage
+            final LocalDate currentDay = day; // For lambda usage
 
             Label dayLabel = new Label(day.getDayOfMonth() + " (" + day.getDayOfWeek().name().substring(0, 3) + ")");
             dayLabel.setAlignment(Pos.CENTER);
@@ -624,13 +630,13 @@ public class CalenderController {
 
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
-                        double size = weekGrid.getWidth() / 40;
+                        double size = Math.max(10, weekGrid.getWidth() / 40);
                         String baseStyle = String.format(
                                 "-fx-font-size: %.2fpx; -fx-font-weight: bold; -fx-background-color: #eee; -fx-border-color: #ccc; -fx-border-width: 0.5px;",
                                 size
                         );
 
-                        // If the current day is today, apply the highlight
+                        // Highlight today
                         if (currentDay.isEqual(LocalDate.now())) {
                             baseStyle += "-fx-background-color: rgba(216,185,255,0.5); "
                                     + "-fx-border-color: #D8B9FF; "
@@ -638,14 +644,13 @@ public class CalenderController {
                                     + "-fx-border-radius: 20px; "
                                     + "-fx-background-radius: 20px;";
                         }
-
                         return baseStyle;
                     }, weekGrid.widthProperty())
             );
 
             GridPane.setHgrow(dayLabel, Priority.ALWAYS);
             GridPane.setVgrow(dayLabel, Priority.ALWAYS);
-            weekGrid.add(dayLabel, col, 0); // Using weekGrid
+            weekGrid.add(dayLabel, col, 0);
         }
 
         // Add hour labels on the side (00:00 to 23:00)
@@ -654,9 +659,10 @@ public class CalenderController {
             hourLabel.setAlignment(Pos.CENTER);
             hourLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             hourLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #666; -fx-font-weight: bold;");
+            hourLabel.setMinHeight(30); // Set a minimum height for hour labels
             GridPane.setHgrow(hourLabel, Priority.ALWAYS);
             GridPane.setVgrow(hourLabel, Priority.ALWAYS);
-            weekGrid.add(hourLabel, 0, row); // Using weekGrid
+            weekGrid.add(hourLabel, 0, row);
         }
 
         // Add cells for each hour of each day
@@ -664,49 +670,39 @@ public class CalenderController {
             for (int row = 1; row <= 24; row++) {
                 Label cell = new Label();
                 cell.setWrapText(true);
-                cell.setAlignment(Pos.CENTER);
-                // All days of the week are an even size, a 7th of the total width
-                cell.setMaxSize(weekGrid.getWidth() / 7, Double.MAX_VALUE);
-                int pTB = 1;
-                int pLR = 3;
-                cell.setPadding(new Insets(pTB,pLR,pTB,pLR));
                 cell.setAlignment(Pos.TOP_LEFT);
-
-                String labelText = "";
+                cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                cell.setMinHeight(0);
+                cell.setPadding(new Insets(1, 3, 1, 3));
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
-                LocalTime time = LocalTime.of((row - 1), 0, 0);
+                LocalTime time = LocalTime.of(row - 1, 0);
                 LocalDateTime currentTime = day.atTime(time);
-                Event cEvent = eventCalendar.getFirstEventForInterval(day.atTime(time), TimeUnit.HOURS);
+
+                Event cEvent = eventCalendar.getFirstEventForInterval(currentTime, TimeUnit.HOURS);
+
+                String labelText = "";
+                boolean hasEvent = false;
                 if (cEvent != null) {
                     labelText = cEvent.getName();
+                    hasEvent = true;
                 }
+
                 cell.setText(labelText);
 
-                final String fillString;
+                // Build base style
+                double fontSize = 12;
+                String borderStyle = "-fx-border-color: #ccc; -fx-border-width: 0.5px;";
+                String fontStyle = String.format("-fx-font-size: %.2fpx;", fontSize);
 
-                if (eventCalendar.IsAnyEventInProgress(currentTime)) {
-                    fillString = fillColour;
-                } else {
-                    fillString = "";
-                }
+                // Use the purple highlight for events
+                String eventHighlightStyle = hasEvent ? "-fx-background-color: rgba(216,185,255,0.5);" : "";
 
-                // Bind font size to the width of the grid
-                cell.styleProperty().bind(
-                        Bindings.createStringBinding(() -> {
-                            // double size = weekGrid.getWidth() / 40; // Using weekGrid here
-                            double size = 12;
-
-                            return String.format(
-                                    "-fx-font-size: %.2fpx; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-alignment: center;  %s",
-                                    size, fillString
-                            );
-                        }, weekGrid.widthProperty()) // Using weekGrid width for size binding
-                );
+                cell.setStyle(fontStyle + borderStyle + eventHighlightStyle);
 
                 GridPane.setHgrow(cell, Priority.ALWAYS);
                 GridPane.setVgrow(cell, Priority.ALWAYS);
-                weekGrid.add(cell, col, row); // Using weekGrid
+                weekGrid.add(cell, col, row);
             }
         }
     }
@@ -715,61 +711,67 @@ public class CalenderController {
      */
     private void renderDayView() {
         dayGrid.getChildren().clear();
-        dayGrid.getRowConstraints().clear(); // Clear previous row constraints
+        dayGrid.getRowConstraints().clear();
 
-        // Add RowConstraints to give more vertical space between rows
+        // Set row constraints for each hour
         for (int hour = 0; hour < 24; hour++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setMinHeight(50); // Set minimum height for each row (increase this value for more space)
+            rowConstraints.setMinHeight(50); // Minimum height for each row
             dayGrid.getRowConstraints().add(rowConstraints);
         }
 
         // Create and add the date label at the top (spanning both columns)
         Label dateLabel = new Label(currentDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")));
-
         dateLabel.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #333; -fx-padding: 1px;");
         dateLabel.setAlignment(Pos.TOP_LEFT);
         dateLabel.setMaxWidth(Double.MAX_VALUE);
         dateLabel.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setColumnSpan(dateLabel, 2); // Span across both columns (time and event columns)
-        dayGrid.add(dateLabel, 0, 0); // Place it in the first row (row 0)
+        GridPane.setColumnSpan(dateLabel, 2); // Span across both columns
+        dayGrid.add(dateLabel, 0, 0); // Place it in the first row
 
-        var eventCalendar = new CalendarDAO(currentDate,Period.of(0,0,1),TimeUnit.HOURS);
+        var eventCalendar = new CalendarDAO(currentDate, Period.of(0, 0, 1), TimeUnit.HOURS);
 
         // Create the hourly labels and event slots
         for (int hour = 0; hour < 24; hour++) {
             // Create the time label (left side)
             Label timeLabel = new Label(String.format("%02d:00", hour));
             timeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #666;");
-            timeLabel.setPrefHeight(40);
+            timeLabel.setPrefHeight(50); // Match row height
             timeLabel.setMaxWidth(Double.MAX_VALUE);
             timeLabel.setAlignment(Pos.CENTER);
 
             // Create the event slot (right side)
             Label eventSlot = new Label(); // Empty for now
-            eventSlot.setPrefHeight(40);
+            eventSlot.setPrefHeight(50); // Match row height
             eventSlot.setMaxWidth(Double.MAX_VALUE);
-            eventSlot.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0;"); // Bottom line only
             eventSlot.setAlignment(Pos.CENTER_LEFT);
-            int pSides = 10;
-            eventSlot.setPadding(new Insets(0,pSides,0,pSides));
+            eventSlot.setPadding(new Insets(0, 10, 0, 10)); // Adjust padding if necessary
+            eventSlot.setWrapText(true);
 
-            var fEvent = eventCalendar.getFirstEventForInterval(currentDate,hour,TimeUnit.HOURS);
-            if (fEvent != null){eventSlot.setText(fEvent.getName());}
+            // Base style
+            String baseStyle = "-fx-border-color: #ccc; -fx-border-width: 0 0 1px 0; -fx-font-size: 14px;";
+            String highlightStyle = "";
 
-            if (eventCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
-                eventSlot.setStyle(fillColour);
+            // Check for an event at this hour
+            var fEvent = eventCalendar.getFirstEventForInterval(currentDate, hour, TimeUnit.HOURS);
+            if (fEvent != null) {
+                eventSlot.setText(fEvent.getName());
+                highlightStyle = "-fx-background-color: rgba(216,185,255,0.5);"; // Light purple
             }
+
+            // Set the combined style
+            eventSlot.setStyle(baseStyle + highlightStyle);
 
             // Add both to the grid
             dayGrid.add(timeLabel, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
             dayGrid.add(eventSlot, 1, hour + 1); // Column 1 = Event (shifted by 1 row)
 
-
-            // Optional: GridPane.setHgrow(timeLabel, Priority.ALWAYS);
+            // Allow the event slot to grow horizontally
             GridPane.setHgrow(eventSlot, Priority.ALWAYS);
         }
     }
+
+
     /**
      * Renders a full year view using multiple mini-month grids.
      */
@@ -903,14 +905,14 @@ public class CalenderController {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
 
-        var dayCalendar = new CalendarDAO(currentDate,Period.of(0,0,1),TimeUnit.HOURS);
+        var dayCalendar = new CalendarDAO(currentDate, Period.of(0, 0, 1), TimeUnit.HOURS);
 
         // Top date header
         Label header = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
         header.setStyle("-fx-font-weight: bold; -fx-font-size: 32px; -fx-text-fill: #2e014f;");
         header.setMaxWidth(Double.MAX_VALUE);
         header.setAlignment(Pos.TOP_LEFT);
-        miniDayView.add(header, 0, 0, 2, 1);
+        miniDayView.add(header, 0, 0, 2, 1); // Span across two columns
 
         // Spacer
         RowConstraints spacer = new RowConstraints(30);
@@ -918,27 +920,41 @@ public class CalenderController {
 
         // Hour slots
         for (int hour = 0; hour < 24; hour++) {
-            miniDayView.getRowConstraints().add(new RowConstraints(30));
+            // Set row constraints for each hour
+            RowConstraints hourRowConstraints = new RowConstraints(30); // Height for each hour row
+            miniDayView.getRowConstraints().add(hourRowConstraints);
 
+            // Create time label
             Label time = new Label(String.format("%02d:00", hour));
             time.setStyle("-fx-font-size: 13px; -fx-text-fill: #666;");
             time.setMaxWidth(Double.MAX_VALUE);
             time.setAlignment(Pos.CENTER_RIGHT);
+            time.setPrefHeight(30); // Match row height
 
+            // Create event label
             Label event = new Label();
             event.setStyle("-fx-border-color: #bbb; -fx-border-width: 0 0 1px 0;");
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
-            event.setPadding(new Insets(0,3,0,3));
+            event.setPadding(new Insets(0, 3, 0, 3)); // Adjust padding if necessary
+            event.setPrefHeight(30); // Match row height
 
-            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
-            if (fEvent != null){event.setText(fEvent.getName());}
-            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
-                event.setStyle(fillColour);
+            // Check for an event at this hour
+            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour, TimeUnit.HOURS);
+            if (fEvent != null) {
+                event.setText(fEvent.getName());
             }
 
-            miniDayView.add(time, 0, hour + 1);
-            miniDayView.add(event, 1, hour + 1);
+            // Highlight if any event is in progress for the current hour
+            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour, 0, 0)))) {
+                event.setStyle(fillColour); // Set highlight color
+            }
+
+            // Add both labels to the grid
+            miniDayView.add(time, 0, hour + 1); // Column 0 = Time (shifted by 1 row)
+            miniDayView.add(event, 1, hour + 1); // Column 1 = Event (shifted by 1 row)
+
+            // Allow the event label to grow horizontally
             GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
