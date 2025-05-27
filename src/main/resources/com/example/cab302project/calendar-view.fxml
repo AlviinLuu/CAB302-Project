@@ -32,7 +32,6 @@
                     <Label fx:id="monthLabel" text="April 2025" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
                 </HBox>
 
-
                 <!-- Spacer to push the view toggle buttons to the right -->
                 <Region HBox.hgrow="ALWAYS"/>
 
@@ -60,7 +59,7 @@
             <!-- Month View -->
             <VBox fx:id="monthView" visible="true" managed="true" alignment="TOP_CENTER" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
                 <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                    <GridPane fx:id="monthGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA;"/>
+                    <GridPane fx:id="monthGrid" hgap="0" vgap="0" style="-fx-padding: 20; -fx-background-color: #E6E6FA; -fx-border-radius: 0; -fx-background-radius: 0;"/>
                 </ScrollPane>
             </VBox>
 
@@ -106,9 +105,7 @@
 
         <!-- Mini Day View -->
         <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="NEVER">
-            <GridPane fx:id="miniDayView" hgap="5" vgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 10; -fx-background-radius: 10;" VBox.vgrow="NEVER">
-                <!-- The hourly slots will be populated dynamically here -->
-            </GridPane>
+            <GridPane fx:id="miniDayView" hgap="5" vgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 0; -fx-background-radius: 0;" VBox.vgrow="NEVER"/>
         </ScrollPane>
         <Button fx:id="profileButton"
                 text="PROFILE"

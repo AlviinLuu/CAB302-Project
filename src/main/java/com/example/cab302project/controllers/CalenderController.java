@@ -466,24 +466,19 @@ public class CalenderController {
      * Renders the month view in the calendar UI.
      */
     private void renderMonthView() {
-        // Clear the grid first
         monthGrid.getChildren().clear();
 
-        // Get system-localized weekday names
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
         for (int i = 0; i < daysOfWeek.length; i++) {
-            String dayName = daysOfWeek[i].getDisplayName(TextStyle.SHORT, Locale.getDefault());
-
-            Label dayLabel = new Label(dayName);
+            Label dayLabel = new Label(daysOfWeek[i].getDisplayName(TextStyle.SHORT, Locale.getDefault()));
             dayLabel.setAlignment(Pos.CENTER);
             dayLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-            // Bind the font size for header too
             dayLabel.styleProperty().bind(
                     Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 40; // Same scaling as days
+                        double size = monthGrid.getWidth() / 40;
                         return String.format(
-                                "-fx-font-size: %.2fpx; -fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid; -fx-background-color: #eee",
+                                "-fx-font-size: %.2fpx; -fx-font-weight: bold; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-background-color: #eee",
                                 size
                         );
                     }, monthGrid.widthProperty())
@@ -494,53 +489,29 @@ public class CalenderController {
             monthGrid.add(dayLabel, i, 0);
         }
 
-        // Add the actual days of the month
         LocalDate firstDay = currentDate.withDayOfMonth(1);
         LocalDate lastDay = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
 
-        int startCol = (firstDay.getDayOfWeek().getValue() + 6) % 7; // Monday = 0
+        int startCol = (firstDay.getDayOfWeek().getValue() + 6) % 7;
         int row = 1;
         int col = startCol;
 
-        CalendarDAO monthCalendar = new CalendarDAO(firstDay,Period.of(0,1,0),TimeUnit.DAYS);
+        CalendarDAO monthCalendar = new CalendarDAO(firstDay, Period.of(0, 1, 0), TimeUnit.DAYS);
 
         for (int day = 1; day <= lastDay.getDayOfMonth(); day++) {
-            final int currentDay = day;
-
-            Label label = new Label(String.valueOf(day));
-            label.setAlignment(Pos.CENTER);
-            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            LocalDate dateForLabel = currentDate.withDayOfMonth(currentDay);
-
-            label.styleProperty().bind(
-                    Bindings.createStringBinding(() -> {
-                        double size = monthGrid.getWidth() / 30;
-                        String style = String.format(
-                                "-fx-font-size: %.2fpx; -fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
-                                size
-                        );
-
-                        // Check if this label represents today's date
-
-                        if (dateForLabel.isEqual(LocalDate.now())) {
-                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
-                        }
-                        return style;
-                    }, monthGrid.widthProperty())
-            );
+            LocalDate dateForLabel = currentDate.withDayOfMonth(day);
 
             VBox daybox = new VBox();
-            Label dateLabel = new Label(Integer.toString(currentDay));
+            daybox.setAlignment(Pos.TOP_CENTER);
+
+            Label dateLabel = new Label(Integer.toString(day));
             dateLabel.setAlignment(Pos.TOP_CENTER);
             dateLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: black;");
-
-            daybox.setMinWidth(monthGrid.getWidth() / 7);
-            daybox.setAlignment(Pos.TOP_CENTER);
             daybox.getChildren().add(dateLabel);
 
             List<Event> eList = monthCalendar.getAllEventsOnDay(dateForLabel);
-            for (Event e :eList){
-                if (e != null){
+            for (Event e : eList) {
+                if (e != null) {
                     Label eventLabel = new Label(e.getName());
                     eventLabel.setWrapText(true);
                     daybox.getChildren().add(eventLabel);
@@ -551,22 +522,19 @@ public class CalenderController {
                     Bindings.createStringBinding(() -> {
                         double size = monthGrid.getWidth() / 30;
                         String style = String.format(
-                                "-fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;",
-                                size
+                                "-fx-text-fill: black; -fx-border-color: #ccc; -fx-border-width: 0.5px; -fx-border-style: solid;"
                         );
-
-                        // Check if this label represents today's date
                         if (dateForLabel.isEqual(LocalDate.now())) {
-                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px; -fx-border-radius: 20px; -fx-background-radius: 20px;";
+                            style += "-fx-background-color: rgba(216, 185, 255, 0.4); -fx-border-color: #D8B9FF; -fx-border-width: 2px;";
                         }
                         return style;
                     }, monthGrid.widthProperty())
             );
 
-
             GridPane.setHgrow(daybox, Priority.ALWAYS);
             GridPane.setVgrow(daybox, Priority.ALWAYS);
             monthGrid.add(daybox, col, row);
+
             col++;
             if (col > 6) {
                 col = 0;
