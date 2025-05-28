@@ -89,10 +89,7 @@ public class LoginController {
             showError("Invalid email format. Please use user@domain.com");
             return;
         }
-        if (!isValidPassword(password)) {
-            showError("Password must be at least 8 characters long.");
-            return;
-        }
+
 
         if (this.isLogin) {
             // ---- LOGIN FLOW ----
@@ -111,6 +108,10 @@ public class LoginController {
         } else {
             // ---- REGISTRATION FLOW ----
             System.out.println("Attempting registration...");
+            if (!isValidPassword(password)) {
+                showError("Password must be at least 8 characters long.");
+                return;
+            }
             if (!password.equals(rptPassword)) {
                 System.out.println("Passwords do not match.");
                 showError("Passwords do not match.");
