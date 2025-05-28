@@ -673,7 +673,12 @@ public class CalenderController {
                 cell.setAlignment(Pos.TOP_LEFT);
                 cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 cell.setMinHeight(0);
-                cell.setPadding(new Insets(1, 3, 1, 3));
+                int pTB = 4;
+                int pLR = 2;
+                cell.setPadding(new Insets(pTB, pLR, pTB, pLR));
+                cell.setMinHeight(Region.USE_PREF_SIZE);
+
+                weekGrid.setMinHeight(Region.USE_PREF_SIZE);
 
                 LocalDate day = startOfWeek.plusDays(col - 1);
                 LocalTime time = LocalTime.of(row - 1, 0);
