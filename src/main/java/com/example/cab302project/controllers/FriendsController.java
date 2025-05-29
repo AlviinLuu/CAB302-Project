@@ -423,7 +423,11 @@ public class FriendsController {
         }
     }
 
-
+    /**
+     * Handles the action for the remove friend button.
+     * Removes the selected friends from the friends list.
+     * Updates the database via the user DAO and refreshes the friends list on success.
+     */
     @FXML
     private void handleRemoveFriend() {
         String selectedFriend = friendSelector.getSelectionModel().getSelectedItem();
@@ -560,12 +564,18 @@ public class FriendsController {
             showAlert("Error", "An error occurred while deleting the request.");
         }
     }
+    /**
+     * Enlarges the logo on mouse hover.
+     */
 
     @FXML
     private void onLogoHover() {
         logoImage.setScaleX(1.2);
         logoImage.setScaleY(1.2);
     }
+    /**
+     * Resets logo scale on mouse exit.
+     */
 
     @FXML
     private void onLogoExit() {
@@ -1110,21 +1120,6 @@ public class FriendsController {
             GridPane.setHgrow(event, Priority.ALWAYS);
         }
     }
-
-//    private void renderMiniDayView() {
-//        miniDayView.getChildren().clear();
-//        miniDayView.getRowConstraints().clear();
-//
-//        Label dateLbl = new Label(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
-//        dateLbl.setStyle("-fx-font-weight:bold; -fx-font-size:50px; -fx-text-fill:#333;");
-//        dateLbl.setMaxWidth(Double.MAX_VALUE);
-//        dateLbl.setAlignment(Pos.TOP_LEFT);
-//        miniDayView.add(dateLbl, 0, 0, 2, 1);
-//
-//        RowConstraints spacer = new RowConstraints();
-//        spacer.setVgrow(Priority.ALWAYS);
-//        miniDayView.getRowConstraints().add(spacer);
-//    }
 
     /**
      * Displays a standard JavaFX Alert dialog
