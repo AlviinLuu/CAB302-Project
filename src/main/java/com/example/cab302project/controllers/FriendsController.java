@@ -329,28 +329,37 @@ public class FriendsController {
     }
     /**
      * Refreshes the list of pending friend requests sent by the current user (outgoing requests).
-     * Fetches data directly using a SQL query and updates the pendingOutgoing observable list.
+     * Fetches data directly using a SQL query, then maps receiver emails back to usernames.
      */
     private void refreshOutgoingRequests() {
         pendingOutgoing.clear();
+
         String sql = """
-            SELECT receiver_email
-              FROM friend_requests
-             WHERE sender_email = ?
-               AND status = 'pending'
-        """;
+        SELECT receiver_email
+          FROM friend_requests
+         WHERE sender_email = ?
+           AND status = 'pending'
+    """;
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, Session.getLoggedInUser().getUsername());
+            // use the **email** of the logged-in user, not their username
+            ps.setString(1, Session.getLoggedInUser().getEmail());
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String username = rs.getString("receiver_email");
-                    pendingOutgoing.add(username);
+                    String receiverEmail = rs.getString("receiver_email");
+                    // convert the email back to a username for display
+                    User u = userDAO.getUserByEmail(receiverEmail);
+                    if (u != null) {
+                        pendingOutgoing.add(u.getUsername());
+                    }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     /**
      * Loads and displays the profile details of a specified user
      * in the profile display area. Fetches user data and profile image using the user DAO.
@@ -508,27 +517,50 @@ public class FriendsController {
      * Deletes the selected outgoing friend request from the database.
      * Updates the database directly using SQL and refreshes the outgoing requests list on success.
      */
-    @FXML private void handleDeleteRequest() {
-        String sel = pendingRequestsList.getSelectionModel().getSelectedItem();
-        if (sel == null) {
-            showAlert("No Selection","Please select a request to delete.");
+    @FXML
+    private void handleDeleteRequest() {
+        String selUsername = pendingRequestsList.getSelectionModel().getSelectedItem();
+        if (selUsername == null) {
+            showAlert("No Selection", "Please select a request to delete.");
             return;
         }
+
+        // Convert the selected username back to an email
+        User selUser = userDAO.getUserByUsername(selUsername);
+        if (selUser == null) {
+            showAlert("Error", "Could not find user: " + selUsername);
+            return;
+        }
+
+        String myEmail   = Session.getLoggedInUser().getEmail();
+        String theirEmail = selUser.getEmail();
+
         String sql = """
-            DELETE FROM friend_requests
-             WHERE sender_email   = ?
-               AND receiver_email = ?
-        """;
+        DELETE FROM friend_requests
+         WHERE sender_email   = ?
+           AND receiver_email = ?
+    """;
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, Session.getLoggedInUser().getUsername());
-            ps.setString(2, sel);
-            ps.executeUpdate();
-            showAlert("Deleted","Request to " + sel + " removed.");
+            ps.setString(1, myEmail);
+            ps.setString(2, theirEmail);
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                showAlert("Deleted", "Friend request to " + selUsername + " has been removed.");
+            } else {
+                showAlert("Not Found", "No pending request to " + selUsername + " was found.");
+            }
+
+            // Refresh the outgoing list so the deleted entry vanishes
             refreshOutgoingRequests();
+
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Error", "An error occurred while deleting the request.");
         }
     }
+
     @FXML
     private void onLogoHover() {
         logoImage.setScaleX(1.2);
