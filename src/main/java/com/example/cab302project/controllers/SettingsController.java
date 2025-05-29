@@ -27,30 +27,85 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Controller for the Settings view of the application.
+ * Allows users to edit account information, upload a profile image,
+ * sync Google Calendar, update bio, and navigate to other pages.
+ * Renders the sidebar, mini day view, and shows motivational quotes.
+ */
 public class SettingsController {
 
+    /** Field for editing the user's email. */
     @FXML private TextField emailField;
+
+    /** Field for editing the user's password. */
     @FXML private PasswordField passwordField;
+
+    /** Sidebar button showing the user's profile name. */
     @FXML private Button profileButton;
+
+    /** Displays the user's profile image. */
     @FXML private ImageView profileImage;
+
+    /** Displays the application logo. */
     @FXML private ImageView logoImage;
-    @FXML private Button uploadImageButton, changeEmailButton, changePasswordButton, UploadingGoogleCalendar;
+
+    /** Button to upload a new profile image. */
+    @FXML private Button uploadImageButton;
+
+    /** Button to change the email address. */
+    @FXML private Button changeEmailButton;
+
+    /** Button to change the password. */
+    @FXML private Button changePasswordButton;
+
+    /** Button to upload/sync Google Calendar (.ics) file. */
+    @FXML private Button UploadingGoogleCalendar;
+
+    /** Displays the current date at the top of the sidebar. */
     @FXML private Label dateLabel;
-    @FXML private VBox aiSidebar;
+
+    /** VBox container for the sidebar. */
+    @FXML private VBox Sidebar;
+
+    /** GridPane showing a mini day view (24-hour calendar) in the sidebar. */
     @FXML private GridPane miniDayView;
+
+    /** Main split pane separating sidebar and main settings content. */
     @FXML private SplitPane splitPane;
+
+    /** Main VBox container for settings content. */
     @FXML private VBox mainContent;
+
+    /** Button to save or edit the user bio. */
     @FXML private Button editBioButton;
+
+    /** Editable text area for the user's bio. */
     @FXML private TextArea bioTextArea;
+
+    /** Label showing the status of calendar sync. */
     @FXML private Label calendarSyncStatusLabel;
+
+    /** Label to display a motivational or fun quote. */
     @FXML private Label quoteLabel;
 
     // === Local State ===
+
+    /** Current date, used for the sidebar mini day view and date label. */
     private final LocalDate currentDate = LocalDate.now();
+
+    /** DAO for user-related actions (DB access). */
     private final IUserDAO userDAO = new SqliteUserDAO();
 
+    // ================== IMAGE HANDLING =====================
+
     /**
-     * Center-crop and resize an image to the target size.
+     * Crops and resizes a JavaFX Image to a square of the specified width and height.
+     * Center-crops the image, then scales to the target size.
+     * @param input The original JavaFX Image.
+     * @param width The target width (pixels).
+     * @param height The target height (pixels).
+     * @return Cropped and resized JavaFX Image.
      */
     private Image cropAndResizeImage(Image input, int width, int height) {
         double origWidth = input.getWidth();
@@ -75,7 +130,10 @@ public class SettingsController {
     }
 
     /**
-     * Convert JavaFX Image to byte array (PNG format).
+     * Converts a JavaFX Image to a PNG byte array for database storage.
+     * @param image JavaFX Image to convert.
+     * @return Byte array representing the PNG-encoded image.
+     * @throws IOException if encoding fails.
      */
     private byte[] imageToByteArray(Image image) throws IOException {
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
@@ -84,26 +142,32 @@ public class SettingsController {
         return out.toByteArray();
     }
 
+    // ================== INITIALIZATION =====================
+
+    /**
+     * Initializes the settings view after FXML loading.
+     * Loads logo, sidebar, user info, profile image, bio, date, quote, and sets up sidebar.
+     */
     @FXML
     private void initialize() {
-        //Loads logo
+        // Loads logo
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
 
-        //Sidebar fully expanded on load
+        // Sidebar fully expanded on load
         splitPane.setDividerPositions(0.75);
 
         // Display current user password and email
         User currentUser = Session.getLoggedInUser();
         if (currentUser != null) {
             emailField.setText(currentUser.getEmail());
-            passwordField.setText(currentUser.getPassword()); // ⚠️ Only if passwords are stored in plain text (not recommended)
+            passwordField.setText(currentUser.getPassword()); // Only if passwords are stored as plain text
         } else {
             emailField.setText("");
             passwordField.setText("");
         }
 
-        //Apply sidebar styling and calendar info
+        // Apply sidebar styling and calendar info
         updateDateLabel();
         renderMiniDayView();
 
@@ -141,12 +205,18 @@ public class SettingsController {
         setRandomQuote();
     }
 
+    /**
+     * Updates the sidebar's date label to the current date.
+     */
     private void updateDateLabel() {
         if (dateLabel != null) {
             dateLabel.setText(currentDate.format(DateTimeFormatter.ofPattern("d MMM")));
         }
     }
 
+    /**
+     * Renders a mini day calendar view (24 hourly slots) in the sidebar.
+     */
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
@@ -182,18 +252,30 @@ public class SettingsController {
         }
     }
 
+    // ================== UI INTERACTIONS & NAVIGATION =====================
+
+    /**
+     * Enlarges the logo when hovered for UI feedback.
+     */
     @FXML
     private void onLogoHover() {
         logoImage.setScaleX(1.2);
         logoImage.setScaleY(1.2);
     }
 
+    /**
+     * Resets the logo to its original size when mouse exits.
+     */
     @FXML
     private void onLogoExit() {
         logoImage.setScaleX(1.0);
         logoImage.setScaleY(1.0);
     }
 
+    /**
+     * Handles uploading a Google Calendar (.ics) file.
+     * Clears existing user events, prompts user to select file, imports events, and updates status label.
+     */
     @FXML
     private void handleUploadGoogleCalendar() {
         System.out.println("📂 Upload button clicked.");
@@ -239,9 +321,8 @@ public class SettingsController {
     }
 
     /**
-     * Handles the action of the Upload Image button.
-     * Opens a file chooser for image files, loads the selected image,
-     * crops/resizes to 400x400, saves to DB and shows in UI.
+     * Handles the upload of a new profile image.
+     * Allows user to choose image, crops and resizes, updates image in UI and DB.
      */
     @FXML
     private void handleUploadImage() {
@@ -282,6 +363,10 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles changing the user's email address.
+     * Validates input, updates in database, updates session, and shows a status alert.
+     */
     @FXML
     private void handleChangeEmail() {
         String newEmail = emailField.getText();
@@ -301,6 +386,10 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles changing the user's password.
+     * Validates minimum length, updates in database, updates session, and shows status alert.
+     */
     @FXML
     private void handleChangePassword() {
         String newPassword = passwordField.getText();
@@ -319,6 +408,13 @@ public class SettingsController {
             showAlert(Alert.AlertType.WARNING, "Warning", "Password must be at least 6 characters.");
         }
     }
+
+    /**
+     * Displays a standard JavaFX alert dialog.
+     * @param alertType Alert type (information, warning, error, etc).
+     * @param title Title text for the dialog.
+     * @param message Main content/message.
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -327,6 +423,9 @@ public class SettingsController {
         alert.showAndWait();
     }
 
+    // ================== MOTIVATIONAL QUOTES =====================
+
+    /** Array of motivational or app-themed quotes shown in the sidebar. */
     private final String[] appQuotes = {
             "Great plans start with great friends.",
             "Find time for what matters — together.",
@@ -340,11 +439,19 @@ public class SettingsController {
             "We help you find time for friends — literally."
     };
 
+    /**
+     * Sets a random motivational or themed quote in the sidebar.
+     */
     private void setRandomQuote() {
         int index = (int) (Math.random() * appQuotes.length);
         quoteLabel.setText('"' + appQuotes[index] + '"');
     }
 
+    // ================== NAVIGATION =====================
+
+    /**
+     * Navigates to the calendar (home) page, replacing the current scene.
+     */
     @FXML
     private void goToHome() {
         try {
@@ -359,6 +466,9 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Handles logout: clears session and returns to login screen.
+     */
     @FXML
     private void handleLogOut() {
         Session.clear();
@@ -386,6 +496,9 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Navigates to the friends page, replacing the current scene.
+     */
     @FXML
     private void openFriendsPage() {
         try {
@@ -400,6 +513,9 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Navigates to the profile page, replacing the current scene.
+     */
     @FXML
     private void openProfilePage() {
         try {
@@ -414,9 +530,13 @@ public class SettingsController {
         }
     }
 
+    // ================== BIO =====================
+
+    /**
+     * Handles editing the user's bio. Saves the current text to DB (up to 100 words).
+     */
     @FXML
     private void handleEditBio() {
-        // Always editable, just save the current text to DB
         String newBio = bioTextArea.getText();
         User currentUser = Session.getLoggedInUser();
 
