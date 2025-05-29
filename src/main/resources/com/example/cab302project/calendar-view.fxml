@@ -105,8 +105,9 @@
 
         <!-- Mini Day View -->
         <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="NEVER">
-            <GridPane fx:id="miniDayView" hgap="5" vgap="5" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 0; -fx-background-radius: 0;" VBox.vgrow="NEVER"/>
+            <GridPane fx:id="miniDayView" hgap="0" vgap="0" style="-fx-padding: 10; -fx-background-color: #CCCCFF; -fx-border-radius: 0; -fx-background-radius: 0;" VBox.vgrow="NEVER"/>
         </ScrollPane>
+
         <Button fx:id="profileButton"
                 text="PROFILE"
                 onAction="#openProfilePage"
