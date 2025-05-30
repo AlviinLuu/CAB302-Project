@@ -29,3 +29,14 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # ... other steps
+
+      - name: Publish Javadoc
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/Docs
