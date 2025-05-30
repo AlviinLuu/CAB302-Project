@@ -71,6 +71,11 @@ public class CalendarDAO {
         return getFirstEventForInterval(date.atTime(LocalTime.of((timeHour),0,0)), interval);
     }
 
+    /**
+     * Returns list of all events from signed-in user.
+     * @param date  LocalDate Date to retrieve events from
+     * @return
+     */
     public List<Event> getAllEventsOnDay(LocalDate date){
         List<Event> eventsOnDay = new ArrayList<>();
         for (final Event e:events){
@@ -81,6 +86,11 @@ public class CalendarDAO {
         return eventsOnDay;
     }
 
+    /**
+     * Checks if logged in account has any event on at {@code CurrentTime} time
+     * @param currentTime   Check if any events are occurring at this time
+     * @return  True if any event is currently occurring
+     */
     public boolean IsAnyEventInProgress(LocalDateTime currentTime){
         return !getCurrentEvents(currentTime).isEmpty();
     }
