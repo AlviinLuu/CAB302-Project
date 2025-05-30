@@ -16,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
@@ -28,26 +27,74 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Controller for the Profile view of the application.
+ * Displays the logged-in user's profile info, profile image, and a mini day calendar.
+ * Handles navigation (settings, home, friends, logout) and profile display logic.
+ */
 public class ProfileController {
 
+    /**
+     * Displays the user's username.
+     */
     @FXML private Label profileNameLabel;
-    @FXML private Label bioLabel; // Updated to Label
+
+    /**
+     * Displays the user's bio.
+     */
+    @FXML private Label bioLabel;
+
+    /**
+     * Displays the user's profile image.
+     */
     @FXML private ImageView profileImageView;
+
+    /**
+     * Mini calendar GridPane for today's 24-hour day view.
+     */
     @FXML private GridPane miniDayView;
+
+    /**
+     * The main VBox container for profile view content.
+     */
     @FXML private VBox mainContent;
+
+    /**
+     * ImageView for the application logo.
+     */
     @FXML private ImageView logoImage;
+
+    /**
+     * Sidebar button showing the current user's username.
+     */
     @FXML private Button profileButton;
 
+    /**
+     * The current date shown in the mini day view.
+     */
     private final LocalDate currentDate = LocalDate.now();
+
+    /**
+     * DAO for user-related database actions.
+     */
     private final SqliteUserDAO userDAO = new SqliteUserDAO();
+
+    /**
+     * Fill colour for highlighting event-in-progress slots.
+     */
     private final String fillColour = "-fx-background-color: black ;";
+
+    /**
+     * Initializes the profile view after FXML loading.
+     * Loads user details, profile image, logo, mini day calendar, and sets the sidebar button.
+     */
     @FXML
     private void initialize() {
         User user = Session.getLoggedInUser();
 
         if (user != null) {
             profileNameLabel.setText(user.getUsername() != null ? user.getUsername() : "User");
-            bioLabel.setText(user.getBio() != null ? user.getBio() : "No bio provided."); // Set bio text
+            bioLabel.setText(user.getBio() != null ? user.getBio() : "No bio provided.");
             byte[] imgData = userDAO.getProfileImage(user.getEmail());
             if (imgData != null && imgData.length > 0) {
                 profileImageView.setImage(new Image(new ByteArrayInputStream(imgData)));
@@ -60,7 +107,7 @@ public class ProfileController {
             setDefaultProfileImage();
         }
 
-        // Load logo image
+        // Load logo image from resources
         Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImage.setImage(logo);
 
@@ -80,11 +127,18 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Sets the profile image to a default placeholder.
+     */
     private void setDefaultProfileImage() {
         Image placeholder = new Image(getClass().getResourceAsStream("/images/default_profile.png"));
         profileImageView.setImage(placeholder);
     }
 
+    /**
+     * Renders a mini day view (24 hour slots) for the sidebar calendar.
+     * Highlights any hour blocks with events and displays event names if present.
+     */
     private void renderMiniDayView() {
         miniDayView.getChildren().clear();
         miniDayView.getRowConstraints().clear();
@@ -116,10 +170,11 @@ public class ProfileController {
             event.setMaxWidth(Double.MAX_VALUE);
             event.setAlignment(Pos.CENTER_LEFT);
 
-
-            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour ,TimeUnit.HOURS);
-            if (fEvent != null){event.setText(fEvent.getName());}
-            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))){
+            var fEvent = dayCalendar.getFirstEventForInterval(currentDate, hour, TimeUnit.HOURS);
+            if (fEvent != null) {
+                event.setText(fEvent.getName());
+            }
+            if (dayCalendar.IsAnyEventInProgress(currentDate.atTime(LocalTime.of(hour,0,0)))) {
                 event.setStyle(fillColour);
             }
 
@@ -129,6 +184,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Navigates to the settings page, replacing the current scene with the settings-view.
+     */
     @FXML
     private void openSettingsPage() {
         try {
@@ -142,17 +200,28 @@ public class ProfileController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Handles mouse hover on the logo image, enlarging it for UI feedback.
+     */
     @FXML
     private void onLogoHover() {
         logoImage.setScaleX(1.2);
         logoImage.setScaleY(1.2);
     }
 
+    /**
+     * Handles mouse exit from the logo image, resetting it to original size.
+     */
     @FXML
     private void onLogoExit() {
         logoImage.setScaleX(1.0);
         logoImage.setScaleY(1.0);
     }
+
+    /**
+     * Navigates back to the main calendar (home) page, replacing the current scene.
+     */
     @FXML
     private void goToHome() {
         try {
@@ -167,6 +236,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Navigates to the friends page, replacing the current scene.
+     */
     @FXML
     private void openFriendsPage() {
         try {
@@ -175,13 +247,16 @@ public class ProfileController {
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
             Scene scene = currentStage.getScene();
             scene.setRoot(friendsRoot);
-            currentStage.setTitle("Friends"); // Optional: Update window title
+            currentStage.setTitle("Friends");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
+    /**
+     * Handles logout action.
+     * Clears the session and returns to the login screen, matching the initial launch window size and behavior.
+     */
     @FXML
     private void handleLogOut() {
         Session.clear();
@@ -196,12 +271,12 @@ public class ProfileController {
             // Match initial launch size exactly
             Scene scene = new Scene(loginRoot, 450, 600);
             loginStage.setScene(scene);
-            loginStage.setResizable(true); // Match startup behavior
-            loginStage.centerOnScreen();   // for polish
+            loginStage.setResizable(true);
+            loginStage.centerOnScreen();
 
             loginStage.show();
 
-            // Close the settings window
+            // Close the profile window
             Stage currentStage = (Stage) mainContent.getScene().getWindow();
             currentStage.close();
         } catch (IOException e) {
@@ -209,6 +284,11 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Opens a given FXML page in a new maximized window, closing the current profile view.
+     * @param fxmlPath Path to the FXML file.
+     * @param title    Window title to set.
+     */
     private void openPage(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
