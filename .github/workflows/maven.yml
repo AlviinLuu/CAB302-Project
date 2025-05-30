@@ -36,7 +36,7 @@ jobs:
       steps:
         # ... other steps
 
-        - name: Publish Javadoc
+        - name: build-docs
           uses: JamesIves/github-pages-deploy-action@v4
           with:
             folder: target/docs/javadoc
