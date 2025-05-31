@@ -466,14 +466,16 @@ public class CalenderController {
                 break;
         }
     }
+
     /**
      * Renders the month view in the calendar UI.
+     * This method populates the `monthGrid` with header labels and daily cells,
+     * including date numbers and any associated events.
+     * It also highlights the current day.
      */
     private void renderMonthView() {
 
-        // -------------------------------------------------------------------
         // Clear previous layout
-        // -------------------------------------------------------------------
         monthGrid.getChildren().clear();
         monthGrid.getColumnConstraints().clear();
         monthGrid.getRowConstraints().clear();
@@ -482,9 +484,7 @@ public class CalenderController {
         GridPane.setHgrow(monthGrid, Priority.ALWAYS);
         GridPane.setVgrow(monthGrid, Priority.ALWAYS);
 
-        // -------------------------------------------------------------------
         // Columns – seven equal slices
-        // -------------------------------------------------------------------
         for (int i = 0; i < 7; i++) {
             ColumnConstraints cc = new ColumnConstraints();
             cc.setPercentWidth(100.0 / 7);
@@ -492,9 +492,7 @@ public class CalenderController {
             monthGrid.getColumnConstraints().add(cc);
         }
 
-        // -------------------------------------------------------------------
         // How many rows will this month need?
-        // -------------------------------------------------------------------
         LocalDate first   = currentDate.withDayOfMonth(1);
         int daysInMonth   = currentDate.lengthOfMonth();
         int startCol      = (first.getDayOfWeek().getValue() + 6) % 7; // Monday-based (Mon = 0)
@@ -503,9 +501,7 @@ public class CalenderController {
         int weeks = (startCol + daysInMonth + 6) / 7;   // 5 or 6 for normal calendars
         int totalRows = weeks + 1;                      // +1 for the weekday header
 
-        // -------------------------------------------------------------------
         // Row constraints – share the full height
-        // -------------------------------------------------------------------
         double rowPercent = 100.0 / totalRows;
         for (int i = 0; i < totalRows; i++) {
             RowConstraints rc = new RowConstraints();
@@ -515,9 +511,7 @@ public class CalenderController {
             monthGrid.getRowConstraints().add(rc);
         }
 
-        // -------------------------------------------------------------------
         // Weekday header (row 0)
-        // -------------------------------------------------------------------
         DayOfWeek[] daysOfWeek = DayOfWeek.values();   // MON…SUN
         for (int i = 0; i < 7; i++) {
             String name = daysOfWeek[i].getDisplayName(TextStyle.SHORT, Locale.getDefault());
@@ -538,9 +532,7 @@ public class CalenderController {
             monthGrid.add(header, i, 0);
         }
 
-        // -------------------------------------------------------------------
         // Day cells (start at row 1)
-        // -------------------------------------------------------------------
         int row = 1;
         int col = startCol;
         CalendarDAO dao = new CalendarDAO(first, Period.ofMonths(1), TimeUnit.DAYS);
@@ -554,12 +546,12 @@ public class CalenderController {
             cell.setPadding(new Insets(4));
             cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-            // date number
+            // Date number
             Label dateLbl = new Label(Integer.toString(d));
             dateLbl.setStyle("-fx-font-size: 15px; -fx-text-fill: black; -fx-font-weight: bold");
             cell.getChildren().add(dateLbl);
 
-            // events
+            // Events
             for (Event e : dao.getAllEventsOnDay(date)) {
                 if (e != null) {
                     Label ev = new Label(e.getName());
@@ -597,6 +589,8 @@ public class CalenderController {
 
     /**
      * Renders the week view in the calendar UI.
+     * Displays a grid with hour labels on the left and seven days of the week,
+     * showing events that occur within each hourly time slot.
      */
     private void renderWeekView() {
         weekGrid.getChildren().clear(); // Clear previous content
@@ -737,6 +731,7 @@ public class CalenderController {
 
     /**
      * Renders the day view in the calendar UI.
+     * Displays a timeline of 24 hours and populates the timeline based on event times.
      */
     private void renderDayView() {
         dayGrid.getChildren().clear();
@@ -809,7 +804,8 @@ public class CalenderController {
     }
 
     /**
-     * Renders a full year view using multiple mini-month grids.
+     * Renders a full year view using multiple mini-month grids in the calendar UI.
+     * Current day is highlighted
      */
     private void renderYearView() {
         yearGrid.getChildren().clear(); // Clear any existing calendar views
