@@ -42,6 +42,9 @@ public class LoginController {
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.com$");
 
+    /**
+     * Init Function for Login Controller
+     */
     @FXML
     private void initialize() {
         // load and set logo
@@ -49,6 +52,9 @@ public class LoginController {
         logoImage.setImage(logo);
     }
 
+    /**
+     * Toggles Boolean value isLogin, which the rest of the page
+     */
     @FXML
     protected void onSwitchStateClick() {
         if (this.isLogin) {
@@ -69,6 +75,9 @@ public class LoginController {
         this.isLogin = !this.isLogin;
     }
 
+    /**
+     * Handler function for submit button.
+     */
     @FXML
     protected void onSubmitButtonClick() {
         errorLabel.setVisible(false);
@@ -153,6 +162,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Launches the main calendar page view
+     */
     private void openCalendarPage() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -183,6 +195,10 @@ public class LoginController {
         return pw != null && pw.length() >= 8;
     }
 
+    /**
+     * Displays error at top of login view
+     * @param msg string of error message text
+     */
     private void showError(String msg) {
         errorLabel.setVisible(true);
         errorLabel.setText(msg);
