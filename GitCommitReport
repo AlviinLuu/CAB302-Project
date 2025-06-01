@@ -1,0 +1,327 @@
+ef846e5 was Alvin (n11380896@qut.edu.au), 1748759278, 61 seconds ago, message: Last changes
+22aa206 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748759054, 5 minutes ago, message: Merge remote-tracking branch 'origin/main'
+baea672 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748759037, 5 minutes ago, message: added comments
+de61517 was Anns Augustine (annsaugustinequt@gmail.com), 1748686064, 20 hours ago, message: final changes
+cde1525 was Alvin (n11380896@qut.edu.au), 1748588098, 2 days ago, message: Merge remote-tracking branch 'origin/main'
+b95168a was Alvin (n11380896@qut.edu.au), 1748588044, 2 days ago, message: Fixed comments and generate report
+8c7c28c was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587678, 2 days ago, message: updated javadocs
+8c1d521 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587532, 2 days ago, message: undid workflow changes
+599cb9e was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587420, 2 days ago, message: added github pages docs workflow
+6985e60 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587343, 2 days ago, message: added github pages docs workflow
+28e5b69 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587309, 2 days ago, message: added github pages docs workflow
+ac0ef00 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748587218, 2 days ago, message: added github pages docs workflow
+fb67841 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748586993, 2 days ago, message: Merge remote-tracking branch 'origin/main'
+ce34a33 was Alvin (n11380896@qut.edu.au), 1748586958, 2 days ago, message: Fixed a comment
+59adb8e was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748586957, 2 days ago, message: added github pages docs workflow
+fefacbc was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748586877, 2 days ago, message: added github pages docs workflow
+ae151a2 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748585663, 2 days ago, message: generated javadocs
+22479e7 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748585158, 2 days ago, message: Merge remote-tracking branch 'origin/main'
+a8a16df was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748585145, 2 days ago, message: added javadoc comments
+1afe850 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748487420, 3 days ago, message: Merge remote-tracking branch 'origin/main'
+4ce0056 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748487396, 3 days ago, message: added java doc comments
+39e98a3 was harpikaur (harpinder6328@gmail.com), 1748482121, 3 days ago, message: more comments
+2ac6832 was harpikaur (harpinder6328@gmail.com), 1748481474, 3 days ago, message: replaced pending request and delete request button
+13bb31f was Anns Augustine (annsaugustinequt@gmail.com), 1748433979, 4 days ago, message: all calendar fixes
+29521ee was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748403010, 4 days ago, message: fixed password check
+2acfa7f was Anns Augustine (annsaugustinequt@gmail.com), 1748402602, 4 days ago, message: delete anns user again
+d53f4b2 was Anns Augustine (annsaugustinequt@gmail.com), 1748402375, 4 days ago, message: delete anns user
+a32a260 was harpikaur (harpinder6328@gmail.com), 1748390645, 4 days ago, message: removed please from calendar uplaod
+ea2ef8e was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748367539, 5 days ago, message: added tests for calender page and events import
+beaea35 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748364853, 5 days ago, message: added valid email check and password length check
+c89177e was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748319655, 5 days ago, message: added event names to month view
+cb5044d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1748309540, 5 days ago, message: fixed up event shading and padding around event cells
+83f2166 was Anns Augustine (annsaugustinequt@gmail.com), 1748234392, 6 days ago, message: small styling changes
+1f753ec was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106754, 8 days ago, message: Merge remote-tracking branch 'origin/main'
+d5c1afe was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106736, 8 days ago, message: Fixed mini day view and made it look consistent in all the pages, overall made all the pages look polished and consistent with each other and also cleaned some unwanted code.
+b98bf27 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106424, 8 days ago, message: Fixed mini day view and made it look consistent in all the pages, overall made all the pages look polished and consistent with each other and also cleaned some unwanted code.
+0e3ea29 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106424, 8 days ago, message: Merge remote-tracking branch 'origin/main'
+335cb07 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106315, 8 days ago, message: upload image now changes every image to 300x300 size. and the newly sized image is uploaded to datebase.
+492caa4 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106315, 8 days ago, message: Merge remote-tracking branch 'origin/main'
+68b7a78 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106231, 8 days ago, message: upload image now changes every image to 300x300 size. and the newly sized image is uploaded to datebase.
+0f146b4 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748106231, 8 days ago, message: upload image now changes every image to 300x300 size. and the newly sized image is uploaded to datebase.
+dfdca14 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748103587, 8 days ago, message: fixed title names on pages and added logo hover. cleaned and made the pages consistent
+33af34c was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748102960, 8 days ago, message: cleaned navigation. Rather than opening and closing windows to navigate to a new page, it just updates the current window with the different scene.
+3f6c548 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1748101644, 8 days ago, message: fixed the background color break in profile page
+a2abe9f was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747798848, 11 days ago, message: implemented event shading (its a bit ugly atm tho)
+3c4c8a0 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747793018, 11 days ago, message: Merge remote-tracking branch 'origin/main'
+03f49ba was harpikaur (harpinder6328@gmail.com), 1747745620, 12 days ago, message: added word limit to bio
+c60aa1d was harpikaur (harpinder6328@gmail.com), 1747744411, 12 days ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+9acfece was harpikaur (harpinder6328@gmail.com), 1747744385, 12 days ago, message: fixed pfp size in settings, buttons. Also fixed colouring in friends page
+8fddfc6 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747743996, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+42486fe was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747743946, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+3c2bec5 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747743946, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+a48ff7b was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738889, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+e1a771b was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738889, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+050dc27 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738864, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+27bb442 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738864, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+756e95e was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738006, 12 days ago, message: added logo on profile page
+626e8aa was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747738006, 12 days ago, message: fixed login page sizing after logging out
+ada8a71 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747736332, 12 days ago, message: Merge remote-tracking branch 'origin/main'
+bbc4ae7 was harpikaur (harpinder6328@gmail.com), 1747719723, 12 days ago, message: password and email, field displays user's actual password
+d71dc0c was harpikaur (harpinder6328@gmail.com), 1747719723, 12 days ago, message: password and email, field displays user's actual password
+212fde8 was harpikaur (harpinder6328@gmail.com), 1747717958, 12 days ago, message: fixed settings format + added a quote section
+2b8640d was harpikaur (harpinder6328@gmail.com), 1747711746, 12 days ago, message: fixed settings format
+f4d5a44 was harpikaur (harpinder6328@gmail.com), 1747707225, 12 days ago, message: fixed settings format
+bf91004 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747705170, 12 days ago, message: commented out these tests as they do not work currently, will rewrite
+36236ff was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747705102, 12 days ago, message: updated the way that CalendarDAO is accessed to follow the new structure of that class
+4ff9bdb was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747705070, 12 days ago, message: rewrote this
+c38ceab was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747705049, 12 days ago, message: updated function which returns LocalDateTime Type object
+f3f7aba was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747705013, 12 days ago, message: Removed functions that are related to getting information for the calendar rather than the user to a new DAO
+0d97036 was harpikaur (harpinder6328@gmail.com), 1747656408, 13 days ago, message: added javadoc comments for all methods in CalenderController, and extra FriendsController
+689853e was harpikaur (harpinder6328@gmail.com), 1747654265, 13 days ago, message: handle exception for profile name button
+0cd3982 was harpikaur (harpinder6328@gmail.com), 1747653688, 13 days ago, message: profile name shows on profile button on calendar page
+3637dea was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747533311, 2 weeks ago, message: changed calendar etc
+e894399 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747532776, 2 weeks ago, message: Merge remote-tracking branch 'origin/main'
+a9dd5ef was harpikaur (harpinder6328@gmail.com), 1747390397, 2 weeks ago, message: Merge pull request #74 from AlviinLuu/changes
+1ee9be1 was harpikaur (harpinder6328@gmail.com), 1747390345, 2 weeks ago, message: Merge branch 'main' into changes
+6333375 was harpikaur (harpinder6328@gmail.com), 1747389643, 2 weeks ago, message: changed default pfp, profile button shows user name, ask button moved to right side (friends page), intructions alert message now appears after registeration.
+06bb49d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747356932, 2 weeks ago, message: added and updated comments
+178f491 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747356304, 2 weeks ago, message: Merge remote-tracking branch 'origin/main'
+ccb9726 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747356287, 2 weeks ago, message: updated calendar
+0b7fd6a was Alvin (n11380896@qut.edu.au), 1747313658, 2 weeks ago, message: Added javadoc comments for all my parts and cleaned code a bit
+d51f726 was annsthecoder (annsaugustinequt@gmail.com), 1747291947, 2 weeks ago, message: Update SCRUM Meeting 6
+5efc1e2 was annsthecoder (annsaugustinequt@gmail.com), 1747289333, 2 weeks ago, message: Create SCRUM Meeting 6
+873a171 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747288357, 2 weeks ago, message: removed failing tests fr this time
+7e7b13c was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747286051, 2 weeks ago, message: removed failing tests
+d800194 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747285997, 2 weeks ago, message: it works
+4333332 was Alvin Luu (n11380896@qut.edu.au), 1747283229, 2 weeks ago, message: roll back
+5738b61 was harpikaur (harpinder6328@gmail.com), 1747281822, 2 weeks ago, message: buttons made consistent, size and colour
+8e0355f was Alvin Luu (n11380896@qut.edu.au), 1747281206, 2 weeks ago, message: Fixed AI Again
+787a956 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747277022, 2 weeks ago, message: updated tests
+0b2b040 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747276749, 2 weeks ago, message: updated tests
+8a6f06b was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747276410, 2 weeks ago, message: updated tests
+9a4f708 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747276097, 2 weeks ago, message: updated how date is handled
+1bd96b7 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747273562, 2 weeks ago, message: updated calendar files
+49d7511 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747273420, 2 weeks ago, message: files for calendar test
+dc184ea was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747269110, 2 weeks ago, message: created calendar class for accessing events and wrote tests
+92f5a74 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747269078, 2 weeks ago, message: added exception handling for date format
+67a6af1 was harpikaur (harpinder6328@gmail.com), 1747266617, 2 weeks ago, message: changed ai response box colour
+25daddb was Alvin Luu (n11380896@qut.edu.au), 1747228794, 3 weeks ago, message: Fixed AI Prompt box
+3f3d325 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1747221230, 3 weeks ago, message: Update README.md
+767d70b was Alvin (n11380896@qut.edu.au), 1747220772, 3 weeks ago, message: Finetuned AI
+b820b68 was Alvin (n11380896@qut.edu.au), 1747207541, 3 weeks ago, message: Finished AI
+f008466 was Alvin (n11380896@qut.edu.au), 1747203462, 3 weeks ago, message: Fixed thinking ai
+6ca2a0d was Anns Augustine (annsaugustinequt@gmail.com), 1747202993, 3 weeks ago, message: trying
+0d4e485 was Alvin (n11380896@qut.edu.au), 1747201126, 3 weeks ago, message: AI Working for logged in user
+3c3694b was Alvin (n11380896@qut.edu.au), 1747191747, 3 weeks ago, message: Integrated the ai into the app now must fine tune it
+e56cb98 was Anns Augustine (annsaugustinequt@gmail.com), 1747173415, 3 weeks ago, message: trying agian
+7145218 was Anns Augustine (annsaugustinequt@gmail.com), 1747172926, 3 weeks ago, message: commit try once again
+9cfb08e was Anns Augustine (annsaugustinequt@gmail.com), 1747172135, 3 weeks ago, message: commit try again
+454c8e8 was Anns Augustine (annsaugustinequt@gmail.com), 1747171945, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+517bb50 was Anns Augustine (annsaugustinequt@gmail.com), 1747171394, 3 weeks ago, message: ics database
+e044743 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747168520, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+255122b was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747168492, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+fa6ecc8 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747168492, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+7b426ce was Anns Augustine (annsaugustinequt@gmail.com), 1747164337, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+8365d33 was Anns Augustine (annsaugustinequt@gmail.com), 1747164337, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+b75d851 was Anns Augustine (annsaugustinequt@gmail.com), 1747160300, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+0c154b7 was Anns Augustine (annsaugustinequt@gmail.com), 1747160300, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+2bed1ee was Arsh6876 (135971222+arsh6876@users.noreply.github.com), 1747141914, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+66f71cb was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747141914, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+eceedda was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747141885, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+bfacb5b was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747141885, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+3529f75 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747141222, 3 weeks ago, message: Merge remote-tracking branch 'origin/uploadcalendar' into uploadcalendar
+dc2f12f was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747141166, 3 weeks ago, message: Your commit message
+448541d was Anns Augustine (annsaugustinequt@gmail.com), 1747136744, 3 weeks ago, message: Your commit message
+5936e44 was Anns Augustine (annsaugustinequt@gmail.com), 1747136744, 3 weeks ago, message: Your commit message
+b57b3b8 was Anns Augustine (annsaugustinequt@gmail.com), 1747132624, 3 weeks ago, message: testing
+da15b72 was Alvin (n11380896@qut.edu.au), 1747130269, 3 weeks ago, message: Linked profile image to profile
+a030cd0 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1747128789, 3 weeks ago, message: added profile page. connected the page with the application. Fixed button names. and some other minor adjustments
+ab291c9 was Alvin (n11380896@qut.edu.au), 1747120734, 3 weeks ago, message: fixing layout
+0762c0a was Alvin (n11380896@qut.edu.au), 1747119741, 3 weeks ago, message: fixing again
+853c247 was Alvin (n11380896@qut.edu.au), 1747119615, 3 weeks ago, message: fixing workflow
+1bbf27a was Alvin (n11380896@qut.edu.au), 1747119466, 3 weeks ago, message: moving test file
+9e460cb was Alvin (n11380896@qut.edu.au), 1747119169, 3 weeks ago, message: fixing pom.xml
+b58e2f2 was Alvin (n11380896@qut.edu.au), 1747118538, 3 weeks ago, message: fixing pom.xml
+0c1fd9f was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1747117635, 3 weeks ago, message: Update maven.yml
+72d7880 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1747117572, 3 weeks ago, message: Update maven.yml
+45398fe was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1747117396, 3 weeks ago, message: Create maven.yml
+9e0f3f1 was Alvin (n11380896@qut.edu.au), 1747113897, 3 weeks ago, message: Linked profile picture to database and allows ability to upload images
+7089db3 was harpikaur (harpinder6328@gmail.com), 1747052986, 3 weeks ago, message: fixed mini day view
+8f6459f was Alvin (n11380896@qut.edu.au), 1747049992, 3 weeks ago, message: Synced bio to friends page and minor fixes all around with database
+fa0aaab was harpikaur (harpinder6328@gmail.com), 1747038701, 3 weeks ago, message: Merge pull request #71 from AlviinLuu/friends-page-changes
+77969e8 was harpikaur (harpinder6328@gmail.com), 1747038656, 3 weeks ago, message: fixed some of the layout, and added a remove friend button
+5ed53cb was Alvin (n11380896@qut.edu.au), 1747032702, 3 weeks ago, message: Added friend functionality, able to request and decline
+8b578a3 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747029913, 3 weeks ago, message: Merge remote-tracking branch 'origin/main'
+e160cb2 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747029900, 3 weeks ago, message: added profile page section
+a16094d was harpikaur (harpinder6328@gmail.com), 1747028756, 3 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+8168ac8 was harpikaur (harpinder6328@gmail.com), 1747028727, 3 weeks ago, message: fixed colouring
+7e82f23 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1747028497, 3 weeks ago, message: added bio section
+f1aff83 was harpikaur (harpinder6328@gmail.com), 1747027637, 3 weeks ago, message: made bio and all bigger
+57839d4 was harpikaur (harpinder6328@gmail.com), 1747024964, 3 weeks ago, message: added more swaggy usernames
+717205c was harpikaur (harpinder6328@gmail.com), 1747024093, 3 weeks ago, message: added profile picture to the view
+46f6057 was annsthecoder (annsaugustinequt@gmail.com), 1747021482, 3 weeks ago, message: Merge pull request #70 from AlviinLuu/friends-page-application
+7b662d0 was harpikaur (harpinder6328@gmail.com), 1747020898, 3 weeks ago, message: added friends-application.java
+3def31d was harpikaur (harpinder6328@gmail.com), 1747020102, 3 weeks ago, message: added bio and user name code for profile views
+8a211ba was harpikaur (harpinder6328@gmail.com), 1747013087, 3 weeks ago, message: minor adjustments to the LHS
+28aa9f5 was harpikaur (harpinder6328@gmail.com), 1747010670, 3 weeks ago, message: added accept and reject buttons to send, recieve, delete requests
+b0b429b was harpikaur (harpinder6328@gmail.com), 1746966630, 3 weeks ago, message: the left hand side buttoms function a bit more now
+0a1bd7c was harpikaur (harpinder6328@gmail.com), 1746959705, 3 weeks ago, message: Merge pull request #69 from AlviinLuu/friends-page-edits
+515146c was harpikaur (harpinder6328@gmail.com), 1746959638, 3 weeks ago, message: changed layout of friends page
+d158310 was harpikaur (harpinder6328@gmail.com), 1746952517, 3 weeks ago, message: added some imports
+2b4bd9b was harpikaur (harpinder6328@gmail.com), 1746952145, 3 weeks ago, message: Merge pull request #68 from AlviinLuu/friends-page-design
+c531b1e was harpikaur (harpinder6328@gmail.com), 1746952135, 3 weeks ago, message: Merge branch 'main' into friends-page-design
+8d7da00 was harpikaur (harpinder6328@gmail.com), 1746951694, 3 weeks ago, message: added more to friend's page
+e676fc9 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746940248, 3 weeks ago, message: added friends search field, search button and listview to display list of friends
+360f049 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746923234, 3 weeks ago, message: meeting notes
+9625562 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746685422, 3 weeks ago, message: meeting notes
+457e677 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746172208, 4 weeks ago, message: Merge remote-tracking branch 'origin/main'
+6771ede was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746172196, 4 weeks ago, message: wrote some unit tests
+e104e47 was annsthecoder (annsaugustinequt@gmail.com), 1746083976, 4 weeks ago, message: Update SCRUM Meeting 4
+5ea0245 was annsthecoder (annsaugustinequt@gmail.com), 1746083445, 4 weeks ago, message: Create SCRUM Meeting 4
+d07810f was harpikaur (harpinder6328@gmail.com), 1746081635, 4 weeks ago, message: Merge pull request #67 from AlviinLuu/loginpage-change
+e27cff9 was Harpinder Kaur (harpinder6328@gmail.com), 1746081578, 4 weeks ago, message: added logo to signup and login page
+6a7389c was Alvin Luu (n11380896@qut.edu.au), 1746079820, 4 weeks ago, message: Fixed test cases
+aee7139 was Harpinder Kaur (harpinder6328@gmail.com), 1746066110, 4 weeks ago, message: removed some comments
+c317f25 was harpikaur (harpinder6328@gmail.com), 1746064909, 4 weeks ago, message: Merge pull request #66 from AlviinLuu/calendarpage-changes
+031553b was Harpinder Kaur (harpinder6328@gmail.com), 1746064823, 4 weeks ago, message: fixed day,week and year view
+b0d00e4 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746063027, 4 weeks ago, message: Merge remote-tracking branch 'origin/main'
+1779aa0 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1746063013, 4 weeks ago, message: text on buttons now updates
+0421cff was Alvin Luu (n11380896@qut.edu.au), 1746062789, 4 weeks ago, message: Fixing login screen
+f9f1e7b was Alvin (n11380896@qut.edu.au), 1746009939, 5 weeks ago, message: Created additional test cases
+9728745 was Alvin (n11380896@qut.edu.au), 1746008801, 5 weeks ago, message: Fixing unit test and fixing ui
+fecae20 was annsthecoder (annsaugustinequt@gmail.com), 1746006825, 5 weeks ago, message: Merge pull request #65 from AlviinLuu/calendar-controller
+7f1a1f8 was Anns Augustine (annsaugustinequt@gmail.com), 1746006762, 5 weeks ago, message: login edits fxml
+87307af was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745980690, 5 weeks ago, message: enter key triggers submit button
+ed29b66 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745976511, 5 weeks ago, message: Merge remote-tracking branch 'origin/main'
+2f0ea8f was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745975164, 5 weeks ago, message: changed button appearance
+efd1a29 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745975164, 5 weeks ago, message: changed button appearance
+22ca9ff was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745936995, 5 weeks ago, message: fixed register button text
+46795c7 was harpikaur (harpinder6328@gmail.com), 1745915508, 5 weeks ago, message: Merge pull request #64 from AlviinLuu/login-test-fix
+4d72bd4 was Harpinder Kaur (harpinder6328@gmail.com), 1745915470, 5 weeks ago, message: fixed login test - both null
+c6a0990 was Harpinder Kaur (harpinder6328@gmail.com), 1745914898, 5 weeks ago, message: removed the lil heart message
+8880687 was harpikaur (harpinder6328@gmail.com), 1745914593, 5 weeks ago, message: Merge pull request #63 from AlviinLuu/opening-friendspage
+b823938 was Harpinder Kaur (harpinder6328@gmail.com), 1745914541, 5 weeks ago, message: made the friends button work on all pages
+3edc79b was Alvin (n11380896@qut.edu.au), 1745913760, 5 weeks ago, message: Fixing database logic
+15592ba was Harpinder Kaur (harpinder6328@gmail.com), 1745912573, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+3d72f42 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745911363, 5 weeks ago, message: add change email/ password functionality
+1b01ee4 was Alvin (n11380896@qut.edu.au), 1745910714, 5 weeks ago, message: added sessions and settings now interacts with database, also made session clear upon logout
+cccdcb8 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745910038, 5 weeks ago, message: added log out functionality
+be4dc86 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745909258, 5 weeks ago, message: connected login page and calender page
+829eee2 was Alvin (n11380896@qut.edu.au), 1745908947, 5 weeks ago, message: fix comments
+beb53ee was Alvin (n11380896@qut.edu.au), 1745908714, 5 weeks ago, message: added session class
+5061fb8 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745907620, 5 weeks ago, message: small fix. change background color for home button while on the page
+bf5ec22 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745906736, 5 weeks ago, message: added login with special char test-Makes sure the system correctly accepts usernames and passwords with special characters. added login with long credentials test- Checks if very long usernames/passwords still work and do not crash the system. added test to verify that login is case-sensitive
+9ed3533 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745905704, 5 weeks ago, message: fixed navigation. Closes the old page when a new page is opened.
+6e6f353 was Alvin (n11380896@qut.edu.au), 1745905065, 5 weeks ago, message: Small name fix
+ec93808 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745904720, 5 weeks ago, message: Merge remote-tracking branch 'origin/main'
+6bde18a was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745904597, 5 weeks ago, message: updated login page
+57ca168 was Harpinder Kaur (harpinder6328@gmail.com), 1745903974, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+fa85d12 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745902440, 5 weeks ago, message: fixed directory issues, improved settings-view.fxml and SettingsController. commented out unused code
+4b50d82 was Harpinder Kaur (harpinder6328@gmail.com), 1745890902, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+2b7aae4 was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1745859435, 5 weeks ago, message: Merge remote-tracking branch 'origin/main'
+3442809 was annsthecoder (annsaugustinequt@gmail.com), 1745859368, 5 weeks ago, message: Merge pull request #59 from AlviinLuu/calendar-controller
+a6f1e84 was annsthecoder (annsaugustinequt@gmail.com), 1745859368, 5 weeks ago, message: Merge pull request #59 from AlviinLuu/calendar-controller
+99d9c57 was annsthecoder (annsaugustinequt@gmail.com), 1745828777, 5 weeks ago, message: Merge pull request #59 from AlviinLuu/calendar-controller
+3f167ab was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745841055, 5 weeks ago, message: added username field
+c10667e was Harpinder Kaur (harpinder6328@gmail.com), 1745840513, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+62e22a6 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745840030, 5 weeks ago, message: updated login page
+6d8d2f1 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745839133, 5 weeks ago, message: updated login page
+b728b47 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745838923, 5 weeks ago, message: updated login page
+cd3afd6 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745838767, 5 weeks ago, message: updated login page
+187a1c5 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745838661, 5 weeks ago, message: Merge branch 'login'
+0ccd606 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745838536, 5 weeks ago, message: updated login page to match ui of other app and changed variable scope to be for the whole LoginController class
+bc17717 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745837931, 5 weeks ago, message: updated login page
+fd5b9a2 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745837907, 5 weeks ago, message: changed window size
+8c1a7ed was Harpinder Kaur (harpinder6328@gmail.com), 1745837670, 5 weeks ago, message: Merge branch 'friends-page'
+5f2d31a was Harpinder Kaur (harpinder6328@gmail.com), 1745837527, 5 weeks ago, message: friends controller code
+7909d31 was Harpinder Kaur (harpinder6328@gmail.com), 1745837301, 5 weeks ago, message: added method to connet friends page
+26c13e4 was harpikaur (harpinder6328@gmail.com), 1745837225, 5 weeks ago, message: Merge pull request #62 from AlviinLuu/friends-page
+1ab6f40 was Harpinder Kaur (harpinder6328@gmail.com), 1745837091, 5 weeks ago, message: friends page xml file
+785aa0d was annsthecoder (annsaugustinequt@gmail.com), 1745836392, 5 weeks ago, message: Merge pull request #61 from AlviinLuu/calendar-controller
+017a325 was Anns Augustine (annsaugustinequt@gmail.com), 1745836315, 5 weeks ago, message: annzy tests
+d1cbeab was Harpinder Kaur (harpinder6328@gmail.com), 1745832868, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+4182de0 was Alvin (n11380896@qut.edu.au), 1745832105, 5 weeks ago, message: fix title
+128662e was Harpinder Kaur (harpinder6328@gmail.com), 1745829280, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+0f7230e was annsthecoder (annsaugustinequt@gmail.com), 1745828777, 5 weeks ago, message: Merge pull request #59 from AlviinLuu/calendar-controller
+01773d3 was Anns Augustine (annsaugustinequt@gmail.com), 1745828738, 5 weeks ago, message: calendar application in branch edit
+1ce0d41 was Anns Augustine (annsaugustinequt@gmail.com), 1745828470, 5 weeks ago, message: calendar application in branch
+80d32d9 was Harpinder Kaur (harpinder6328@gmail.com), 1745828126, 5 weeks ago, message: Merge branch 'main' of github.com:AlviinLuu/CAB302-Project
+d1c4326 was annsthecoder (annsaugustinequt@gmail.com), 1745827926, 5 weeks ago, message: Merge pull request #58 from AlviinLuu/calendar-controller
+e4fa1d6 was Anns Augustine (annsaugustinequt@gmail.com), 1745827829, 5 weeks ago, message: calendar-controller branch
+3f3c53e was Harpinder Kaur (harpinder6328@gmail.com), 1745826786, 5 weeks ago, message: Merge branch 'calendar-xml'
+5afb731 was harpikaur (harpinder6328@gmail.com), 1745826605, 5 weeks ago, message: Merge pull request #57
+029a87b was Harpinder Kaur (harpinder6328@gmail.com), 1745826310, 5 weeks ago, message: added calendar xml code
+6031261 was Alvin (n11380896@qut.edu.au), 1745825227, 5 weeks ago, message: Linked sign up and login to database
+cfef7e3 was Alvin (n11380896@qut.edu.au), 1745819514, 5 weeks ago, message: slight fixes to db
+07bde9a was Alvin (n11380896@qut.edu.au), 1745819378, 5 weeks ago, message: Fixing names
+a52ceb1 was harpikaur (harpinder6328@gmail.com), 1745818063, 5 weeks ago, message: Merge pull request #56 from AlviinLuu/calendar-xml
+2d998f4 was Harpinder Kaur (harpinder6328@gmail.com), 1745817938, 5 weeks ago, message: added calendar controller and xml-view and loho.png
+7b2fdae was harpikaur (harpinder6328@gmail.com), 1745802520, 5 weeks ago, message: Merge pull request #55 from AlviinLuu/login-null-tests
+4730eaf was Harpinder Kaur (harpinder6328@gmail.com), 1745801912, 5 weeks ago, message: Added three new tests- empty inputs and null value login
+d6e12bc was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745801640, 5 weeks ago, message: moved login files to correct locations
+a463bd1 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745801581, 5 weeks ago, message: Merge branch 'login'
+58141b3 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745801558, 5 weeks ago, message: deleted leftover file from original project
+a40c04d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745801472, 5 weeks ago, message: added sqlite jdbc to maven list
+fcd9ad0 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745650727, 5 weeks ago, message: repeat password field has been added to login screen
+268607a was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745649189, 5 weeks ago, message: added comment
+f426ca2 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745649180, 5 weeks ago, message: added comment
+89b2f6d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745648534, 5 weeks ago, message: now reads user input in text fields and switches between login and register
+1309613 was Alvin (n11380896@qut.edu.au), 1745493107, 5 weeks ago, message: Created database, awating team for further implementation
+3b882b9 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1745485488, 5 weeks ago, message: Reframe project scope
+c4080b2 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745480253, 5 weeks ago, message: more login stuff
+d0b5bea was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745480189, 5 weeks ago, message: more login stuff
+67f2c4a was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745479168, 5 weeks ago, message: label now alternates between "login" and "register" states
+2c58258 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745477719, 5 weeks ago, message: created LoginApplication and associated javafx files
+b2e33c1 was harpikaur (harpinder6328@gmail.com), 1745477530, 5 weeks ago, message: Create SCRUM Meeting 3
+bf05385 was Alex78149 (66576264+Alex78149@users.noreply.github.com), 1745477074, 5 weeks ago, message: Merge pull request #51 from AlviinLuu/redo
+a9c2bcc was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745476761, 5 weeks ago, message: new project
+7c2347d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745475918, 5 weeks ago, message: replaced project with new javafx project
+f60d06f was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1745475914, 5 weeks ago, message: replaced project with new javafx project
+2c9ca0a was annsthecoder (annsaugustinequt@gmail.com), 1744267332, 7 weeks ago, message: Create SCRUM Meeting 2
+cfd8abd was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1744202663, 8 weeks ago, message: Add files via upload
+4883b5f was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744193068, 8 weeks ago, message: Add files via upload
+51c41c1 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192562, 8 weeks ago, message: Add files via upload
+500b972 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192543, 8 weeks ago, message: Delete Medium Fidelity/Med Fidelity Settings.png
+f20723d was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192431, 8 weeks ago, message: Add files via upload
+66de569 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192361, 8 weeks ago, message: Delete Medium Fidelity/Med Fidelity Sign Up.png
+328bda3 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192300, 8 weeks ago, message: Add files via upload
+b0ebfd8 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192285, 8 weeks ago, message: Delete Low Fidelity/Settings.jpg
+edcf499 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192068, 8 weeks ago, message: Delete Medium Fidelity/Calendar Page.png
+4ca4241 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192054, 8 weeks ago, message: Delete Medium Fidelity/Event Page.png
+ef6c4a4 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744192027, 8 weeks ago, message: Fixes
+2e59c11 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744191367, 8 weeks ago, message: Delete Low Fidelity/eventcreation_friend.jpg
+d31fa7c was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744191349, 8 weeks ago, message: Add files via upload
+019fa52 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744191241, 8 weeks ago, message: Add files via upload
+277b4e9 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190517, 8 weeks ago, message: Add files via upload
+7566852 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190385, 8 weeks ago, message: Add files via upload
+1b62d45 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190293, 8 weeks ago, message: Delete Low Fidelity/login_home.jpg
+a83b6d6 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190213, 8 weeks ago, message: Add files via upload
+6b12755 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190178, 8 weeks ago, message: Add files via upload
+0141981 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744190158, 8 weeks ago, message: Delete Low Fidelity/login_signup_calender.jpg
+d5f8772 was harpikaur (harpinder6328@gmail.com), 1744181164, 8 weeks ago, message: Add files via upload
+bc9f924 was harpikaur (harpinder6328@gmail.com), 1744180698, 8 weeks ago, message: Add files via upload
+2d2c6d7 was harpikaur (harpinder6328@gmail.com), 1744180372, 8 weeks ago, message: Delete Low Fidelity/friend_and_eventcreationPage.jpg
+83d71cd was harpikaur (harpinder6328@gmail.com), 1744180313, 8 weeks ago, message: Delete Low Fidelity/login_signup_and_calender.jpg
+c3255e0 was harpikaur (harpinder6328@gmail.com), 1744180213, 8 weeks ago, message: Delete Low Fidelity/summaryPage.jpg
+4033cfd was harpikaur (harpinder6328@gmail.com), 1744180197, 8 weeks ago, message: Delete Low Fidelity/login_and_home.jpg
+f145d25 was harpikaur (harpinder6328@gmail.com), 1744180133, 8 weeks ago, message: Delete Low Fidelity/IMG_1992.jpg
+dc4fa43 was harpikaur (harpinder6328@gmail.com), 1744179734, 8 weeks ago, message: Rename IMG_1993.jpg to login_signup_and_calender.jpg
+9a78fb6 was harpikaur (harpinder6328@gmail.com), 1744179664, 8 weeks ago, message: Rename IMG_1994.jpg to summaryPage.jpg
+384b1bf was harpikaur (harpinder6328@gmail.com), 1744179576, 8 weeks ago, message: Rename IMG_1995.jpg to friend_and_eventcreationPage.jpg
+243a874 was harpikaur (harpinder6328@gmail.com), 1744179444, 8 weeks ago, message: Rename IMG_1991.jpg to login_and_home.jpg
+6436750 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744179286, 8 weeks ago, message: Add files via upload
+ece482b was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744179092, 8 weeks ago, message: Delete Low Fidelity/Test
+0b52a75 was harpikaur (harpinder6328@gmail.com), 1744179041, 8 weeks ago, message: Add files via upload
+4c4a470 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744178997, 8 weeks ago, message: Test
+a908e9e was harpikaur (harpinder6328@gmail.com), 1744178992, 8 weeks ago, message: Add files via upload
+e8d7bba was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744178722, 8 weeks ago, message: Create Test
+c92ecaf was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744178349, 8 weeks ago, message: Delete Low Fidelity/Test
+8667a25 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744178329, 8 weeks ago, message: Create Folder
+da71ed7 was Anns Augustine (annsaugustinequt@gmail.com), 1744177701, 8 weeks ago, message: calendar page
+f8df047 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744174364, 8 weeks ago, message: Create Meeting 3
+acb89ce was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1744161456, 8 weeks ago, message: Create Meeting 2
+9e04e4c was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1743057160, 9 weeks ago, message: fixed things up
+1d88487 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1743056741, 9 weeks ago, message: renamed file
+bf0dbd0 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1743056720, 9 weeks ago, message: moved meeting files around
+d931e88 was harpikaur (harpinder6328@gmail.com), 1743056526, 9 weeks ago, message: Create SCRUM Meeting Week 5
+ed61b70 was annsthecoder (annsaugustinequt@gmail.com), 1743055626, 9 weeks ago, message: Update README.md
+feee435 was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1743055568, 9 weeks ago, message: added 'S' to file name
+d3c1e1d was Alex Thompson (66576264+Alex78149@users.noreply.github.com), 1743055527, 9 weeks ago, message: changed file name
+33e0b4a was Alvin (n11380896@qut.edu.au), 1742980744, 10 weeks ago, message: Created Java Project
+993d909 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1742979094, 10 weeks ago, message: Delete Meetings.md
+eda4fe8 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1742979067, 10 weeks ago, message: Create README.md
+be6bb8f was Arsh6876 (135971222+Arsh6876@users.noreply.github.com), 1742294522, 3 months ago, message: Create Meeting 1
+ddad93e was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1742293949, 3 months ago, message: Create Meetings.md
+5a077e0 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1742293238, 3 months ago, message: Delete Project Management
+13e9043 was AlviinLuu (146501030+AlviinLuu@users.noreply.github.com), 1742292446, 3 months ago, message: Create Project Management file
